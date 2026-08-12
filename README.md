@@ -38,7 +38,22 @@ Por eso: **descarga el respaldo JSON al cerrar cada camión** (pestaña Datos), 
 guarda también el Excel. El JSON se puede restaurar en cualquier PDA.
 
 Si necesitas que varias PDAs compartan el mismo histórico en tiempo real, hace
-falta un servidor; esta app no lo lleva.
+falta un servidor; esta app no lo lleva. Pero desde la pestaña **Datos** hay
+una **sincronización online manual** que usa tu propio repositorio de GitHub
+como almacén (nada de servidores de terceros):
+
+1. Entra en GitHub → tu perfil → **Settings → Developer settings → Fine-grained
+   tokens** → genera un token con permiso **Contents: Read and write** sólo
+   sobre este repositorio.
+2. En la app, pestaña **Datos → Sincronización online**, rellena usuario,
+   repositorio, rama y ese token, y pulsa "Guardar estos datos de conexión".
+   El token se queda sólo en ese dispositivo.
+3. Cuando quieras compartir lo escaneado: **Subir mis datos a la nube**.
+   Cuando quieras traer lo de otras PDAs: **Traer datos de la nube** — combina
+   los bultos de cada palé sin borrar lo que ya tenías en el dispositivo.
+
+No es en tiempo real: cada PDA decide cuándo subir y cuándo traer, y hace
+falta cobertura para hacerlo.
 
 ## Cómo se usa
 

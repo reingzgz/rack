@@ -526,9 +526,29 @@ details summary{cursor:pointer;font-size:12px;letter-spacing:.1em;text-transform
   </div>
 
   <div class="card">
+    <h2>Sincronización online</h2>
+    <p class="hint">Guarda una copia de los datos de este dispositivo en el propio repositorio de GitHub donde está publicada la app (en un archivo <code>sync/datos.json</code>), para poder traerla a otra PDA. No hace falta contratar ningún servidor: se usa tu cuenta de GitHub. Cada PDA decide cuándo subir y cuándo traer; no es automático ni en tiempo real.</p>
+    <div class="row">
+      <div><label>Usuario/organización</label><input id="sy_owner" class="mono" placeholder="TU-USUARIO"></div>
+      <div><label>Repositorio</label><input id="sy_repo" class="mono" placeholder="TU-REPO"></div>
+      <div><label>Rama</label><input id="sy_branch" class="mono" placeholder="main"></div>
+    </div>
+    <div class="row" style="margin-top:8px">
+      <div style="flex:1 1 100%"><label>Token de GitHub (con permiso de lectura/escritura de contenidos de este repositorio)</label><input id="sy_token" class="mono" type="password" placeholder="ghp_…" autocomplete="off"></div>
+    </div>
+    <p class="hint" style="margin-top:6px">El token se crea en GitHub → Settings → Developer settings → Fine-grained tokens, dándole permiso de <b>Contents: Read and write</b> sólo en este repositorio. Se guarda únicamente en este dispositivo, nunca se sube a ningún sitio.</p>
+    <div class="actions">
+      <button class="btn gh" id="sy_savecfg">Guardar estos datos de conexión</button>
+      <button class="btn pri" id="sy_push">Subir mis datos a la nube</button>
+      <button class="btn gh" id="sy_pull">Traer datos de la nube</button>
+    </div>
+    <p class="hint" style="margin-top:10px" id="sy_info">Sin configurar todavía.</p>
+  </div>
+
+  <div class="card">
     <h2>Versión</h2>
     <p class="hint">Si una PDA se comporta distinto a otra, compara este número. Si no coincide, esa PDA tiene una copia antigua guardada: ciérrala del todo y vuelve a abrirla con cobertura.</p>
-    <p style="font-family:var(--mono);font-size:22px;font-weight:800;margin:8px 0 0">v5</p>
+    <p style="font-family:var(--mono);font-size:22px;font-weight:800;margin:8px 0 0">v6</p>
   </div>
 
   <div class="card">
@@ -3928,6 +3948,101 @@ $('#d_restore').addEventListener('change',e=>{
   r.readAsText(f,'utf-8'); e.target.value='';
 });
 
+/* ================= sincronización online (vía GitHub) =================
+   Guarda/trae S.cfg + S.ubic + S.conts como un JSON dentro del propio
+   repositorio de GitHub, usando la API de Contents. Cada PDA guarda su
+   configuración (usuario, repo, rama, token) sólo en su propio dispositivo;
+   el token nunca se incluye en el JSON que se sube. */
+let SY_CFG = {owner:'', repo:'', branch:'main', token:''};
+async function syCargaCfg(){
+  const d = await Store.get('sync_cfg');
+  if(d) SY_CFG = {owner:d.owner||'', repo:d.repo||'', branch:d.branch||'main', token:d.token||''};
+  $('#sy_owner').value = SY_CFG.owner;
+  $('#sy_repo').value = SY_CFG.repo;
+  $('#sy_branch').value = SY_CFG.branch;
+  $('#sy_token').value = SY_CFG.token;
+  $('#sy_info').textContent = (SY_CFG.owner && SY_CFG.repo)
+    ? `Conectado a ${SY_CFG.owner}/${SY_CFG.repo} (${SY_CFG.branch}).`
+    : 'Sin configurar todavía.';
+}
+$('#sy_savecfg').addEventListener('click', async ()=>{
+  SY_CFG = {
+    owner: $('#sy_owner').value.trim(),
+    repo: $('#sy_repo').value.trim(),
+    branch: $('#sy_branch').value.trim() || 'main',
+    token: $('#sy_token').value.trim()
+  };
+  if(!SY_CFG.owner || !SY_CFG.repo) return toast('Indica usuario y repositorio','ko');
+  await Store.set('sync_cfg', SY_CFG);
+  $('#sy_info').textContent = `Conectado a ${SY_CFG.owner}/${SY_CFG.repo} (${SY_CFG.branch}).`;
+  toast('Datos de conexión guardados','ok');
+});
+const SY_PATH = 'sync/datos.json';
+function syUrl(){ return `https://api.github.com/repos/${SY_CFG.owner}/${SY_CFG.repo}/contents/${SY_PATH}?ref=${encodeURIComponent(SY_CFG.branch)}`; }
+async function syFetchRemoto(){
+  const r = await fetch(syUrl(), {headers:{'Authorization':`Bearer ${SY_CFG.token}`,'Accept':'application/vnd.github+json'}});
+  if(r.status===404) return {sha:null, datos:null};
+  if(!r.ok) throw new Error('No se pudo leer la nube ('+r.status+')');
+  const j = await r.json();
+  const texto = decodeURIComponent(escape(atob(j.content.replace(/\n/g,''))));
+  return {sha:j.sha, datos:JSON.parse(texto)};
+}
+function syClaveScan(x){ return x.c+'|'+x.u+'|'+(x.t||''); }
+function syMergePalet(loc, rem){
+  if(!loc) return rem;
+  if(!rem) return loc;
+  const vistos = new Set((loc.scans||[]).map(syClaveScan));
+  const scans = [...(loc.scans||[])];
+  (rem.scans||[]).forEach(x=>{ const k=syClaveScan(x); if(!vistos.has(k)){ vistos.add(k); scans.push(x); } });
+  scans.sort((a,b)=> (a.t||'').localeCompare(b.t||''));
+  const masReciente = (loc.ts||'') >= (rem.ts||'') ? loc : rem;
+  return {...masReciente, scans};
+}
+function syMergeConts(locConts, remConts){
+  const porId = new Map(locConts.map(c=>[c.id,c]));
+  remConts.forEach(rc=>{
+    const lc = porId.get(rc.id);
+    if(!lc){ porId.set(rc.id, rc); return; }
+    const paletsPorN = new Map(lc.palets.map(p=>[p.n,p]));
+    rc.palets.forEach(rp=>{ paletsPorN.set(rp.n, syMergePalet(paletsPorN.get(rp.n), rp)); });
+    porId.set(rc.id, {...lc, palets:[...paletsPorN.values()].sort((a,b)=>a.n-b.n)});
+  });
+  return [...porId.values()];
+}
+$('#sy_push').addEventListener('click', async ()=>{
+  if(!SY_CFG.owner || !SY_CFG.repo || !SY_CFG.token) return toast('Rellena y guarda antes la conexión','ko');
+  $('#sy_info').textContent = 'Subiendo…';
+  try{
+    const {sha} = await syFetchRemoto();
+    const cuerpo = JSON.stringify({cfg:S.cfg, ubic:S.ubic, conts:S.conts}, null, 1);
+    const b64 = btoa(unescape(encodeURIComponent(cuerpo)));
+    const r = await fetch(`https://api.github.com/repos/${SY_CFG.owner}/${SY_CFG.repo}/contents/${SY_PATH}`, {
+      method:'PUT',
+      headers:{'Authorization':`Bearer ${SY_CFG.token}`,'Accept':'application/vnd.github+json','Content-Type':'application/json'},
+      body: JSON.stringify({message:'Sincronización palés '+new Date().toISOString(), content:b64, branch:SY_CFG.branch, sha:sha||undefined})
+    });
+    if(!r.ok) throw new Error('GitHub rechazó la subida ('+r.status+')');
+    $('#sy_info').textContent = 'Subido correctamente · '+new Date().toLocaleString('es-ES');
+    toast('Datos subidos a la nube','ok');
+  }catch(err){ $('#sy_info').textContent='Error al subir: '+err.message; toast('No se pudo subir','ko'); }
+});
+$('#sy_pull').addEventListener('click', async ()=>{
+  if(!SY_CFG.owner || !SY_CFG.repo || !SY_CFG.token) return toast('Rellena y guarda antes la conexión','ko');
+  $('#sy_info').textContent = 'Trayendo…';
+  try{
+    const {datos} = await syFetchRemoto();
+    if(!datos){ $('#sy_info').textContent='Todavía no hay nada subido a la nube.'; return; }
+    if(!confirm('Se van a combinar los datos de la nube con los de este dispositivo (no se borra nada local). ¿Seguir?')) { $('#sy_info').textContent=''; return; }
+    S.ubic = {...(datos.ubic||{}), ...S.ubic};
+    S.conts = syMergeConts(S.conts, datos.conts||[]);
+    if(!S.sel && S.conts.length) S.sel = S.conts[0].id;
+    save(); render();
+    $('#sy_info').textContent = 'Traído y combinado · '+new Date().toLocaleString('es-ES');
+    toast('Datos combinados','ok');
+  }catch(err){ $('#sy_info').textContent='Error al traer: '+err.message; toast('No se pudo traer','ko'); }
+});
+syCargaCfg();
+
 /* ============ generador XLSX (ZIP sin comprimir + CRC32) ============ */
 const CRCT=(()=>{const t=new Uint32Array(256);for(let n=0;n<256;n++){let c=n;for(let k=0;k<8;k++)c=c&1?0xEDB88320^(c>>>1):c>>>1;t[n]=c>>>0;}return t;})();
 const crc32=b=>{let c=0xFFFFFFFF;for(let i=0;i<b.length;i++)c=CRCT[(c^b[i])&0xFF]^(c>>>8);return (c^0xFFFFFFFF)>>>0;};
@@ -3962,7 +4077,10 @@ function hojaXml(head,rows){
     fs.push(`<row r="${ri+2}">`+r.map((v,i)=>{
       if(v===''||v===null||v===undefined) return '';
       const ref=`${colN(i)}${ri+2}`;
-      return (typeof v==='number'&&isFinite(v)) ? `<c r="${ref}"><v>${v}</v></c>` : `<c r="${ref}" t="inlineStr"><is><t>${xe(v)}</t></is></c>`;
+      // Los códigos (mocacota, artículo, bulto, contenedor...) son texto: forzamos
+      // estilo de texto (s="2") además del tipo inlineStr, para que Excel nunca
+      // los reinterprete como número y así nunca se coma un cero a la izquierda.
+      return (typeof v==='number'&&isFinite(v)) ? `<c r="${ref}"><v>${v}</v></c>` : `<c r="${ref}" t="inlineStr" s="2"><is><t>${xe(v)}</t></is></c>`;
     }).join('')+`</row>`);
   });
   return `<?xml version="1.0" encoding="UTF-8" standalone="yes"?><worksheet xmlns="http://schemas.openxmlformats.org/spreadsheetml/2006/main"><cols>${cols}</cols><sheetData>${fs.join('')}</sheetData></worksheet>`;
@@ -3975,7 +4093,7 @@ function descargaXLSX(sheets,nombre){
     add('_rels/.rels',`<?xml version="1.0" encoding="UTF-8" standalone="yes"?><Relationships xmlns="http://schemas.openxmlformats.org/package/2006/relationships"><Relationship Id="rId1" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/officeDocument" Target="xl/workbook.xml"/></Relationships>`);
     add('xl/workbook.xml',`<?xml version="1.0" encoding="UTF-8" standalone="yes"?><workbook xmlns="http://schemas.openxmlformats.org/spreadsheetml/2006/main" xmlns:r="http://schemas.openxmlformats.org/officeDocument/2006/relationships"><sheets>${ss.map(s=>`<sheet name="${xe(s.name)}" sheetId="${s.id}" r:id="rId${s.id}"/>`).join('')}</sheets></workbook>`);
     add('xl/_rels/workbook.xml.rels',`<?xml version="1.0" encoding="UTF-8" standalone="yes"?><Relationships xmlns="http://schemas.openxmlformats.org/package/2006/relationships">${ss.map(s=>`<Relationship Id="rId${s.id}" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/worksheet" Target="worksheets/sheet${s.id}.xml"/>`).join('')}<Relationship Id="rId${ss.length+1}" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/styles" Target="styles.xml"/></Relationships>`);
-    add('xl/styles.xml',`<?xml version="1.0" encoding="UTF-8" standalone="yes"?><styleSheet xmlns="http://schemas.openxmlformats.org/spreadsheetml/2006/main"><fonts count="2"><font><sz val="11"/><name val="Arial"/></font><font><b/><sz val="11"/><color rgb="FFFFFFFF"/><name val="Arial"/></font></fonts><fills count="3"><fill><patternFill patternType="none"/></fill><fill><patternFill patternType="gray125"/></fill><fill><patternFill patternType="solid"><fgColor rgb="FF14181C"/><bgColor indexed="64"/></patternFill></fill></fills><borders count="1"><border><left/><right/><top/><bottom/><diagonal/></border></borders><cellStyleXfs count="1"><xf numFmtId="0" fontId="0" fillId="0" borderId="0"/></cellStyleXfs><cellXfs count="2"><xf numFmtId="0" fontId="0" fillId="0" borderId="0" xfId="0"/><xf numFmtId="0" fontId="1" fillId="2" borderId="0" xfId="0" applyFont="1" applyFill="1"/></cellXfs></styleSheet>`);
+    add('xl/styles.xml',`<?xml version="1.0" encoding="UTF-8" standalone="yes"?><styleSheet xmlns="http://schemas.openxmlformats.org/spreadsheetml/2006/main"><fonts count="2"><font><sz val="11"/><name val="Arial"/></font><font><b/><sz val="11"/><color rgb="FFFFFFFF"/><name val="Arial"/></font></fonts><fills count="3"><fill><patternFill patternType="none"/></fill><fill><patternFill patternType="gray125"/></fill><fill><patternFill patternType="solid"><fgColor rgb="FF14181C"/><bgColor indexed="64"/></patternFill></fill></fills><borders count="1"><border><left/><right/><top/><bottom/><diagonal/></border></borders><cellStyleXfs count="1"><xf numFmtId="0" fontId="0" fillId="0" borderId="0"/></cellStyleXfs><cellXfs count="3"><xf numFmtId="0" fontId="0" fillId="0" borderId="0" xfId="0"/><xf numFmtId="0" fontId="1" fillId="2" borderId="0" xfId="0" applyFont="1" applyFill="1"/><xf numFmtId="49" fontId="0" fillId="0" borderId="0" xfId="0" applyNumberFormat="1"/></cellXfs></styleSheet>`);
     ss.forEach(s=>add(`xl/worksheets/sheet${s.id}.xml`,hojaXml(s.header,s.rows)));
     baja(new Blob(zip(F),{type:'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'}),nombre);
     toast('Excel descargado','ok');
