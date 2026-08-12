@@ -518,6 +518,13 @@ details summary{cursor:pointer;font-size:12px;letter-spacing:.1em;text-transform
   </div>
 
   <div class="card">
+    <h2>Comprobar la cámara</h2>
+    <p class="hint">Sirve para saber si este dispositivo puede leer números por foto, y si no puede, por qué.</p>
+    <div class="actions"><button class="btn gh" id="d_cam">Probar la cámara</button></div>
+    <p class="hint" style="margin-top:10px" id="d_camOut"></p>
+  </div>
+
+  <div class="card">
     <h2>Teclado en pantalla en la PDA</h2>
     <p class="hint">Si al tocar una casilla no sale el teclado, es la PDA, no la app: Android oculta el teclado cuando detecta el lector como teclado físico. Se arregla en <b>Ajustes → Sistema → Idiomas e introducción de texto → Teclado físico → Mostrar teclado en pantalla</b>. Todas las casillas de la app son editables a mano y las numéricas abren el teclado numérico.</p>
   </div>
@@ -3306,7 +3313,8 @@ function pintaModo(){
   if(!c.modo) c.modo='codigo';
   const foto = c.modo==='imagen';
   $('#g_modoTxt').innerHTML = `Lectura: <b>${foto?'foto del número':'lector de códigos'}</b> · patrón: <b>${esc(patronTxt(c))}</b>`;
-  $('#g_foto').classList.toggle('hide', !foto || !PAL);
+  $('#g_foto').classList.toggle('hide', !foto);
+  $('#g_foto').textContent = PAL ? 'Hacer foto del número' : 'Primero escanea el QR del palé';
   $('#g_scan').placeholder = foto ? (PAL?'O escribe el número a mano':'Escanea el QR del palé') : (PAL?'Escanea bulto tras bulto':'Dispara el lector aquí');
 }
 $('#g_modoChg').addEventListener('click',()=>{
@@ -3786,6 +3794,24 @@ $('#s_save').addEventListener('click',()=>{
   S.cfg.moca=Math.max(1,parseInt($('#s_moca').value,10)||12);
   save(); renderDatos(); toast('Reglas guardadas','ok');
 });
+$('#d_cam').addEventListener('click',async()=>{
+  const o=$('#d_camOut');
+  o.innerHTML='Comprobando…';
+  const lineas=[];
+  lineas.push(`Dirección: <b>${esc(location.protocol)}//${esc(location.host||'archivo local')}</b>`);
+  lineas.push(`Conexión segura: <b>${window.isSecureContext?'sí':'no'}</b>`);
+  lineas.push(`Dentro de otra página: <b>${(()=>{try{return window.self!==window.top?'sí':'no';}catch(e){return 'sí';}})()}</b>`);
+  lineas.push(`Soporte de cámara: <b>${(navigator.mediaDevices&&navigator.mediaDevices.getUserMedia)?'sí':'no'}</b>`);
+  lineas.push(`Lector de códigos del sistema: <b>${('BarcodeDetector' in window)?'sí':'no'}</b>`);
+  try{
+    const st=await navigator.mediaDevices.getUserMedia({video:{facingMode:{ideal:'environment'}}});
+    st.getTracks().forEach(t=>t.stop());
+    lineas.push('<b style="color:var(--ok)">La cámara se abre correctamente.</b>');
+  }catch(e){
+    lineas.push(`<b style="color:var(--ko)">No se pudo abrir: ${esc(e&&e.name||'error')}</b>`);
+  }
+  o.innerHTML=lineas.join('<br>');
+});
 $('#s_repat').addEventListener('click',()=>{
   const c=cont(); if(!c) return toast('Selecciona un contenedor','ko');
   c.patron=null; save(); renderDatos(); pintaModo();
@@ -3938,10 +3964,22 @@ const Cam=(()=>{
   const vid=$('#camVid'),wrap=$('#camWrap'),msg=$('#camMsg'),cv=document.createElement('canvas');
   const shot=$('#camShot'),guia=$('#camGuia'),lee=$('#camLee'),cap=$('#camCap');
   const hay=()=>!!(navigator.mediaDevices&&navigator.mediaDevices.getUserMedia);
+  const enMarco=()=>{ try{ return window.self!==window.top; }catch(e){ return true; } };
+  function porQueNo(){
+    if(!window.isSecureContext)
+      return location.protocol==='file:'
+        ? 'Has abierto el archivo directamente desde el disco. La cámara sólo funciona desde una dirección https, como la de GitHub Pages.'
+        : 'La cámara necesita una conexión segura (https).';
+    if(!hay())
+      return enMarco()
+        ? 'La app se está viendo dentro de otra página y eso bloquea la cámara. Ábrela directamente en el navegador.'
+        : 'Este navegador no permite usar la cámara. Prueba con Chrome.';
+    return null;
+  }
 
   async function abrir(id,foto){
-    if(!hay()) return toast('Este dispositivo no permite la cámara','ko');
-    if(!window.isSecureContext) return toast('La cámara necesita HTTPS','ko');
+    const m=porQueNo();
+    if(m){ toast(m,'ko'); alert('No se puede abrir la cámara.\n\n'+m); return; }
     dest=id; modoFoto=!!foto;
     wrap.classList.add('on'); msg.textContent='Iniciando…';
     guia.classList.toggle('hide',!modoFoto);
@@ -3956,7 +3994,17 @@ const Cam=(()=>{
         if('BarcodeDetector' in window){ try{ det=new window.BarcodeDetector({formats:await window.BarcodeDetector.getSupportedFormats()}); }catch(e){ det=null; } }
         bucle();
       }
-    }catch(e){ cerrar(); toast(e&&e.name==='NotAllowedError'?'Permiso denegado':'No se pudo abrir la cámara','ko'); }
+    }catch(e){
+      cerrar();
+      const n=e&&e.name;
+      const msg = n==='NotAllowedError'
+          ? (enMarco() ? 'La cámara está bloqueada porque la app se está viendo dentro de otra página. Ábrela directamente en el navegador.'
+                       : 'Has denegado el permiso de cámara. Púlsalo en el candado de la barra de direcciones y permítelo.')
+        : n==='NotFoundError' ? 'Este dispositivo no tiene cámara disponible.'
+        : n==='NotReadableError' ? 'Otra aplicación está usando la cámara. Ciérrala y vuelve a intentarlo.'
+        : 'No se pudo abrir la cámara ('+(n||'error desconocido')+').';
+      toast('No se pudo abrir la cámara','ko'); alert(msg);
+    }
   }
   async function bucle(){
     if(!on||modoFoto) return;
@@ -4042,7 +4090,10 @@ const Cam=(()=>{
   return {abrir,cerrar,girar,hay,capturar,confirmar,repetir};
 })();
 document.addEventListener('click',e=>{ const b=e.target.closest('[data-cam]'); if(b) Cam.abrir(b.dataset.cam,false); });
-$('#g_foto').addEventListener('click',()=>Cam.abrir('g_scan',true));
+$('#g_foto').addEventListener('click',()=>{
+  if(!PAL){ beep(false); eco('bad','Falta el palé','Escanea antes el QR del palé que vas a contar'); foco(); return; }
+  Cam.abrir('g_scan',true);
+});
 $('#camCap').addEventListener('click',()=>Cam.capturar());
 $('#camOk').addEventListener('click',()=>Cam.confirmar());
 $('#camRe').addEventListener('click',()=>Cam.repetir());
