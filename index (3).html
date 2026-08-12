@@ -1,0 +1,4075 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<title>Control de palés · Descarga y ubicación</title>
+<link rel="manifest" href="manifest.json">
+<meta name="theme-color" content="#14181c">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<link rel="icon" href="icon.svg" type="image/svg+xml">
+<style>
+:root{
+  --ink:#14181c; --steel:#39434c; --mute:#79858f;
+  --paper:#eef1ef; --card:#ffffff; --line:#d3d9d6;
+  --amber:#ff7a00; --amber-d:#c65c00;
+  --ok:#12855a; --ok-bg:#e3f5ec;
+  --ko:#c62a1c; --ko-bg:#fdeae8;
+  --warn:#8a6100; --warn-bg:#fdf3dc;
+  --mono: ui-monospace, "SF Mono", "Cascadia Mono", Menlo, Consolas, monospace;
+  --ui: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+}
+*{box-sizing:border-box}
+html,body{margin:0;padding:0}
+body{font-family:var(--ui);background:var(--paper);color:var(--ink);font-size:15px;-webkit-text-size-adjust:100%}
+button,input,select,textarea{font-family:inherit;font-size:16px}
+h1,h2,h3{margin:0}
+.hide{display:none !important}
+
+header{position:sticky;top:0;z-index:40;background:var(--ink);color:#fff}
+.hz{height:6px;background:repeating-linear-gradient(45deg,var(--amber) 0 12px,#1b2126 12px 24px)}
+.htop{display:flex;align-items:center;gap:10px;padding:9px 12px}
+.brand{font-weight:800;letter-spacing:.14em;font-size:12px;text-transform:uppercase;white-space:nowrap}
+.brand span{color:var(--amber)}
+.active-cont{margin-left:auto;min-width:0}
+.active-cont select{background:#222a30;color:#fff;border:1px solid #3c464e;border-radius:7px;padding:7px 8px;max-width:52vw;font-size:14px}
+nav{display:flex;overflow-x:auto;background:#1b2126;scrollbar-width:none}
+nav::-webkit-scrollbar{display:none}
+nav button{flex:1 0 auto;background:none;border:0;border-bottom:3px solid transparent;color:#96a2ab;padding:11px 14px;font-size:12px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;cursor:pointer}
+nav button.on{color:#fff;border-bottom-color:var(--amber)}
+
+main{max-width:1180px;margin:0 auto;padding:14px 12px 90px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:14px;margin-bottom:12px}
+.card>h2{font-size:12px;letter-spacing:.12em;text-transform:uppercase;color:var(--mute);margin-bottom:12px;font-weight:800}
+.row{display:flex;gap:10px;flex-wrap:wrap}
+.row>*{flex:1 1 150px;min-width:0}
+label{display:block;font-size:11px;letter-spacing:.09em;text-transform:uppercase;color:var(--mute);font-weight:700;margin-bottom:5px}
+input,select,textarea{width:100%;padding:11px 12px;border:1.5px solid var(--line);border-radius:9px;background:#fff;color:var(--ink)}
+input:focus,select:focus,textarea:focus{outline:0;border-color:var(--amber);box-shadow:0 0 0 3px rgba(255,122,0,.16)}
+input.mono,textarea.mono{font-family:var(--mono)}
+input[readonly]{background:#f4f6f5;color:var(--steel)}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:7px;padding:11px 15px;border-radius:9px;border:1.5px solid var(--ink);background:var(--ink);color:#fff;font-weight:700;cursor:pointer;font-size:14px}
+.btn.pri{background:var(--amber);border-color:var(--amber);color:#171008}
+.btn.gh{background:#fff;color:var(--ink)}
+.btn.sm{padding:7px 10px;font-size:12.5px;border-radius:7px}
+.btn.dgr{border-color:var(--ko);color:var(--ko);background:#fff}
+.btn:disabled{opacity:.4;cursor:not-allowed}
+.actions{display:flex;gap:9px;flex-wrap:wrap;margin-top:12px}
+.hint{font-size:12.5px;color:var(--mute);line-height:1.5}
+.empty{text-align:center;padding:26px 14px;color:var(--mute);font-size:14px;border:2px dashed var(--line);border-radius:12px}
+
+.chip{display:inline-block;padding:3px 9px;border-radius:99px;font-size:11px;font-weight:800;letter-spacing:.06em;text-transform:uppercase}
+.chip.ok{background:var(--ok-bg);color:var(--ok)}
+.chip.ko{background:var(--ko-bg);color:var(--ko)}
+.chip.pend{background:#e9edeb;color:var(--steel)}
+.chip.warn{background:var(--warn-bg);color:var(--warn)}
+
+.clist{display:grid;gap:10px}
+.citem{border:1.5px solid var(--line);border-radius:11px;padding:12px;display:flex;gap:12px;align-items:center;flex-wrap:wrap;background:#fff}
+.citem.sel{border-color:var(--amber);box-shadow:0 0 0 3px rgba(255,122,0,.12)}
+.citem .cid{font-family:var(--mono);font-weight:700;font-size:15px}
+.citem .meta{font-size:12px;color:var(--mute)}
+.bar{height:7px;background:#e6eae8;border-radius:99px;overflow:hidden;min-width:120px;flex:1}
+.bar i{display:block;height:100%;background:var(--ok)}
+
+.scanbox{border:2px dashed var(--amber);border-radius:12px;padding:16px;background:#fff8f1}
+.scanbox input{font-family:var(--mono);font-size:18px;padding:14px;border-color:var(--amber)}
+.scanrow{display:flex;gap:8px}
+.scanrow input{flex:1;min-width:0}
+.camBtn{flex:0 0 auto;width:54px;border-radius:9px;border:1.5px solid var(--amber);background:#fff;color:var(--amber-d);font-size:20px;cursor:pointer}
+.camBtn.hide{display:none}
+
+.bigread{display:grid;grid-template-columns:repeat(auto-fit,minmax(115px,1fr));gap:10px;margin-top:12px}
+.read{background:#f4f6f5;border:1.5px solid var(--line);border-radius:10px;padding:10px}
+.read b{display:block;font-size:10.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--mute);margin-bottom:4px}
+.read span{font-family:var(--mono);font-size:20px;font-weight:700;line-height:1.15;word-break:break-all}
+.read.hero{background:var(--ink);border-color:var(--ink)}
+.read.hero b{color:#95a1aa}.read.hero span{color:var(--amber)}
+.paletbadge{display:flex;align-items:baseline;gap:10px;flex-wrap:wrap;margin-bottom:12px}
+.paletbadge .p{font-family:var(--mono);font-size:26px;font-weight:800}
+.paletbadge .c{font-family:var(--mono);color:var(--mute)}
+
+/* lista de bultos escaneados */
+.bultos{display:flex;flex-wrap:wrap;gap:6px;margin-top:12px;max-height:260px;overflow:auto}
+.bul{display:flex;align-items:center;gap:6px;border:1.5px solid var(--line);border-radius:8px;padding:5px 7px;background:#fff;font-family:var(--mono);font-size:13px}
+.bul.pico{border-color:var(--warn);background:var(--warn-bg)}
+.bul.dup{border-color:var(--ko);background:var(--ko-bg)}
+.bul i{font-style:normal;color:var(--mute);font-size:11px}
+.bul b{font-weight:800}
+.bul button{border:0;background:none;color:var(--ko);font-weight:800;cursor:pointer;padding:0 2px;font-size:15px}
+
+/* combinaciones */
+.combo{border:1.5px solid var(--line);border-left:5px solid var(--ok);border-radius:11px;padding:12px;margin-bottom:10px;background:#fff}
+.combo.over{border-left-color:var(--warn)}
+.combo.short{border-left-color:var(--ko)}
+.combo h3{font-size:13px;letter-spacing:.06em;text-transform:uppercase;color:var(--steel);margin-bottom:8px}
+.combo .tot{font-family:var(--mono);font-size:24px;font-weight:800}
+.combo .sub{font-size:12.5px;color:var(--mute);margin-bottom:10px}
+.picks{display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:8px}
+.pick{border:1.5px solid var(--line);border-radius:9px;padding:8px;background:#fbfdfc}
+.pick .co{font-family:var(--mono);font-weight:800;font-size:16px;word-break:break-all}
+.pick .de{font-size:11.5px;color:var(--mute);margin-top:2px}
+.niveles{display:flex;gap:8px;margin-top:12px}
+.niveles button{flex:1;padding:11px;border:1.5px solid var(--line);background:#fff;border-radius:9px;
+  font-weight:700;font-size:13.5px;cursor:pointer;color:var(--steel)}
+.niveles button.on{background:var(--ink);border-color:var(--ink);color:#fff}
+.sum{display:flex;gap:18px;flex-wrap:wrap}
+.sum div b{display:block;font-size:10.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--mute)}
+.sum div span{font-family:var(--mono);font-size:21px;font-weight:800}
+
+.tw{overflow-x:auto;-webkit-overflow-scrolling:touch}
+table{border-collapse:collapse;width:100%;font-size:13.5px}
+th{background:#f4f6f5;text-align:left;padding:9px 8px;font-size:10.5px;letter-spacing:.08em;text-transform:uppercase;color:var(--mute);border-bottom:1.5px solid var(--line);white-space:nowrap}
+td{padding:6px 8px;border-bottom:1px solid var(--line)}
+td.m,th.m{font-family:var(--mono)}
+tr.done td{background:#fbfdfc}
+table input{padding:7px 8px;border-radius:7px;font-size:14px}
+.w60{width:70px}.w90{width:95px}.w130{width:140px}
+
+/* etiquetas */
+.labels{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:10px}
+.lab{border:1.5px solid var(--ink);border-radius:10px;padding:10px;background:#fff;display:flex;gap:10px;align-items:center}
+.lab .qr{flex:0 0 42%;aspect-ratio:1}
+.lab .qr svg{width:100%;height:100%;display:block}
+.lab .tx{flex:1;min-width:0}
+.lab .pn{font-family:var(--mono);font-weight:800;font-size:26px;line-height:1}
+.lab .cn{font-family:var(--mono);font-size:11.5px;color:var(--steel);word-break:break-all;margin-top:4px}
+.lab .fd{font-size:11.5px;color:var(--mute);margin-top:2px}
+
+#camWrap{position:fixed;inset:0;background:#000;z-index:100;display:none;flex-direction:column}
+#camWrap.on{display:flex}
+#camVid{flex:1;width:100%;object-fit:cover;background:#000}
+#camBar{padding:12px;background:var(--ink);color:#fff;display:flex;gap:10px;align-items:center}
+#camBar b{font-size:13px;flex:1}
+
+/* ---------- pantalla de escaneo ---------- */
+.paso{display:flex;gap:12px;align-items:center;margin-bottom:12px}
+.pasoN{flex:0 0 auto;width:38px;height:38px;border-radius:50%;background:var(--ink);color:#fff;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:18px}
+.paso b{display:block;font-size:17px;line-height:1.2}
+.paso i{font-style:normal;font-size:13px;color:var(--mute)}
+.paso.ok .pasoN{background:var(--ok)}
+#g_scan{font-size:20px;padding:16px}
+.foco{margin-top:10px;text-align:center;font-weight:800;font-size:13px;letter-spacing:.08em;text-transform:uppercase;
+  padding:8px;border-radius:8px;background:var(--ok-bg);color:var(--ok)}
+.foco.off{background:var(--ko-bg);color:var(--ko)}
+.eco{margin-top:12px;border-radius:12px;padding:16px;text-align:center;font-weight:800;display:none}
+.eco.on{display:block}
+.eco.good{background:var(--ok-bg);color:var(--ok)}
+.eco.bad{background:var(--ko-bg);color:var(--ko)}
+.eco .big{display:block;font-family:var(--mono);font-size:34px;line-height:1.1}
+.eco .sm{display:block;font-size:13px;font-weight:600;margin-top:4px}
+.marcador{display:grid;grid-template-columns:1fr 1.4fr;gap:10px}
+.mk{background:#f4f6f5;border:1.5px solid var(--line);border-radius:12px;padding:14px;text-align:center}
+.mk b{display:block;font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--mute);margin-bottom:6px}
+.mk span{font-family:var(--mono);font-size:40px;font-weight:800;line-height:1}
+.mk.hero{background:var(--ink);border-color:var(--ink)}
+.mk.hero b{color:#95a1aa}.mk.hero span{color:var(--amber)}
+.desg{text-align:center;font-family:var(--mono);font-size:15px;color:var(--steel);margin-top:10px}
+.btn.grande{flex:1 1 160px;padding:18px 14px;font-size:16px}
+
+/* ---------- operario, último código, contador visual ---------- */
+.quien{display:flex;align-items:center;gap:10px;margin-bottom:14px;padding-bottom:12px;border-bottom:1px solid var(--line)}
+.quien label{margin:0;flex:0 0 auto}
+.quien input{flex:1;padding:8px 10px;font-size:15px}
+.quien b{flex:1;font-size:15px;color:var(--ink)}
+#g_gate h2,#m_gate h2{font-size:17px;text-transform:none;letter-spacing:0;color:var(--ink)}
+.ultimo{margin-top:10px;background:#f4f6f5;border:1.5px solid var(--line);border-radius:9px;padding:9px 11px;
+  font-family:var(--mono);font-size:13px;color:var(--steel);word-break:break-all;text-align:center}
+.ultimo b{color:var(--ink);font-size:15px}
+.tally{display:grid;grid-template-columns:repeat(auto-fill,minmax(46px,1fr));gap:6px;margin-top:14px}
+.tally .t{aspect-ratio:1;border-radius:9px;background:var(--ok);color:#fff;display:flex;flex-direction:column;
+  align-items:center;justify-content:center;font-family:var(--mono);font-weight:800;font-size:15px;position:relative}
+.tally .t small{font-size:9px;font-weight:600;opacity:.85}
+.tally .t.pico{background:var(--warn)}
+.tally .t.anomal{background:var(--ko)}
+.tally .t.nuevo{animation:pop .3s ease}
+.tally .hueco{aspect-ratio:1;border-radius:9px;border:2px dashed var(--line)}
+@keyframes pop{from{transform:scale(.4);opacity:0}to{transform:scale(1);opacity:1}}
+
+/* ---------- anomalía y modo ---------- */
+.modobar{display:flex;align-items:center;gap:10px;margin-bottom:12px;font-size:13px;color:var(--steel)}
+.modobar span{flex:1}
+.modobar b{color:var(--ink)}
+.anom{margin-top:12px;border:2px solid var(--warn);background:var(--warn-bg);border-radius:12px;padding:16px}
+.anom .atit{font-size:20px;font-weight:800;color:var(--warn);margin-bottom:6px}
+.anom .atxt{font-size:14px;color:var(--steel);line-height:1.5}
+.anom .acod{margin-top:10px;background:#fff;border:1.5px solid var(--line);border-radius:8px;padding:9px;
+  text-align:center;font-size:17px;font-weight:700;word-break:break-all}
+/* ---------- captura de foto ---------- */
+#camStage{position:relative;flex:1;display:flex;overflow:hidden}
+#camShot{flex:1;width:100%;object-fit:contain;background:#000}
+#camGuia{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;pointer-events:none}
+#camGuia div{width:78%;height:22%;border:3px solid var(--amber);border-radius:10px;box-shadow:0 0 0 100vmax rgba(0,0,0,.5)}
+#camLee{background:var(--ink);color:#fff;padding:14px}
+#camLee label{color:#95a1aa}
+#camLee input{font-size:34px;text-align:center;padding:12px;letter-spacing:.12em}
+
+#toast{position:fixed;left:50%;bottom:22px;transform:translateX(-50%) translateY(140%);background:var(--ink);color:#fff;padding:12px 18px;border-radius:10px;font-weight:700;z-index:90;transition:transform .22s;max-width:92vw;text-align:center;font-size:14px}
+#toast.show{transform:translateX(-50%) translateY(0)}
+#toast.ok{background:var(--ok)}#toast.ko{background:var(--ko)}
+.foot{font-size:11.5px;color:var(--mute);text-align:center}
+details summary{cursor:pointer;font-size:12px;letter-spacing:.1em;text-transform:uppercase;color:var(--mute);font-weight:800}
+
+/* ============ IMPRESIÓN ============ */
+@media print{
+  header,nav,.noprint{display:none !important}
+  body{background:#fff}
+  main{padding:0;max-width:none}
+  .card{border:0;padding:0;margin:0;background:none}
+  .lab{break-inside:avoid;page-break-inside:avoid}
+}
+/* rollo de etiquetas 100 x 64 mm: una etiqueta por página */
+@media print{
+  body.fmt-rollo .labels{display:block}
+  body.fmt-rollo .lab{
+    width:100mm;height:64mm;margin:0;border:0;border-radius:0;
+    padding:4mm;gap:4mm;
+    page-break-after:always;break-after:page;
+    display:flex;align-items:center;
+  }
+  body.fmt-rollo .lab:last-child{page-break-after:auto;break-after:auto}
+  body.fmt-rollo .lab .qr{flex:0 0 50mm;width:50mm;height:50mm}
+  body.fmt-rollo .lab .pn{font-size:44pt}
+  body.fmt-rollo .lab .cn{font-size:12pt}
+  body.fmt-rollo .lab .fd{font-size:11pt}
+  body.fmt-a4 .labels{grid-template-columns:repeat(2,1fr);gap:6mm}
+}
+@page{margin:8mm}
+</style>
+<style id="pageRule">@page{size:100mm 64mm;margin:0}</style>
+</head>
+<body class="fmt-rollo">
+
+<header>
+  <div class="hz"></div>
+  <div class="htop">
+    <div class="brand">Palés <span>/</span> Descarga</div>
+    <div class="active-cont"><select id="selCont"></select></div>
+  </div>
+  <nav id="nav">
+    <button data-v="cont" class="on">Contenedores</button>
+    <button data-v="qr">Etiquetas QR</button>
+    <button data-v="grab">Grabar palé</button>
+    <button data-v="hist">Buscar / Histórico</button>
+    <button data-v="mapa">Mapa</button>
+    <button data-v="datos">Datos</button>
+  </nav>
+</header>
+
+<main>
+
+<!-- ============ CONTENEDORES ============ -->
+<section id="v-cont">
+  <div class="card">
+    <h2>Nuevo contenedor</h2>
+    <div class="row">
+      <div style="flex:2 1 220px"><label>Contenedor</label><input id="nc_cod" class="mono" placeholder="MRSKU5610000" autocapitalize="characters"></div>
+      <div><label>Fecha de descarga</label><input id="nc_fec" type="date"></div>
+      <div><label>Nº de palés</label><input id="nc_np" type="number" inputmode="numeric" min="1" max="300" value="30"></div>
+    </div>
+    <div class="row" style="margin-top:10px">
+      <div style="flex:1 1 260px"><label>Cómo se leen los bultos</label><select id="nc_modo">
+        <option value="codigo">Código de barras o QR (lector)</option>
+        <option value="imagen">Foto de la pegatina con el número</option>
+      </select></div>
+      <div style="flex:1 1 240px" id="nc_sigWrap" class="hide"><label>El número de la pegatina es…</label><select id="nc_sig">
+        <option value="uds">Las unidades del bulto</option>
+        <option value="codigo">Un código: aplicar las reglas de lectura</option>
+      </select></div>
+    </div>
+    <div class="actions"><button class="btn pri" id="nc_add">Crear contenedor</button></div>
+  </div>
+  <div class="card">
+    <h2>Contenedores</h2>
+    <div id="contList" class="clist"></div>
+  </div>
+</section>
+
+<!-- ============ ETIQUETAS QR ============ -->
+<section id="v-qr" class="hide">
+  <div class="card noprint">
+    <h2>Etiquetas para imprimir</h2>
+    <div class="row">
+      <div style="flex:1 1 220px"><label>Formato</label><select id="qr_fmt">
+        <option value="rollo">Etiqueta 100 × 64 mm (una por etiqueta)</option>
+        <option value="a4">Hoja A4 (2 por fila)</option>
+      </select></div>
+      <div><label>Desde palé</label><input id="qr_de" type="number" inputmode="numeric" min="1" value="1"></div>
+      <div><label>Hasta palé</label><input id="qr_a" type="number" inputmode="numeric" min="1" value="30"></div>
+    </div>
+    <div class="actions">
+      <button class="btn gh" id="qr_gen">Actualizar</button>
+      <button class="btn pri" id="qr_print">Imprimir</button>
+    </div>
+    <p class="hint" style="margin-top:10px" id="qr_info"></p>
+  </div>
+  <div class="card"><div id="qrGrid" class="labels"></div></div>
+</section>
+
+<!-- ============ GRABAR PALÉ ============ -->
+<section id="v-grab" class="hide">
+
+  <div class="card" id="g_gate">
+    <h2>¿Quién está descargando?</h2>
+    <label for="g_oper">Nombre del operario</label>
+    <input id="g_oper" placeholder="Escribe tu nombre" autocomplete="off" autocapitalize="words" style="font-size:19px;padding:15px">
+    <div class="actions"><button class="btn pri grande" id="g_start">Empezar a escanear</button></div>
+    <p class="hint" style="margin-top:10px">Hace falta para saber quién ha grabado cada palé.</p>
+  </div>
+
+  <div class="card hide" id="g_card">
+    <div class="quien">
+      <label>Operario</label>
+      <b id="g_operShow" class="mono"></b>
+      <button class="btn gh sm" id="g_operChg">Cambiar</button>
+    </div>
+
+    <div class="modobar">
+      <span id="g_modoTxt"></span>
+      <button class="btn gh sm" id="g_modoChg">Cambiar</button>
+    </div>
+
+    <div id="g_cab" class="paso">
+      <div class="pasoN">1</div>
+      <div><b>Escanea el QR del palé</b><i>El del papel que has pegado encima</i></div>
+    </div>
+
+    <div class="scanbox" id="g_box">
+      <div class="scanrow">
+        <input id="g_scan" class="mono" placeholder="Dispara el lector aquí" autocomplete="off" autocapitalize="characters">
+        <button class="camBtn hide" data-cam="g_scan">&#9723;</button>
+      </div>
+      <div id="g_foco" class="foco">Listo para escanear</div>
+      <button class="btn pri grande hide" id="g_foto" style="width:100%;margin-top:12px">Hacer foto del número</button>
+    </div>
+
+    <div id="g_anom" class="anom hide">
+      <div class="atit" id="an_tit"></div>
+      <div class="atxt" id="an_txt"></div>
+      <div class="acod mono" id="an_cod"></div>
+      <div class="actions">
+        <button class="btn pri grande" id="an_ok">Sí, está bien</button>
+        <button class="btn gh grande" id="an_no">No, descartar</button>
+      </div>
+    </div>
+
+    <div id="g_eco" class="eco"></div>
+    <div id="g_ultimo" class="ultimo">Aún no has escaneado nada</div>
+  </div>
+
+  <div id="g_form" class="card hide">
+    <div class="marcador">
+      <div class="mk"><b>Bultos</b><span id="r_nb">0</span></div>
+      <div class="mk hero"><b>Total uds</b><span id="r_total">0</span></div>
+    </div>
+    <div class="desg" id="r_desg">Todavía sin bultos</div>
+    <div id="g_bultos" class="tally"></div>
+    <div id="g_avisos"></div>
+
+    <div class="row" style="margin-top:14px">
+      <div style="flex:1 1 180px"><label>Tono del palé</label><input id="g_tono" class="mono" placeholder="Escríbelo aquí" autocomplete="off" autocapitalize="characters"></div>
+      <div style="flex:2 1 240px"><label>Copiar en layout</label><input id="r_layout" class="mono" readonly></div>
+    </div>
+
+    <div class="actions">
+      <button class="btn gh grande" id="g_undo">Quitar el último bulto</button>
+      <button class="btn pri grande" id="g_next">Palé terminado</button>
+    </div>
+
+    <div class="actions">
+      <button class="btn gh sm" id="g_copy">Copiar layout</button>
+      <button class="btn gh sm dgr" id="g_clear">Vaciar este palé</button>
+    </div>
+  </div>
+
+  <div class="card">
+    <h2>Palés del contenedor</h2>
+    <div class="actions" style="margin:0 0 12px">
+      <button class="btn pri sm" id="g_pack">Descargar packing list (Excel)</button>
+      <button class="btn gh sm" id="g_sonido">Sonido: activado</button>
+    </div>
+    <div id="g_list" class="tw"></div>
+  </div>
+</section>
+
+<!-- ============ BUSCAR / HISTÓRICO ============ -->
+<section id="v-hist" class="hide">
+  <div class="card">
+    <h2>Qué necesito coger</h2>
+    <div class="row">
+      <div style="flex:2 1 260px">
+        <label>Artículo (mocacota o código de bulto)</label>
+        <div class="scanrow">
+          <input id="h_art" class="mono" list="h_arts" placeholder="Escanea un bulto o elige" autocomplete="off" autocapitalize="characters">
+          <button class="camBtn hide" data-cam="h_art">&#9723;</button>
+        </div>
+        <datalist id="h_arts"></datalist>
+      </div>
+      <div style="flex:0 1 170px"><label>Uds que necesito</label><input id="h_uds" type="number" inputmode="numeric" min="1" placeholder="3000"></div>
+      <div style="flex:0 1 170px"><label>Tono</label><select id="h_tono"><option value="">Cualquiera</option></select></div>
+    </div>
+    <div class="actions">
+      <button class="btn pri" id="h_go">Buscar combinaciones</button>
+      <button class="btn gh" id="h_reset">Limpiar</button>
+    </div>
+    <p class="hint" style="margin-top:10px">Sólo entran palés <b>con ubicación en el rack</b>. Si dejas las uds en blanco, verás todo el stock del artículo.</p>
+  </div>
+
+  <div id="h_out"></div>
+
+  <div class="card">
+    <h2>Registro histórico</h2>
+    <div class="row">
+      <div style="flex:2 1 240px"><label>Buscar</label>
+        <div class="scanrow">
+          <input id="h_q" class="mono" placeholder="código, artículo, tono, coordenada, palé, camión…" autocomplete="off" autocapitalize="characters">
+          <button class="camBtn hide" data-cam="h_q">&#9723;</button>
+        </div>
+      </div>
+      <div style="flex:0 1 200px"><label>Contenedor</label><select id="h_cont"></select></div>
+      <div style="flex:0 1 150px"><label>Desde</label><input id="h_des" type="date"></div>
+      <div style="flex:0 1 150px"><label>Hasta</label><input id="h_has" type="date"></div>
+    </div>
+    <div class="niveles" id="h_niv">
+      <button data-n="cont">Camiones</button>
+      <button data-n="palet" class="on">Palés</button>
+      <button data-n="bulto">Bultos</button>
+    </div>
+    <div id="h_sum" class="sum" style="margin-top:12px"></div>
+    <div class="actions">
+      <button class="btn pri sm" id="h_xlsx">Descargar lo filtrado (Excel)</button>
+      <button class="btn gh sm" id="h_copyUb">Copiar ubicaciones</button>
+      <button class="btn gh sm" id="h_limpia">Limpiar filtros</button>
+    </div>
+  </div>
+  <div class="card"><div id="h_tabla" class="tw"></div></div>
+</section>
+
+<!-- ============ MAPA ============ -->
+<section id="v-mapa" class="hide">
+  <div class="card" id="m_gate">
+    <h2>¿Quién está ubicando?</h2>
+    <label for="m_coord">Nombre del coordinador</label>
+    <input id="m_coord" placeholder="Escribe tu nombre" autocomplete="off" autocapitalize="words" style="font-size:19px;padding:15px">
+    <div class="actions"><button class="btn pri grande" id="m_start">Empezar</button></div>
+    <p class="hint" style="margin-top:10px">Hace falta para saber quién ha ubicado cada palé.</p>
+  </div>
+
+  <div class="card hide" id="m_card">
+    <div class="quien">
+      <label>Coordinador</label>
+      <b id="m_coordShow" class="mono"></b>
+      <button class="btn gh sm" id="m_coordChg">Cambiar</button>
+    </div>
+    <h2>Mapa de ubicación</h2>
+    <p class="hint">Pasillo, altura y número los rellena el coordinador. La coordenada sale del maestro y se contrasta con lo que escanea la carretilla.</p>
+    <div class="actions">
+      <button class="btn gh sm" id="m_copyLayout">Copiar columna layout</button>
+      <button class="btn gh sm" id="m_copyTabla">Copiar tabla</button>
+      <button class="btn pri sm" id="m_xlsx">Descargar Excel</button>
+    </div>
+    <div id="m_aviso" style="margin-top:10px"></div>
+  </div>
+  <div class="card hide" id="m_tablaCard"><div id="mapaTabla" class="tw"></div></div>
+</section>
+
+<!-- ============ DATOS ============ -->
+<section id="v-datos" class="hide">
+  <div class="card">
+    <h2>Maestro de ubicaciones</h2>
+    <p class="hint">Sustituye al BUSCARV contra “CONFE TODO”. Formato <b>pasillo;altura;número;coordenada</b> o <b>clave;coordenada</b>.</p>
+    <textarea id="ub_txt" rows="5" class="mono" style="margin-top:10px" placeholder="3;3;210;HM1003C210"></textarea>
+    <div class="actions">
+      <button class="btn pri" id="ub_load">Cargar ubicaciones</button>
+      <label class="btn gh" style="margin:0">Subir CSV<input type="file" id="ub_file" accept=".csv,.txt" class="hide"></label>
+      <button class="btn gh dgr" id="ub_clear">Vaciar</button>
+    </div>
+    <p class="hint" style="margin-top:10px" id="ub_info"></p>
+  </div>
+
+  <div class="card">
+    <h2>Lectura del código de bulto</h2>
+    <div class="row">
+      <div><label>Uds: dígitos desde el final</label><input id="s_pos" type="number" inputmode="numeric" min="2" value="3"></div>
+      <div><label>Uds: nº de dígitos</label><input id="s_len" type="number" inputmode="numeric" min="1" value="2"></div>
+      <div><label>Mocacota: primeros caracteres</label><input id="s_moca" type="number" inputmode="numeric" min="1" value="12"></div>
+      <div><label>Patrón del contenedor activo</label><input id="s_largo" class="mono" readonly></div>
+    </div>
+    <p class="hint" style="margin-top:8px" id="s_demo"></p>
+    <div class="row" style="margin-top:10px">
+      <div style="flex:1 1 100%"><label>Probar un código</label><input id="s_test" class="mono" placeholder="pega aquí una etiqueta de bulto"></div>
+    </div>
+    <p class="hint" id="s_testout"></p>
+    <div class="actions">
+      <button class="btn gh" id="s_save">Guardar reglas</button>
+      <button class="btn gh dgr" id="s_repat">Olvidar patrón y volver a aprenderlo</button>
+    </div>
+  </div>
+
+  <div class="card">
+    <h2>Histórico y copias de seguridad</h2>
+    <div class="actions">
+      <button class="btn pri" id="d_xlsxAll">Descargar todo (Excel)</button>
+      <button class="btn gh" id="d_backup">Respaldo (JSON)</button>
+      <label class="btn gh" style="margin:0">Restaurar<input type="file" id="d_restore" accept=".json" class="hide"></label>
+    </div>
+    <p class="hint" style="margin-top:10px" id="d_info"></p>
+  </div>
+
+  <div class="card">
+    <h2>Teclado en pantalla en la PDA</h2>
+    <p class="hint">Si al tocar una casilla no sale el teclado, es la PDA, no la app: Android oculta el teclado cuando detecta el lector como teclado físico. Se arregla en <b>Ajustes → Sistema → Idiomas e introducción de texto → Teclado físico → Mostrar teclado en pantalla</b>. Todas las casillas de la app son editables a mano y las numéricas abren el teclado numérico.</p>
+  </div>
+  <p class="foot">Los cálculos son los mismos del Excel original</p>
+</section>
+
+</main>
+
+<div id="camWrap">
+  <div id="camStage">
+    <video id="camVid" playsinline muted></video>
+    <canvas id="camShot" class="hide"></canvas>
+    <div id="camGuia" class="hide"><div></div></div>
+  </div>
+  <div id="camLee" class="hide">
+    <label>Número leído — corrígelo si hace falta</label>
+    <input id="camNum" class="mono" inputmode="numeric" autocomplete="off">
+    <div class="actions">
+      <button class="btn pri grande" id="camOk">Confirmar</button>
+      <button class="btn gh grande" id="camRe">Repetir foto</button>
+    </div>
+  </div>
+  <div id="camBar"><b id="camMsg">Apunta al código</b>
+    <button class="btn pri sm hide" id="camCap">Capturar</button>
+    <button class="btn gh sm" id="camSwap">Girar</button>
+    <button class="btn gh sm" id="camClose">Cerrar</button></div>
+</div>
+<div id="toast"></div>
+
+<script>
+//---------------------------------------------------------------------
+//
+// QR Code Generator for JavaScript
+//
+// Copyright (c) 2009 Kazuhiko Arase
+//
+// URL: http://www.d-project.com/
+//
+// Licensed under the MIT license:
+//  http://www.opensource.org/licenses/mit-license.php
+//
+// The word 'QR Code' is registered trademark of
+// DENSO WAVE INCORPORATED
+//  http://www.denso-wave.com/qrcode/faqpatent-e.html
+//
+//---------------------------------------------------------------------
+
+var qrcode = function() {
+
+  //---------------------------------------------------------------------
+  // qrcode
+  //---------------------------------------------------------------------
+
+  /**
+   * qrcode
+   * @param typeNumber 1 to 40
+   * @param errorCorrectionLevel 'L','M','Q','H'
+   */
+  var qrcode = function(typeNumber, errorCorrectionLevel) {
+
+    var PAD0 = 0xEC;
+    var PAD1 = 0x11;
+
+    var _typeNumber = typeNumber;
+    var _errorCorrectionLevel = QRErrorCorrectionLevel[errorCorrectionLevel];
+    var _modules = null;
+    var _moduleCount = 0;
+    var _dataCache = null;
+    var _dataList = [];
+
+    var _this = {};
+
+    var makeImpl = function(test, maskPattern) {
+
+      _moduleCount = _typeNumber * 4 + 17;
+      _modules = function(moduleCount) {
+        var modules = new Array(moduleCount);
+        for (var row = 0; row < moduleCount; row += 1) {
+          modules[row] = new Array(moduleCount);
+          for (var col = 0; col < moduleCount; col += 1) {
+            modules[row][col] = null;
+          }
+        }
+        return modules;
+      }(_moduleCount);
+
+      setupPositionProbePattern(0, 0);
+      setupPositionProbePattern(_moduleCount - 7, 0);
+      setupPositionProbePattern(0, _moduleCount - 7);
+      setupPositionAdjustPattern();
+      setupTimingPattern();
+      setupTypeInfo(test, maskPattern);
+
+      if (_typeNumber >= 7) {
+        setupTypeNumber(test);
+      }
+
+      if (_dataCache == null) {
+        _dataCache = createData(_typeNumber, _errorCorrectionLevel, _dataList);
+      }
+
+      mapData(_dataCache, maskPattern);
+    };
+
+    var setupPositionProbePattern = function(row, col) {
+
+      for (var r = -1; r <= 7; r += 1) {
+
+        if (row + r <= -1 || _moduleCount <= row + r) continue;
+
+        for (var c = -1; c <= 7; c += 1) {
+
+          if (col + c <= -1 || _moduleCount <= col + c) continue;
+
+          if ( (0 <= r && r <= 6 && (c == 0 || c == 6) )
+              || (0 <= c && c <= 6 && (r == 0 || r == 6) )
+              || (2 <= r && r <= 4 && 2 <= c && c <= 4) ) {
+            _modules[row + r][col + c] = true;
+          } else {
+            _modules[row + r][col + c] = false;
+          }
+        }
+      }
+    };
+
+    var getBestMaskPattern = function() {
+
+      var minLostPoint = 0;
+      var pattern = 0;
+
+      for (var i = 0; i < 8; i += 1) {
+
+        makeImpl(true, i);
+
+        var lostPoint = QRUtil.getLostPoint(_this);
+
+        if (i == 0 || minLostPoint > lostPoint) {
+          minLostPoint = lostPoint;
+          pattern = i;
+        }
+      }
+
+      return pattern;
+    };
+
+    var setupTimingPattern = function() {
+
+      for (var r = 8; r < _moduleCount - 8; r += 1) {
+        if (_modules[r][6] != null) {
+          continue;
+        }
+        _modules[r][6] = (r % 2 == 0);
+      }
+
+      for (var c = 8; c < _moduleCount - 8; c += 1) {
+        if (_modules[6][c] != null) {
+          continue;
+        }
+        _modules[6][c] = (c % 2 == 0);
+      }
+    };
+
+    var setupPositionAdjustPattern = function() {
+
+      var pos = QRUtil.getPatternPosition(_typeNumber);
+
+      for (var i = 0; i < pos.length; i += 1) {
+
+        for (var j = 0; j < pos.length; j += 1) {
+
+          var row = pos[i];
+          var col = pos[j];
+
+          if (_modules[row][col] != null) {
+            continue;
+          }
+
+          for (var r = -2; r <= 2; r += 1) {
+
+            for (var c = -2; c <= 2; c += 1) {
+
+              if (r == -2 || r == 2 || c == -2 || c == 2
+                  || (r == 0 && c == 0) ) {
+                _modules[row + r][col + c] = true;
+              } else {
+                _modules[row + r][col + c] = false;
+              }
+            }
+          }
+        }
+      }
+    };
+
+    var setupTypeNumber = function(test) {
+
+      var bits = QRUtil.getBCHTypeNumber(_typeNumber);
+
+      for (var i = 0; i < 18; i += 1) {
+        var mod = (!test && ( (bits >> i) & 1) == 1);
+        _modules[Math.floor(i / 3)][i % 3 + _moduleCount - 8 - 3] = mod;
+      }
+
+      for (var i = 0; i < 18; i += 1) {
+        var mod = (!test && ( (bits >> i) & 1) == 1);
+        _modules[i % 3 + _moduleCount - 8 - 3][Math.floor(i / 3)] = mod;
+      }
+    };
+
+    var setupTypeInfo = function(test, maskPattern) {
+
+      var data = (_errorCorrectionLevel << 3) | maskPattern;
+      var bits = QRUtil.getBCHTypeInfo(data);
+
+      // vertical
+      for (var i = 0; i < 15; i += 1) {
+
+        var mod = (!test && ( (bits >> i) & 1) == 1);
+
+        if (i < 6) {
+          _modules[i][8] = mod;
+        } else if (i < 8) {
+          _modules[i + 1][8] = mod;
+        } else {
+          _modules[_moduleCount - 15 + i][8] = mod;
+        }
+      }
+
+      // horizontal
+      for (var i = 0; i < 15; i += 1) {
+
+        var mod = (!test && ( (bits >> i) & 1) == 1);
+
+        if (i < 8) {
+          _modules[8][_moduleCount - i - 1] = mod;
+        } else if (i < 9) {
+          _modules[8][15 - i - 1 + 1] = mod;
+        } else {
+          _modules[8][15 - i - 1] = mod;
+        }
+      }
+
+      // fixed module
+      _modules[_moduleCount - 8][8] = (!test);
+    };
+
+    var mapData = function(data, maskPattern) {
+
+      var inc = -1;
+      var row = _moduleCount - 1;
+      var bitIndex = 7;
+      var byteIndex = 0;
+      var maskFunc = QRUtil.getMaskFunction(maskPattern);
+
+      for (var col = _moduleCount - 1; col > 0; col -= 2) {
+
+        if (col == 6) col -= 1;
+
+        while (true) {
+
+          for (var c = 0; c < 2; c += 1) {
+
+            if (_modules[row][col - c] == null) {
+
+              var dark = false;
+
+              if (byteIndex < data.length) {
+                dark = ( ( (data[byteIndex] >>> bitIndex) & 1) == 1);
+              }
+
+              var mask = maskFunc(row, col - c);
+
+              if (mask) {
+                dark = !dark;
+              }
+
+              _modules[row][col - c] = dark;
+              bitIndex -= 1;
+
+              if (bitIndex == -1) {
+                byteIndex += 1;
+                bitIndex = 7;
+              }
+            }
+          }
+
+          row += inc;
+
+          if (row < 0 || _moduleCount <= row) {
+            row -= inc;
+            inc = -inc;
+            break;
+          }
+        }
+      }
+    };
+
+    var createBytes = function(buffer, rsBlocks) {
+
+      var offset = 0;
+
+      var maxDcCount = 0;
+      var maxEcCount = 0;
+
+      var dcdata = new Array(rsBlocks.length);
+      var ecdata = new Array(rsBlocks.length);
+
+      for (var r = 0; r < rsBlocks.length; r += 1) {
+
+        var dcCount = rsBlocks[r].dataCount;
+        var ecCount = rsBlocks[r].totalCount - dcCount;
+
+        maxDcCount = Math.max(maxDcCount, dcCount);
+        maxEcCount = Math.max(maxEcCount, ecCount);
+
+        dcdata[r] = new Array(dcCount);
+
+        for (var i = 0; i < dcdata[r].length; i += 1) {
+          dcdata[r][i] = 0xff & buffer.getBuffer()[i + offset];
+        }
+        offset += dcCount;
+
+        var rsPoly = QRUtil.getErrorCorrectPolynomial(ecCount);
+        var rawPoly = qrPolynomial(dcdata[r], rsPoly.getLength() - 1);
+
+        var modPoly = rawPoly.mod(rsPoly);
+        ecdata[r] = new Array(rsPoly.getLength() - 1);
+        for (var i = 0; i < ecdata[r].length; i += 1) {
+          var modIndex = i + modPoly.getLength() - ecdata[r].length;
+          ecdata[r][i] = (modIndex >= 0)? modPoly.getAt(modIndex) : 0;
+        }
+      }
+
+      var totalCodeCount = 0;
+      for (var i = 0; i < rsBlocks.length; i += 1) {
+        totalCodeCount += rsBlocks[i].totalCount;
+      }
+
+      var data = new Array(totalCodeCount);
+      var index = 0;
+
+      for (var i = 0; i < maxDcCount; i += 1) {
+        for (var r = 0; r < rsBlocks.length; r += 1) {
+          if (i < dcdata[r].length) {
+            data[index] = dcdata[r][i];
+            index += 1;
+          }
+        }
+      }
+
+      for (var i = 0; i < maxEcCount; i += 1) {
+        for (var r = 0; r < rsBlocks.length; r += 1) {
+          if (i < ecdata[r].length) {
+            data[index] = ecdata[r][i];
+            index += 1;
+          }
+        }
+      }
+
+      return data;
+    };
+
+    var createData = function(typeNumber, errorCorrectionLevel, dataList) {
+
+      var rsBlocks = QRRSBlock.getRSBlocks(typeNumber, errorCorrectionLevel);
+
+      var buffer = qrBitBuffer();
+
+      for (var i = 0; i < dataList.length; i += 1) {
+        var data = dataList[i];
+        buffer.put(data.getMode(), 4);
+        buffer.put(data.getLength(), QRUtil.getLengthInBits(data.getMode(), typeNumber) );
+        data.write(buffer);
+      }
+
+      // calc num max data.
+      var totalDataCount = 0;
+      for (var i = 0; i < rsBlocks.length; i += 1) {
+        totalDataCount += rsBlocks[i].dataCount;
+      }
+
+      if (buffer.getLengthInBits() > totalDataCount * 8) {
+        throw 'code length overflow. ('
+          + buffer.getLengthInBits()
+          + '>'
+          + totalDataCount * 8
+          + ')';
+      }
+
+      // end code
+      if (buffer.getLengthInBits() + 4 <= totalDataCount * 8) {
+        buffer.put(0, 4);
+      }
+
+      // padding
+      while (buffer.getLengthInBits() % 8 != 0) {
+        buffer.putBit(false);
+      }
+
+      // padding
+      while (true) {
+
+        if (buffer.getLengthInBits() >= totalDataCount * 8) {
+          break;
+        }
+        buffer.put(PAD0, 8);
+
+        if (buffer.getLengthInBits() >= totalDataCount * 8) {
+          break;
+        }
+        buffer.put(PAD1, 8);
+      }
+
+      return createBytes(buffer, rsBlocks);
+    };
+
+    _this.addData = function(data, mode) {
+
+      mode = mode || 'Byte';
+
+      var newData = null;
+
+      switch(mode) {
+      case 'Numeric' :
+        newData = qrNumber(data);
+        break;
+      case 'Alphanumeric' :
+        newData = qrAlphaNum(data);
+        break;
+      case 'Byte' :
+        newData = qr8BitByte(data);
+        break;
+      case 'Kanji' :
+        newData = qrKanji(data);
+        break;
+      default :
+        throw 'mode:' + mode;
+      }
+
+      _dataList.push(newData);
+      _dataCache = null;
+    };
+
+    _this.isDark = function(row, col) {
+      if (row < 0 || _moduleCount <= row || col < 0 || _moduleCount <= col) {
+        throw row + ',' + col;
+      }
+      return _modules[row][col];
+    };
+
+    _this.getModuleCount = function() {
+      return _moduleCount;
+    };
+
+    _this.make = function() {
+      if (_typeNumber < 1) {
+        var typeNumber = 1;
+
+        for (; typeNumber < 40; typeNumber++) {
+          var rsBlocks = QRRSBlock.getRSBlocks(typeNumber, _errorCorrectionLevel);
+          var buffer = qrBitBuffer();
+
+          for (var i = 0; i < _dataList.length; i++) {
+            var data = _dataList[i];
+            buffer.put(data.getMode(), 4);
+            buffer.put(data.getLength(), QRUtil.getLengthInBits(data.getMode(), typeNumber) );
+            data.write(buffer);
+          }
+
+          var totalDataCount = 0;
+          for (var i = 0; i < rsBlocks.length; i++) {
+            totalDataCount += rsBlocks[i].dataCount;
+          }
+
+          if (buffer.getLengthInBits() <= totalDataCount * 8) {
+            break;
+          }
+        }
+
+        _typeNumber = typeNumber;
+      }
+
+      makeImpl(false, getBestMaskPattern() );
+    };
+
+    _this.createTableTag = function(cellSize, margin) {
+
+      cellSize = cellSize || 2;
+      margin = (typeof margin == 'undefined')? cellSize * 4 : margin;
+
+      var qrHtml = '';
+
+      qrHtml += '<table style="';
+      qrHtml += ' border-width: 0px; border-style: none;';
+      qrHtml += ' border-collapse: collapse;';
+      qrHtml += ' padding: 0px; margin: ' + margin + 'px;';
+      qrHtml += '">';
+      qrHtml += '<tbody>';
+
+      for (var r = 0; r < _this.getModuleCount(); r += 1) {
+
+        qrHtml += '<tr>';
+
+        for (var c = 0; c < _this.getModuleCount(); c += 1) {
+          qrHtml += '<td style="';
+          qrHtml += ' border-width: 0px; border-style: none;';
+          qrHtml += ' border-collapse: collapse;';
+          qrHtml += ' padding: 0px; margin: 0px;';
+          qrHtml += ' width: ' + cellSize + 'px;';
+          qrHtml += ' height: ' + cellSize + 'px;';
+          qrHtml += ' background-color: ';
+          qrHtml += _this.isDark(r, c)? '#000000' : '#ffffff';
+          qrHtml += ';';
+          qrHtml += '"/>';
+        }
+
+        qrHtml += '</tr>';
+      }
+
+      qrHtml += '</tbody>';
+      qrHtml += '</table>';
+
+      return qrHtml;
+    };
+
+    _this.createSvgTag = function(cellSize, margin, alt, title) {
+
+      var opts = {};
+      if (typeof arguments[0] == 'object') {
+        // Called by options.
+        opts = arguments[0];
+        // overwrite cellSize and margin.
+        cellSize = opts.cellSize;
+        margin = opts.margin;
+        alt = opts.alt;
+        title = opts.title;
+      }
+
+      cellSize = cellSize || 2;
+      margin = (typeof margin == 'undefined')? cellSize * 4 : margin;
+
+      // Compose alt property surrogate
+      alt = (typeof alt === 'string') ? {text: alt} : alt || {};
+      alt.text = alt.text || null;
+      alt.id = (alt.text) ? alt.id || 'qrcode-description' : null;
+
+      // Compose title property surrogate
+      title = (typeof title === 'string') ? {text: title} : title || {};
+      title.text = title.text || null;
+      title.id = (title.text) ? title.id || 'qrcode-title' : null;
+
+      var size = _this.getModuleCount() * cellSize + margin * 2;
+      var c, mc, r, mr, qrSvg='', rect;
+
+      rect = 'l' + cellSize + ',0 0,' + cellSize +
+        ' -' + cellSize + ',0 0,-' + cellSize + 'z ';
+
+      qrSvg += '<svg version="1.1" xmlns="http://www.w3.org/2000/svg"';
+      qrSvg += !opts.scalable ? ' width="' + size + 'px" height="' + size + 'px"' : '';
+      qrSvg += ' viewBox="0 0 ' + size + ' ' + size + '" ';
+      qrSvg += ' preserveAspectRatio="xMinYMin meet"';
+      qrSvg += (title.text || alt.text) ? ' role="img" aria-labelledby="' +
+          escapeXml([title.id, alt.id].join(' ').trim() ) + '"' : '';
+      qrSvg += '>';
+      qrSvg += (title.text) ? '<title id="' + escapeXml(title.id) + '">' +
+          escapeXml(title.text) + '</title>' : '';
+      qrSvg += (alt.text) ? '<description id="' + escapeXml(alt.id) + '">' +
+          escapeXml(alt.text) + '</description>' : '';
+      qrSvg += '<rect width="100%" height="100%" fill="white" cx="0" cy="0"/>';
+      qrSvg += '<path d="';
+
+      for (r = 0; r < _this.getModuleCount(); r += 1) {
+        mr = r * cellSize + margin;
+        for (c = 0; c < _this.getModuleCount(); c += 1) {
+          if (_this.isDark(r, c) ) {
+            mc = c*cellSize+margin;
+            qrSvg += 'M' + mc + ',' + mr + rect;
+          }
+        }
+      }
+
+      qrSvg += '" stroke="transparent" fill="black"/>';
+      qrSvg += '</svg>';
+
+      return qrSvg;
+    };
+
+    _this.createDataURL = function(cellSize, margin) {
+
+      cellSize = cellSize || 2;
+      margin = (typeof margin == 'undefined')? cellSize * 4 : margin;
+
+      var size = _this.getModuleCount() * cellSize + margin * 2;
+      var min = margin;
+      var max = size - margin;
+
+      return createDataURL(size, size, function(x, y) {
+        if (min <= x && x < max && min <= y && y < max) {
+          var c = Math.floor( (x - min) / cellSize);
+          var r = Math.floor( (y - min) / cellSize);
+          return _this.isDark(r, c)? 0 : 1;
+        } else {
+          return 1;
+        }
+      } );
+    };
+
+    _this.createImgTag = function(cellSize, margin, alt) {
+
+      cellSize = cellSize || 2;
+      margin = (typeof margin == 'undefined')? cellSize * 4 : margin;
+
+      var size = _this.getModuleCount() * cellSize + margin * 2;
+
+      var img = '';
+      img += '<img';
+      img += '\u0020src="';
+      img += _this.createDataURL(cellSize, margin);
+      img += '"';
+      img += '\u0020width="';
+      img += size;
+      img += '"';
+      img += '\u0020height="';
+      img += size;
+      img += '"';
+      if (alt) {
+        img += '\u0020alt="';
+        img += escapeXml(alt);
+        img += '"';
+      }
+      img += '/>';
+
+      return img;
+    };
+
+    var escapeXml = function(s) {
+      var escaped = '';
+      for (var i = 0; i < s.length; i += 1) {
+        var c = s.charAt(i);
+        switch(c) {
+        case '<': escaped += '&lt;'; break;
+        case '>': escaped += '&gt;'; break;
+        case '&': escaped += '&amp;'; break;
+        case '"': escaped += '&quot;'; break;
+        default : escaped += c; break;
+        }
+      }
+      return escaped;
+    };
+
+    var _createHalfASCII = function(margin) {
+      var cellSize = 1;
+      margin = (typeof margin == 'undefined')? cellSize * 2 : margin;
+
+      var size = _this.getModuleCount() * cellSize + margin * 2;
+      var min = margin;
+      var max = size - margin;
+
+      var y, x, r1, r2, p;
+
+      var blocks = {
+        '██': '█',
+        '█ ': '▀',
+        ' █': '▄',
+        '  ': ' '
+      };
+
+      var blocksLastLineNoMargin = {
+        '██': '▀',
+        '█ ': '▀',
+        ' █': ' ',
+        '  ': ' '
+      };
+
+      var ascii = '';
+      for (y = 0; y < size; y += 2) {
+        r1 = Math.floor((y - min) / cellSize);
+        r2 = Math.floor((y + 1 - min) / cellSize);
+        for (x = 0; x < size; x += 1) {
+          p = '█';
+
+          if (min <= x && x < max && min <= y && y < max && _this.isDark(r1, Math.floor((x - min) / cellSize))) {
+            p = ' ';
+          }
+
+          if (min <= x && x < max && min <= y+1 && y+1 < max && _this.isDark(r2, Math.floor((x - min) / cellSize))) {
+            p += ' ';
+          }
+          else {
+            p += '█';
+          }
+
+          // Output 2 characters per pixel, to create full square. 1 character per pixels gives only half width of square.
+          ascii += (margin < 1 && y+1 >= max) ? blocksLastLineNoMargin[p] : blocks[p];
+        }
+
+        ascii += '\n';
+      }
+
+      if (size % 2 && margin > 0) {
+        return ascii.substring(0, ascii.length - size - 1) + Array(size+1).join('▀');
+      }
+
+      return ascii.substring(0, ascii.length-1);
+    };
+
+    _this.createASCII = function(cellSize, margin) {
+      cellSize = cellSize || 1;
+
+      if (cellSize < 2) {
+        return _createHalfASCII(margin);
+      }
+
+      cellSize -= 1;
+      margin = (typeof margin == 'undefined')? cellSize * 2 : margin;
+
+      var size = _this.getModuleCount() * cellSize + margin * 2;
+      var min = margin;
+      var max = size - margin;
+
+      var y, x, r, p;
+
+      var white = Array(cellSize+1).join('██');
+      var black = Array(cellSize+1).join('  ');
+
+      var ascii = '';
+      var line = '';
+      for (y = 0; y < size; y += 1) {
+        r = Math.floor( (y - min) / cellSize);
+        line = '';
+        for (x = 0; x < size; x += 1) {
+          p = 1;
+
+          if (min <= x && x < max && min <= y && y < max && _this.isDark(r, Math.floor((x - min) / cellSize))) {
+            p = 0;
+          }
+
+          // Output 2 characters per pixel, to create full square. 1 character per pixels gives only half width of square.
+          line += p ? white : black;
+        }
+
+        for (r = 0; r < cellSize; r += 1) {
+          ascii += line + '\n';
+        }
+      }
+
+      return ascii.substring(0, ascii.length-1);
+    };
+
+    _this.renderTo2dContext = function(context, cellSize) {
+      cellSize = cellSize || 2;
+      var length = _this.getModuleCount();
+      for (var row = 0; row < length; row++) {
+        for (var col = 0; col < length; col++) {
+          context.fillStyle = _this.isDark(row, col) ? 'black' : 'white';
+          context.fillRect(row * cellSize, col * cellSize, cellSize, cellSize);
+        }
+      }
+    }
+
+    return _this;
+  };
+
+  //---------------------------------------------------------------------
+  // qrcode.stringToBytes
+  //---------------------------------------------------------------------
+
+  qrcode.stringToBytesFuncs = {
+    'default' : function(s) {
+      var bytes = [];
+      for (var i = 0; i < s.length; i += 1) {
+        var c = s.charCodeAt(i);
+        bytes.push(c & 0xff);
+      }
+      return bytes;
+    }
+  };
+
+  qrcode.stringToBytes = qrcode.stringToBytesFuncs['default'];
+
+  //---------------------------------------------------------------------
+  // qrcode.createStringToBytes
+  //---------------------------------------------------------------------
+
+  /**
+   * @param unicodeData base64 string of byte array.
+   * [16bit Unicode],[16bit Bytes], ...
+   * @param numChars
+   */
+  qrcode.createStringToBytes = function(unicodeData, numChars) {
+
+    // create conversion map.
+
+    var unicodeMap = function() {
+
+      var bin = base64DecodeInputStream(unicodeData);
+      var read = function() {
+        var b = bin.read();
+        if (b == -1) throw 'eof';
+        return b;
+      };
+
+      var count = 0;
+      var unicodeMap = {};
+      while (true) {
+        var b0 = bin.read();
+        if (b0 == -1) break;
+        var b1 = read();
+        var b2 = read();
+        var b3 = read();
+        var k = String.fromCharCode( (b0 << 8) | b1);
+        var v = (b2 << 8) | b3;
+        unicodeMap[k] = v;
+        count += 1;
+      }
+      if (count != numChars) {
+        throw count + ' != ' + numChars;
+      }
+
+      return unicodeMap;
+    }();
+
+    var unknownChar = '?'.charCodeAt(0);
+
+    return function(s) {
+      var bytes = [];
+      for (var i = 0; i < s.length; i += 1) {
+        var c = s.charCodeAt(i);
+        if (c < 128) {
+          bytes.push(c);
+        } else {
+          var b = unicodeMap[s.charAt(i)];
+          if (typeof b == 'number') {
+            if ( (b & 0xff) == b) {
+              // 1byte
+              bytes.push(b);
+            } else {
+              // 2bytes
+              bytes.push(b >>> 8);
+              bytes.push(b & 0xff);
+            }
+          } else {
+            bytes.push(unknownChar);
+          }
+        }
+      }
+      return bytes;
+    };
+  };
+
+  //---------------------------------------------------------------------
+  // QRMode
+  //---------------------------------------------------------------------
+
+  var QRMode = {
+    MODE_NUMBER :    1 << 0,
+    MODE_ALPHA_NUM : 1 << 1,
+    MODE_8BIT_BYTE : 1 << 2,
+    MODE_KANJI :     1 << 3
+  };
+
+  //---------------------------------------------------------------------
+  // QRErrorCorrectionLevel
+  //---------------------------------------------------------------------
+
+  var QRErrorCorrectionLevel = {
+    L : 1,
+    M : 0,
+    Q : 3,
+    H : 2
+  };
+
+  //---------------------------------------------------------------------
+  // QRMaskPattern
+  //---------------------------------------------------------------------
+
+  var QRMaskPattern = {
+    PATTERN000 : 0,
+    PATTERN001 : 1,
+    PATTERN010 : 2,
+    PATTERN011 : 3,
+    PATTERN100 : 4,
+    PATTERN101 : 5,
+    PATTERN110 : 6,
+    PATTERN111 : 7
+  };
+
+  //---------------------------------------------------------------------
+  // QRUtil
+  //---------------------------------------------------------------------
+
+  var QRUtil = function() {
+
+    var PATTERN_POSITION_TABLE = [
+      [],
+      [6, 18],
+      [6, 22],
+      [6, 26],
+      [6, 30],
+      [6, 34],
+      [6, 22, 38],
+      [6, 24, 42],
+      [6, 26, 46],
+      [6, 28, 50],
+      [6, 30, 54],
+      [6, 32, 58],
+      [6, 34, 62],
+      [6, 26, 46, 66],
+      [6, 26, 48, 70],
+      [6, 26, 50, 74],
+      [6, 30, 54, 78],
+      [6, 30, 56, 82],
+      [6, 30, 58, 86],
+      [6, 34, 62, 90],
+      [6, 28, 50, 72, 94],
+      [6, 26, 50, 74, 98],
+      [6, 30, 54, 78, 102],
+      [6, 28, 54, 80, 106],
+      [6, 32, 58, 84, 110],
+      [6, 30, 58, 86, 114],
+      [6, 34, 62, 90, 118],
+      [6, 26, 50, 74, 98, 122],
+      [6, 30, 54, 78, 102, 126],
+      [6, 26, 52, 78, 104, 130],
+      [6, 30, 56, 82, 108, 134],
+      [6, 34, 60, 86, 112, 138],
+      [6, 30, 58, 86, 114, 142],
+      [6, 34, 62, 90, 118, 146],
+      [6, 30, 54, 78, 102, 126, 150],
+      [6, 24, 50, 76, 102, 128, 154],
+      [6, 28, 54, 80, 106, 132, 158],
+      [6, 32, 58, 84, 110, 136, 162],
+      [6, 26, 54, 82, 110, 138, 166],
+      [6, 30, 58, 86, 114, 142, 170]
+    ];
+    var G15 = (1 << 10) | (1 << 8) | (1 << 5) | (1 << 4) | (1 << 2) | (1 << 1) | (1 << 0);
+    var G18 = (1 << 12) | (1 << 11) | (1 << 10) | (1 << 9) | (1 << 8) | (1 << 5) | (1 << 2) | (1 << 0);
+    var G15_MASK = (1 << 14) | (1 << 12) | (1 << 10) | (1 << 4) | (1 << 1);
+
+    var _this = {};
+
+    var getBCHDigit = function(data) {
+      var digit = 0;
+      while (data != 0) {
+        digit += 1;
+        data >>>= 1;
+      }
+      return digit;
+    };
+
+    _this.getBCHTypeInfo = function(data) {
+      var d = data << 10;
+      while (getBCHDigit(d) - getBCHDigit(G15) >= 0) {
+        d ^= (G15 << (getBCHDigit(d) - getBCHDigit(G15) ) );
+      }
+      return ( (data << 10) | d) ^ G15_MASK;
+    };
+
+    _this.getBCHTypeNumber = function(data) {
+      var d = data << 12;
+      while (getBCHDigit(d) - getBCHDigit(G18) >= 0) {
+        d ^= (G18 << (getBCHDigit(d) - getBCHDigit(G18) ) );
+      }
+      return (data << 12) | d;
+    };
+
+    _this.getPatternPosition = function(typeNumber) {
+      return PATTERN_POSITION_TABLE[typeNumber - 1];
+    };
+
+    _this.getMaskFunction = function(maskPattern) {
+
+      switch (maskPattern) {
+
+      case QRMaskPattern.PATTERN000 :
+        return function(i, j) { return (i + j) % 2 == 0; };
+      case QRMaskPattern.PATTERN001 :
+        return function(i, j) { return i % 2 == 0; };
+      case QRMaskPattern.PATTERN010 :
+        return function(i, j) { return j % 3 == 0; };
+      case QRMaskPattern.PATTERN011 :
+        return function(i, j) { return (i + j) % 3 == 0; };
+      case QRMaskPattern.PATTERN100 :
+        return function(i, j) { return (Math.floor(i / 2) + Math.floor(j / 3) ) % 2 == 0; };
+      case QRMaskPattern.PATTERN101 :
+        return function(i, j) { return (i * j) % 2 + (i * j) % 3 == 0; };
+      case QRMaskPattern.PATTERN110 :
+        return function(i, j) { return ( (i * j) % 2 + (i * j) % 3) % 2 == 0; };
+      case QRMaskPattern.PATTERN111 :
+        return function(i, j) { return ( (i * j) % 3 + (i + j) % 2) % 2 == 0; };
+
+      default :
+        throw 'bad maskPattern:' + maskPattern;
+      }
+    };
+
+    _this.getErrorCorrectPolynomial = function(errorCorrectLength) {
+      var a = qrPolynomial([1], 0);
+      for (var i = 0; i < errorCorrectLength; i += 1) {
+        a = a.multiply(qrPolynomial([1, QRMath.gexp(i)], 0) );
+      }
+      return a;
+    };
+
+    _this.getLengthInBits = function(mode, type) {
+
+      if (1 <= type && type < 10) {
+
+        // 1 - 9
+
+        switch(mode) {
+        case QRMode.MODE_NUMBER    : return 10;
+        case QRMode.MODE_ALPHA_NUM : return 9;
+        case QRMode.MODE_8BIT_BYTE : return 8;
+        case QRMode.MODE_KANJI     : return 8;
+        default :
+          throw 'mode:' + mode;
+        }
+
+      } else if (type < 27) {
+
+        // 10 - 26
+
+        switch(mode) {
+        case QRMode.MODE_NUMBER    : return 12;
+        case QRMode.MODE_ALPHA_NUM : return 11;
+        case QRMode.MODE_8BIT_BYTE : return 16;
+        case QRMode.MODE_KANJI     : return 10;
+        default :
+          throw 'mode:' + mode;
+        }
+
+      } else if (type < 41) {
+
+        // 27 - 40
+
+        switch(mode) {
+        case QRMode.MODE_NUMBER    : return 14;
+        case QRMode.MODE_ALPHA_NUM : return 13;
+        case QRMode.MODE_8BIT_BYTE : return 16;
+        case QRMode.MODE_KANJI     : return 12;
+        default :
+          throw 'mode:' + mode;
+        }
+
+      } else {
+        throw 'type:' + type;
+      }
+    };
+
+    _this.getLostPoint = function(qrcode) {
+
+      var moduleCount = qrcode.getModuleCount();
+
+      var lostPoint = 0;
+
+      // LEVEL1
+
+      for (var row = 0; row < moduleCount; row += 1) {
+        for (var col = 0; col < moduleCount; col += 1) {
+
+          var sameCount = 0;
+          var dark = qrcode.isDark(row, col);
+
+          for (var r = -1; r <= 1; r += 1) {
+
+            if (row + r < 0 || moduleCount <= row + r) {
+              continue;
+            }
+
+            for (var c = -1; c <= 1; c += 1) {
+
+              if (col + c < 0 || moduleCount <= col + c) {
+                continue;
+              }
+
+              if (r == 0 && c == 0) {
+                continue;
+              }
+
+              if (dark == qrcode.isDark(row + r, col + c) ) {
+                sameCount += 1;
+              }
+            }
+          }
+
+          if (sameCount > 5) {
+            lostPoint += (3 + sameCount - 5);
+          }
+        }
+      };
+
+      // LEVEL2
+
+      for (var row = 0; row < moduleCount - 1; row += 1) {
+        for (var col = 0; col < moduleCount - 1; col += 1) {
+          var count = 0;
+          if (qrcode.isDark(row, col) ) count += 1;
+          if (qrcode.isDark(row + 1, col) ) count += 1;
+          if (qrcode.isDark(row, col + 1) ) count += 1;
+          if (qrcode.isDark(row + 1, col + 1) ) count += 1;
+          if (count == 0 || count == 4) {
+            lostPoint += 3;
+          }
+        }
+      }
+
+      // LEVEL3
+
+      for (var row = 0; row < moduleCount; row += 1) {
+        for (var col = 0; col < moduleCount - 6; col += 1) {
+          if (qrcode.isDark(row, col)
+              && !qrcode.isDark(row, col + 1)
+              &&  qrcode.isDark(row, col + 2)
+              &&  qrcode.isDark(row, col + 3)
+              &&  qrcode.isDark(row, col + 4)
+              && !qrcode.isDark(row, col + 5)
+              &&  qrcode.isDark(row, col + 6) ) {
+            lostPoint += 40;
+          }
+        }
+      }
+
+      for (var col = 0; col < moduleCount; col += 1) {
+        for (var row = 0; row < moduleCount - 6; row += 1) {
+          if (qrcode.isDark(row, col)
+              && !qrcode.isDark(row + 1, col)
+              &&  qrcode.isDark(row + 2, col)
+              &&  qrcode.isDark(row + 3, col)
+              &&  qrcode.isDark(row + 4, col)
+              && !qrcode.isDark(row + 5, col)
+              &&  qrcode.isDark(row + 6, col) ) {
+            lostPoint += 40;
+          }
+        }
+      }
+
+      // LEVEL4
+
+      var darkCount = 0;
+
+      for (var col = 0; col < moduleCount; col += 1) {
+        for (var row = 0; row < moduleCount; row += 1) {
+          if (qrcode.isDark(row, col) ) {
+            darkCount += 1;
+          }
+        }
+      }
+
+      var ratio = Math.abs(100 * darkCount / moduleCount / moduleCount - 50) / 5;
+      lostPoint += ratio * 10;
+
+      return lostPoint;
+    };
+
+    return _this;
+  }();
+
+  //---------------------------------------------------------------------
+  // QRMath
+  //---------------------------------------------------------------------
+
+  var QRMath = function() {
+
+    var EXP_TABLE = new Array(256);
+    var LOG_TABLE = new Array(256);
+
+    // initialize tables
+    for (var i = 0; i < 8; i += 1) {
+      EXP_TABLE[i] = 1 << i;
+    }
+    for (var i = 8; i < 256; i += 1) {
+      EXP_TABLE[i] = EXP_TABLE[i - 4]
+        ^ EXP_TABLE[i - 5]
+        ^ EXP_TABLE[i - 6]
+        ^ EXP_TABLE[i - 8];
+    }
+    for (var i = 0; i < 255; i += 1) {
+      LOG_TABLE[EXP_TABLE[i] ] = i;
+    }
+
+    var _this = {};
+
+    _this.glog = function(n) {
+
+      if (n < 1) {
+        throw 'glog(' + n + ')';
+      }
+
+      return LOG_TABLE[n];
+    };
+
+    _this.gexp = function(n) {
+
+      while (n < 0) {
+        n += 255;
+      }
+
+      while (n >= 256) {
+        n -= 255;
+      }
+
+      return EXP_TABLE[n];
+    };
+
+    return _this;
+  }();
+
+  //---------------------------------------------------------------------
+  // qrPolynomial
+  //---------------------------------------------------------------------
+
+  function qrPolynomial(num, shift) {
+
+    if (typeof num.length == 'undefined') {
+      throw num.length + '/' + shift;
+    }
+
+    var _num = function() {
+      var offset = 0;
+      while (offset < num.length && num[offset] == 0) {
+        offset += 1;
+      }
+      var _num = new Array(num.length - offset + shift);
+      for (var i = 0; i < num.length - offset; i += 1) {
+        _num[i] = num[i + offset];
+      }
+      return _num;
+    }();
+
+    var _this = {};
+
+    _this.getAt = function(index) {
+      return _num[index];
+    };
+
+    _this.getLength = function() {
+      return _num.length;
+    };
+
+    _this.multiply = function(e) {
+
+      var num = new Array(_this.getLength() + e.getLength() - 1);
+
+      for (var i = 0; i < _this.getLength(); i += 1) {
+        for (var j = 0; j < e.getLength(); j += 1) {
+          num[i + j] ^= QRMath.gexp(QRMath.glog(_this.getAt(i) ) + QRMath.glog(e.getAt(j) ) );
+        }
+      }
+
+      return qrPolynomial(num, 0);
+    };
+
+    _this.mod = function(e) {
+
+      if (_this.getLength() - e.getLength() < 0) {
+        return _this;
+      }
+
+      var ratio = QRMath.glog(_this.getAt(0) ) - QRMath.glog(e.getAt(0) );
+
+      var num = new Array(_this.getLength() );
+      for (var i = 0; i < _this.getLength(); i += 1) {
+        num[i] = _this.getAt(i);
+      }
+
+      for (var i = 0; i < e.getLength(); i += 1) {
+        num[i] ^= QRMath.gexp(QRMath.glog(e.getAt(i) ) + ratio);
+      }
+
+      // recursive call
+      return qrPolynomial(num, 0).mod(e);
+    };
+
+    return _this;
+  };
+
+  //---------------------------------------------------------------------
+  // QRRSBlock
+  //---------------------------------------------------------------------
+
+  var QRRSBlock = function() {
+
+    var RS_BLOCK_TABLE = [
+
+      // L
+      // M
+      // Q
+      // H
+
+      // 1
+      [1, 26, 19],
+      [1, 26, 16],
+      [1, 26, 13],
+      [1, 26, 9],
+
+      // 2
+      [1, 44, 34],
+      [1, 44, 28],
+      [1, 44, 22],
+      [1, 44, 16],
+
+      // 3
+      [1, 70, 55],
+      [1, 70, 44],
+      [2, 35, 17],
+      [2, 35, 13],
+
+      // 4
+      [1, 100, 80],
+      [2, 50, 32],
+      [2, 50, 24],
+      [4, 25, 9],
+
+      // 5
+      [1, 134, 108],
+      [2, 67, 43],
+      [2, 33, 15, 2, 34, 16],
+      [2, 33, 11, 2, 34, 12],
+
+      // 6
+      [2, 86, 68],
+      [4, 43, 27],
+      [4, 43, 19],
+      [4, 43, 15],
+
+      // 7
+      [2, 98, 78],
+      [4, 49, 31],
+      [2, 32, 14, 4, 33, 15],
+      [4, 39, 13, 1, 40, 14],
+
+      // 8
+      [2, 121, 97],
+      [2, 60, 38, 2, 61, 39],
+      [4, 40, 18, 2, 41, 19],
+      [4, 40, 14, 2, 41, 15],
+
+      // 9
+      [2, 146, 116],
+      [3, 58, 36, 2, 59, 37],
+      [4, 36, 16, 4, 37, 17],
+      [4, 36, 12, 4, 37, 13],
+
+      // 10
+      [2, 86, 68, 2, 87, 69],
+      [4, 69, 43, 1, 70, 44],
+      [6, 43, 19, 2, 44, 20],
+      [6, 43, 15, 2, 44, 16],
+
+      // 11
+      [4, 101, 81],
+      [1, 80, 50, 4, 81, 51],
+      [4, 50, 22, 4, 51, 23],
+      [3, 36, 12, 8, 37, 13],
+
+      // 12
+      [2, 116, 92, 2, 117, 93],
+      [6, 58, 36, 2, 59, 37],
+      [4, 46, 20, 6, 47, 21],
+      [7, 42, 14, 4, 43, 15],
+
+      // 13
+      [4, 133, 107],
+      [8, 59, 37, 1, 60, 38],
+      [8, 44, 20, 4, 45, 21],
+      [12, 33, 11, 4, 34, 12],
+
+      // 14
+      [3, 145, 115, 1, 146, 116],
+      [4, 64, 40, 5, 65, 41],
+      [11, 36, 16, 5, 37, 17],
+      [11, 36, 12, 5, 37, 13],
+
+      // 15
+      [5, 109, 87, 1, 110, 88],
+      [5, 65, 41, 5, 66, 42],
+      [5, 54, 24, 7, 55, 25],
+      [11, 36, 12, 7, 37, 13],
+
+      // 16
+      [5, 122, 98, 1, 123, 99],
+      [7, 73, 45, 3, 74, 46],
+      [15, 43, 19, 2, 44, 20],
+      [3, 45, 15, 13, 46, 16],
+
+      // 17
+      [1, 135, 107, 5, 136, 108],
+      [10, 74, 46, 1, 75, 47],
+      [1, 50, 22, 15, 51, 23],
+      [2, 42, 14, 17, 43, 15],
+
+      // 18
+      [5, 150, 120, 1, 151, 121],
+      [9, 69, 43, 4, 70, 44],
+      [17, 50, 22, 1, 51, 23],
+      [2, 42, 14, 19, 43, 15],
+
+      // 19
+      [3, 141, 113, 4, 142, 114],
+      [3, 70, 44, 11, 71, 45],
+      [17, 47, 21, 4, 48, 22],
+      [9, 39, 13, 16, 40, 14],
+
+      // 20
+      [3, 135, 107, 5, 136, 108],
+      [3, 67, 41, 13, 68, 42],
+      [15, 54, 24, 5, 55, 25],
+      [15, 43, 15, 10, 44, 16],
+
+      // 21
+      [4, 144, 116, 4, 145, 117],
+      [17, 68, 42],
+      [17, 50, 22, 6, 51, 23],
+      [19, 46, 16, 6, 47, 17],
+
+      // 22
+      [2, 139, 111, 7, 140, 112],
+      [17, 74, 46],
+      [7, 54, 24, 16, 55, 25],
+      [34, 37, 13],
+
+      // 23
+      [4, 151, 121, 5, 152, 122],
+      [4, 75, 47, 14, 76, 48],
+      [11, 54, 24, 14, 55, 25],
+      [16, 45, 15, 14, 46, 16],
+
+      // 24
+      [6, 147, 117, 4, 148, 118],
+      [6, 73, 45, 14, 74, 46],
+      [11, 54, 24, 16, 55, 25],
+      [30, 46, 16, 2, 47, 17],
+
+      // 25
+      [8, 132, 106, 4, 133, 107],
+      [8, 75, 47, 13, 76, 48],
+      [7, 54, 24, 22, 55, 25],
+      [22, 45, 15, 13, 46, 16],
+
+      // 26
+      [10, 142, 114, 2, 143, 115],
+      [19, 74, 46, 4, 75, 47],
+      [28, 50, 22, 6, 51, 23],
+      [33, 46, 16, 4, 47, 17],
+
+      // 27
+      [8, 152, 122, 4, 153, 123],
+      [22, 73, 45, 3, 74, 46],
+      [8, 53, 23, 26, 54, 24],
+      [12, 45, 15, 28, 46, 16],
+
+      // 28
+      [3, 147, 117, 10, 148, 118],
+      [3, 73, 45, 23, 74, 46],
+      [4, 54, 24, 31, 55, 25],
+      [11, 45, 15, 31, 46, 16],
+
+      // 29
+      [7, 146, 116, 7, 147, 117],
+      [21, 73, 45, 7, 74, 46],
+      [1, 53, 23, 37, 54, 24],
+      [19, 45, 15, 26, 46, 16],
+
+      // 30
+      [5, 145, 115, 10, 146, 116],
+      [19, 75, 47, 10, 76, 48],
+      [15, 54, 24, 25, 55, 25],
+      [23, 45, 15, 25, 46, 16],
+
+      // 31
+      [13, 145, 115, 3, 146, 116],
+      [2, 74, 46, 29, 75, 47],
+      [42, 54, 24, 1, 55, 25],
+      [23, 45, 15, 28, 46, 16],
+
+      // 32
+      [17, 145, 115],
+      [10, 74, 46, 23, 75, 47],
+      [10, 54, 24, 35, 55, 25],
+      [19, 45, 15, 35, 46, 16],
+
+      // 33
+      [17, 145, 115, 1, 146, 116],
+      [14, 74, 46, 21, 75, 47],
+      [29, 54, 24, 19, 55, 25],
+      [11, 45, 15, 46, 46, 16],
+
+      // 34
+      [13, 145, 115, 6, 146, 116],
+      [14, 74, 46, 23, 75, 47],
+      [44, 54, 24, 7, 55, 25],
+      [59, 46, 16, 1, 47, 17],
+
+      // 35
+      [12, 151, 121, 7, 152, 122],
+      [12, 75, 47, 26, 76, 48],
+      [39, 54, 24, 14, 55, 25],
+      [22, 45, 15, 41, 46, 16],
+
+      // 36
+      [6, 151, 121, 14, 152, 122],
+      [6, 75, 47, 34, 76, 48],
+      [46, 54, 24, 10, 55, 25],
+      [2, 45, 15, 64, 46, 16],
+
+      // 37
+      [17, 152, 122, 4, 153, 123],
+      [29, 74, 46, 14, 75, 47],
+      [49, 54, 24, 10, 55, 25],
+      [24, 45, 15, 46, 46, 16],
+
+      // 38
+      [4, 152, 122, 18, 153, 123],
+      [13, 74, 46, 32, 75, 47],
+      [48, 54, 24, 14, 55, 25],
+      [42, 45, 15, 32, 46, 16],
+
+      // 39
+      [20, 147, 117, 4, 148, 118],
+      [40, 75, 47, 7, 76, 48],
+      [43, 54, 24, 22, 55, 25],
+      [10, 45, 15, 67, 46, 16],
+
+      // 40
+      [19, 148, 118, 6, 149, 119],
+      [18, 75, 47, 31, 76, 48],
+      [34, 54, 24, 34, 55, 25],
+      [20, 45, 15, 61, 46, 16]
+    ];
+
+    var qrRSBlock = function(totalCount, dataCount) {
+      var _this = {};
+      _this.totalCount = totalCount;
+      _this.dataCount = dataCount;
+      return _this;
+    };
+
+    var _this = {};
+
+    var getRsBlockTable = function(typeNumber, errorCorrectionLevel) {
+
+      switch(errorCorrectionLevel) {
+      case QRErrorCorrectionLevel.L :
+        return RS_BLOCK_TABLE[(typeNumber - 1) * 4 + 0];
+      case QRErrorCorrectionLevel.M :
+        return RS_BLOCK_TABLE[(typeNumber - 1) * 4 + 1];
+      case QRErrorCorrectionLevel.Q :
+        return RS_BLOCK_TABLE[(typeNumber - 1) * 4 + 2];
+      case QRErrorCorrectionLevel.H :
+        return RS_BLOCK_TABLE[(typeNumber - 1) * 4 + 3];
+      default :
+        return undefined;
+      }
+    };
+
+    _this.getRSBlocks = function(typeNumber, errorCorrectionLevel) {
+
+      var rsBlock = getRsBlockTable(typeNumber, errorCorrectionLevel);
+
+      if (typeof rsBlock == 'undefined') {
+        throw 'bad rs block @ typeNumber:' + typeNumber +
+            '/errorCorrectionLevel:' + errorCorrectionLevel;
+      }
+
+      var length = rsBlock.length / 3;
+
+      var list = [];
+
+      for (var i = 0; i < length; i += 1) {
+
+        var count = rsBlock[i * 3 + 0];
+        var totalCount = rsBlock[i * 3 + 1];
+        var dataCount = rsBlock[i * 3 + 2];
+
+        for (var j = 0; j < count; j += 1) {
+          list.push(qrRSBlock(totalCount, dataCount) );
+        }
+      }
+
+      return list;
+    };
+
+    return _this;
+  }();
+
+  //---------------------------------------------------------------------
+  // qrBitBuffer
+  //---------------------------------------------------------------------
+
+  var qrBitBuffer = function() {
+
+    var _buffer = [];
+    var _length = 0;
+
+    var _this = {};
+
+    _this.getBuffer = function() {
+      return _buffer;
+    };
+
+    _this.getAt = function(index) {
+      var bufIndex = Math.floor(index / 8);
+      return ( (_buffer[bufIndex] >>> (7 - index % 8) ) & 1) == 1;
+    };
+
+    _this.put = function(num, length) {
+      for (var i = 0; i < length; i += 1) {
+        _this.putBit( ( (num >>> (length - i - 1) ) & 1) == 1);
+      }
+    };
+
+    _this.getLengthInBits = function() {
+      return _length;
+    };
+
+    _this.putBit = function(bit) {
+
+      var bufIndex = Math.floor(_length / 8);
+      if (_buffer.length <= bufIndex) {
+        _buffer.push(0);
+      }
+
+      if (bit) {
+        _buffer[bufIndex] |= (0x80 >>> (_length % 8) );
+      }
+
+      _length += 1;
+    };
+
+    return _this;
+  };
+
+  //---------------------------------------------------------------------
+  // qrNumber
+  //---------------------------------------------------------------------
+
+  var qrNumber = function(data) {
+
+    var _mode = QRMode.MODE_NUMBER;
+    var _data = data;
+
+    var _this = {};
+
+    _this.getMode = function() {
+      return _mode;
+    };
+
+    _this.getLength = function(buffer) {
+      return _data.length;
+    };
+
+    _this.write = function(buffer) {
+
+      var data = _data;
+
+      var i = 0;
+
+      while (i + 2 < data.length) {
+        buffer.put(strToNum(data.substring(i, i + 3) ), 10);
+        i += 3;
+      }
+
+      if (i < data.length) {
+        if (data.length - i == 1) {
+          buffer.put(strToNum(data.substring(i, i + 1) ), 4);
+        } else if (data.length - i == 2) {
+          buffer.put(strToNum(data.substring(i, i + 2) ), 7);
+        }
+      }
+    };
+
+    var strToNum = function(s) {
+      var num = 0;
+      for (var i = 0; i < s.length; i += 1) {
+        num = num * 10 + chatToNum(s.charAt(i) );
+      }
+      return num;
+    };
+
+    var chatToNum = function(c) {
+      if ('0' <= c && c <= '9') {
+        return c.charCodeAt(0) - '0'.charCodeAt(0);
+      }
+      throw 'illegal char :' + c;
+    };
+
+    return _this;
+  };
+
+  //---------------------------------------------------------------------
+  // qrAlphaNum
+  //---------------------------------------------------------------------
+
+  var qrAlphaNum = function(data) {
+
+    var _mode = QRMode.MODE_ALPHA_NUM;
+    var _data = data;
+
+    var _this = {};
+
+    _this.getMode = function() {
+      return _mode;
+    };
+
+    _this.getLength = function(buffer) {
+      return _data.length;
+    };
+
+    _this.write = function(buffer) {
+
+      var s = _data;
+
+      var i = 0;
+
+      while (i + 1 < s.length) {
+        buffer.put(
+          getCode(s.charAt(i) ) * 45 +
+          getCode(s.charAt(i + 1) ), 11);
+        i += 2;
+      }
+
+      if (i < s.length) {
+        buffer.put(getCode(s.charAt(i) ), 6);
+      }
+    };
+
+    var getCode = function(c) {
+
+      if ('0' <= c && c <= '9') {
+        return c.charCodeAt(0) - '0'.charCodeAt(0);
+      } else if ('A' <= c && c <= 'Z') {
+        return c.charCodeAt(0) - 'A'.charCodeAt(0) + 10;
+      } else {
+        switch (c) {
+        case ' ' : return 36;
+        case '$' : return 37;
+        case '%' : return 38;
+        case '*' : return 39;
+        case '+' : return 40;
+        case '-' : return 41;
+        case '.' : return 42;
+        case '/' : return 43;
+        case ':' : return 44;
+        default :
+          throw 'illegal char :' + c;
+        }
+      }
+    };
+
+    return _this;
+  };
+
+  //---------------------------------------------------------------------
+  // qr8BitByte
+  //---------------------------------------------------------------------
+
+  var qr8BitByte = function(data) {
+
+    var _mode = QRMode.MODE_8BIT_BYTE;
+    var _data = data;
+    var _bytes = qrcode.stringToBytes(data);
+
+    var _this = {};
+
+    _this.getMode = function() {
+      return _mode;
+    };
+
+    _this.getLength = function(buffer) {
+      return _bytes.length;
+    };
+
+    _this.write = function(buffer) {
+      for (var i = 0; i < _bytes.length; i += 1) {
+        buffer.put(_bytes[i], 8);
+      }
+    };
+
+    return _this;
+  };
+
+  //---------------------------------------------------------------------
+  // qrKanji
+  //---------------------------------------------------------------------
+
+  var qrKanji = function(data) {
+
+    var _mode = QRMode.MODE_KANJI;
+    var _data = data;
+
+    var stringToBytes = qrcode.stringToBytesFuncs['SJIS'];
+    if (!stringToBytes) {
+      throw 'sjis not supported.';
+    }
+    !function(c, code) {
+      // self test for sjis support.
+      var test = stringToBytes(c);
+      if (test.length != 2 || ( (test[0] << 8) | test[1]) != code) {
+        throw 'sjis not supported.';
+      }
+    }('\u53cb', 0x9746);
+
+    var _bytes = stringToBytes(data);
+
+    var _this = {};
+
+    _this.getMode = function() {
+      return _mode;
+    };
+
+    _this.getLength = function(buffer) {
+      return ~~(_bytes.length / 2);
+    };
+
+    _this.write = function(buffer) {
+
+      var data = _bytes;
+
+      var i = 0;
+
+      while (i + 1 < data.length) {
+
+        var c = ( (0xff & data[i]) << 8) | (0xff & data[i + 1]);
+
+        if (0x8140 <= c && c <= 0x9FFC) {
+          c -= 0x8140;
+        } else if (0xE040 <= c && c <= 0xEBBF) {
+          c -= 0xC140;
+        } else {
+          throw 'illegal char at ' + (i + 1) + '/' + c;
+        }
+
+        c = ( (c >>> 8) & 0xff) * 0xC0 + (c & 0xff);
+
+        buffer.put(c, 13);
+
+        i += 2;
+      }
+
+      if (i < data.length) {
+        throw 'illegal char at ' + (i + 1);
+      }
+    };
+
+    return _this;
+  };
+
+  //=====================================================================
+  // GIF Support etc.
+  //
+
+  //---------------------------------------------------------------------
+  // byteArrayOutputStream
+  //---------------------------------------------------------------------
+
+  var byteArrayOutputStream = function() {
+
+    var _bytes = [];
+
+    var _this = {};
+
+    _this.writeByte = function(b) {
+      _bytes.push(b & 0xff);
+    };
+
+    _this.writeShort = function(i) {
+      _this.writeByte(i);
+      _this.writeByte(i >>> 8);
+    };
+
+    _this.writeBytes = function(b, off, len) {
+      off = off || 0;
+      len = len || b.length;
+      for (var i = 0; i < len; i += 1) {
+        _this.writeByte(b[i + off]);
+      }
+    };
+
+    _this.writeString = function(s) {
+      for (var i = 0; i < s.length; i += 1) {
+        _this.writeByte(s.charCodeAt(i) );
+      }
+    };
+
+    _this.toByteArray = function() {
+      return _bytes;
+    };
+
+    _this.toString = function() {
+      var s = '';
+      s += '[';
+      for (var i = 0; i < _bytes.length; i += 1) {
+        if (i > 0) {
+          s += ',';
+        }
+        s += _bytes[i];
+      }
+      s += ']';
+      return s;
+    };
+
+    return _this;
+  };
+
+  //---------------------------------------------------------------------
+  // base64EncodeOutputStream
+  //---------------------------------------------------------------------
+
+  var base64EncodeOutputStream = function() {
+
+    var _buffer = 0;
+    var _buflen = 0;
+    var _length = 0;
+    var _base64 = '';
+
+    var _this = {};
+
+    var writeEncoded = function(b) {
+      _base64 += String.fromCharCode(encode(b & 0x3f) );
+    };
+
+    var encode = function(n) {
+      if (n < 0) {
+        // error.
+      } else if (n < 26) {
+        return 0x41 + n;
+      } else if (n < 52) {
+        return 0x61 + (n - 26);
+      } else if (n < 62) {
+        return 0x30 + (n - 52);
+      } else if (n == 62) {
+        return 0x2b;
+      } else if (n == 63) {
+        return 0x2f;
+      }
+      throw 'n:' + n;
+    };
+
+    _this.writeByte = function(n) {
+
+      _buffer = (_buffer << 8) | (n & 0xff);
+      _buflen += 8;
+      _length += 1;
+
+      while (_buflen >= 6) {
+        writeEncoded(_buffer >>> (_buflen - 6) );
+        _buflen -= 6;
+      }
+    };
+
+    _this.flush = function() {
+
+      if (_buflen > 0) {
+        writeEncoded(_buffer << (6 - _buflen) );
+        _buffer = 0;
+        _buflen = 0;
+      }
+
+      if (_length % 3 != 0) {
+        // padding
+        var padlen = 3 - _length % 3;
+        for (var i = 0; i < padlen; i += 1) {
+          _base64 += '=';
+        }
+      }
+    };
+
+    _this.toString = function() {
+      return _base64;
+    };
+
+    return _this;
+  };
+
+  //---------------------------------------------------------------------
+  // base64DecodeInputStream
+  //---------------------------------------------------------------------
+
+  var base64DecodeInputStream = function(str) {
+
+    var _str = str;
+    var _pos = 0;
+    var _buffer = 0;
+    var _buflen = 0;
+
+    var _this = {};
+
+    _this.read = function() {
+
+      while (_buflen < 8) {
+
+        if (_pos >= _str.length) {
+          if (_buflen == 0) {
+            return -1;
+          }
+          throw 'unexpected end of file./' + _buflen;
+        }
+
+        var c = _str.charAt(_pos);
+        _pos += 1;
+
+        if (c == '=') {
+          _buflen = 0;
+          return -1;
+        } else if (c.match(/^\s$/) ) {
+          // ignore if whitespace.
+          continue;
+        }
+
+        _buffer = (_buffer << 6) | decode(c.charCodeAt(0) );
+        _buflen += 6;
+      }
+
+      var n = (_buffer >>> (_buflen - 8) ) & 0xff;
+      _buflen -= 8;
+      return n;
+    };
+
+    var decode = function(c) {
+      if (0x41 <= c && c <= 0x5a) {
+        return c - 0x41;
+      } else if (0x61 <= c && c <= 0x7a) {
+        return c - 0x61 + 26;
+      } else if (0x30 <= c && c <= 0x39) {
+        return c - 0x30 + 52;
+      } else if (c == 0x2b) {
+        return 62;
+      } else if (c == 0x2f) {
+        return 63;
+      } else {
+        throw 'c:' + c;
+      }
+    };
+
+    return _this;
+  };
+
+  //---------------------------------------------------------------------
+  // gifImage (B/W)
+  //---------------------------------------------------------------------
+
+  var gifImage = function(width, height) {
+
+    var _width = width;
+    var _height = height;
+    var _data = new Array(width * height);
+
+    var _this = {};
+
+    _this.setPixel = function(x, y, pixel) {
+      _data[y * _width + x] = pixel;
+    };
+
+    _this.write = function(out) {
+
+      //---------------------------------
+      // GIF Signature
+
+      out.writeString('GIF87a');
+
+      //---------------------------------
+      // Screen Descriptor
+
+      out.writeShort(_width);
+      out.writeShort(_height);
+
+      out.writeByte(0x80); // 2bit
+      out.writeByte(0);
+      out.writeByte(0);
+
+      //---------------------------------
+      // Global Color Map
+
+      // black
+      out.writeByte(0x00);
+      out.writeByte(0x00);
+      out.writeByte(0x00);
+
+      // white
+      out.writeByte(0xff);
+      out.writeByte(0xff);
+      out.writeByte(0xff);
+
+      //---------------------------------
+      // Image Descriptor
+
+      out.writeString(',');
+      out.writeShort(0);
+      out.writeShort(0);
+      out.writeShort(_width);
+      out.writeShort(_height);
+      out.writeByte(0);
+
+      //---------------------------------
+      // Local Color Map
+
+      //---------------------------------
+      // Raster Data
+
+      var lzwMinCodeSize = 2;
+      var raster = getLZWRaster(lzwMinCodeSize);
+
+      out.writeByte(lzwMinCodeSize);
+
+      var offset = 0;
+
+      while (raster.length - offset > 255) {
+        out.writeByte(255);
+        out.writeBytes(raster, offset, 255);
+        offset += 255;
+      }
+
+      out.writeByte(raster.length - offset);
+      out.writeBytes(raster, offset, raster.length - offset);
+      out.writeByte(0x00);
+
+      //---------------------------------
+      // GIF Terminator
+      out.writeString(';');
+    };
+
+    var bitOutputStream = function(out) {
+
+      var _out = out;
+      var _bitLength = 0;
+      var _bitBuffer = 0;
+
+      var _this = {};
+
+      _this.write = function(data, length) {
+
+        if ( (data >>> length) != 0) {
+          throw 'length over';
+        }
+
+        while (_bitLength + length >= 8) {
+          _out.writeByte(0xff & ( (data << _bitLength) | _bitBuffer) );
+          length -= (8 - _bitLength);
+          data >>>= (8 - _bitLength);
+          _bitBuffer = 0;
+          _bitLength = 0;
+        }
+
+        _bitBuffer = (data << _bitLength) | _bitBuffer;
+        _bitLength = _bitLength + length;
+      };
+
+      _this.flush = function() {
+        if (_bitLength > 0) {
+          _out.writeByte(_bitBuffer);
+        }
+      };
+
+      return _this;
+    };
+
+    var getLZWRaster = function(lzwMinCodeSize) {
+
+      var clearCode = 1 << lzwMinCodeSize;
+      var endCode = (1 << lzwMinCodeSize) + 1;
+      var bitLength = lzwMinCodeSize + 1;
+
+      // Setup LZWTable
+      var table = lzwTable();
+
+      for (var i = 0; i < clearCode; i += 1) {
+        table.add(String.fromCharCode(i) );
+      }
+      table.add(String.fromCharCode(clearCode) );
+      table.add(String.fromCharCode(endCode) );
+
+      var byteOut = byteArrayOutputStream();
+      var bitOut = bitOutputStream(byteOut);
+
+      // clear code
+      bitOut.write(clearCode, bitLength);
+
+      var dataIndex = 0;
+
+      var s = String.fromCharCode(_data[dataIndex]);
+      dataIndex += 1;
+
+      while (dataIndex < _data.length) {
+
+        var c = String.fromCharCode(_data[dataIndex]);
+        dataIndex += 1;
+
+        if (table.contains(s + c) ) {
+
+          s = s + c;
+
+        } else {
+
+          bitOut.write(table.indexOf(s), bitLength);
+
+          if (table.size() < 0xfff) {
+
+            if (table.size() == (1 << bitLength) ) {
+              bitLength += 1;
+            }
+
+            table.add(s + c);
+          }
+
+          s = c;
+        }
+      }
+
+      bitOut.write(table.indexOf(s), bitLength);
+
+      // end code
+      bitOut.write(endCode, bitLength);
+
+      bitOut.flush();
+
+      return byteOut.toByteArray();
+    };
+
+    var lzwTable = function() {
+
+      var _map = {};
+      var _size = 0;
+
+      var _this = {};
+
+      _this.add = function(key) {
+        if (_this.contains(key) ) {
+          throw 'dup key:' + key;
+        }
+        _map[key] = _size;
+        _size += 1;
+      };
+
+      _this.size = function() {
+        return _size;
+      };
+
+      _this.indexOf = function(key) {
+        return _map[key];
+      };
+
+      _this.contains = function(key) {
+        return typeof _map[key] != 'undefined';
+      };
+
+      return _this;
+    };
+
+    return _this;
+  };
+
+  var createDataURL = function(width, height, getPixel) {
+    var gif = gifImage(width, height);
+    for (var y = 0; y < height; y += 1) {
+      for (var x = 0; x < width; x += 1) {
+        gif.setPixel(x, y, getPixel(x, y) );
+      }
+    }
+
+    var b = byteArrayOutputStream();
+    gif.write(b);
+
+    var base64 = base64EncodeOutputStream();
+    var bytes = b.toByteArray();
+    for (var i = 0; i < bytes.length; i += 1) {
+      base64.writeByte(bytes[i]);
+    }
+    base64.flush();
+
+    return 'data:image/gif;base64,' + base64;
+  };
+
+  //---------------------------------------------------------------------
+  // returns qrcode function.
+
+  return qrcode;
+}();
+
+// multibyte support
+!function() {
+
+  qrcode.stringToBytesFuncs['UTF-8'] = function(s) {
+    // http://stackoverflow.com/questions/18729405/how-to-convert-utf8-string-to-byte-array
+    function toUTF8Array(str) {
+      var utf8 = [];
+      for (var i=0; i < str.length; i++) {
+        var charcode = str.charCodeAt(i);
+        if (charcode < 0x80) utf8.push(charcode);
+        else if (charcode < 0x800) {
+          utf8.push(0xc0 | (charcode >> 6),
+              0x80 | (charcode & 0x3f));
+        }
+        else if (charcode < 0xd800 || charcode >= 0xe000) {
+          utf8.push(0xe0 | (charcode >> 12),
+              0x80 | ((charcode>>6) & 0x3f),
+              0x80 | (charcode & 0x3f));
+        }
+        // surrogate pair
+        else {
+          i++;
+          // UTF-16 encodes 0x10000-0x10FFFF by
+          // subtracting 0x10000 and splitting the
+          // 20 bits of 0x0-0xFFFFF into two halves
+          charcode = 0x10000 + (((charcode & 0x3ff)<<10)
+            | (str.charCodeAt(i) & 0x3ff));
+          utf8.push(0xf0 | (charcode >>18),
+              0x80 | ((charcode>>12) & 0x3f),
+              0x80 | ((charcode>>6) & 0x3f),
+              0x80 | (charcode & 0x3f));
+        }
+      }
+      return utf8;
+    }
+    return toUTF8Array(s);
+  };
+
+}();
+
+(function (factory) {
+  if (typeof define === 'function' && define.amd) {
+      define([], factory);
+  } else if (typeof exports === 'object') {
+      module.exports = factory();
+  }
+}(function () {
+    return qrcode;
+}));
+
+</script>
+<script>
+/* ================= almacenamiento ================= */
+const Store = (()=>{
+  const ws = (typeof window!=='undefined' && window.storage && typeof window.storage.get==='function') ? window.storage : null;
+  const mem = {};
+  return {
+    async get(k){
+      if(ws){ try{ const r = await ws.get(k); return r ? JSON.parse(r.value) : null; }catch(e){} }
+      try{ const v = localStorage.getItem(k); return v ? JSON.parse(v) : null; }catch(e){ return mem[k] ?? null; }
+    },
+    async set(k,v){
+      const s = JSON.stringify(v);
+      if(ws){ try{ await ws.set(k,s); return; }catch(e){} }
+      try{ localStorage.setItem(k,s); }catch(e){ mem[k]=v; }
+    }
+  };
+})();
+
+const DEF = {pos:3, len:2, moca:12, sonido:true, largo:0, operario:'', coordinador:''};
+let S = {cfg:{...DEF}, ubic:{}, conts:[], sel:null};
+let VIEW='cont', PAL=null, tSave=null;
+
+const $  = s=>document.querySelector(s);
+const $$ = s=>Array.from(document.querySelectorAll(s));
+const esc = s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+function toast(m,k){ const t=$('#toast'); t.textContent=m; t.className='show '+(k||''); clearTimeout(t._h); t._h=setTimeout(()=>t.className='',2200); }
+function save(){ clearTimeout(tSave); tSave=setTimeout(async()=>{
+  await Store.set('palets_cfg',{cfg:S.cfg,ubic:S.ubic,sel:S.sel});
+  await Store.set('palets_conts',S.conts);
+},180); }
+
+/* ================= cálculo ================= */
+function udsDeCodigo(cod){
+  const c=(cod||'').trim();
+  if(c.length < S.cfg.pos) return null;
+  const n = parseInt(c.substr(c.length-S.cfg.pos, S.cfg.len), 10);
+  return isNaN(n) ? null : n;
+}
+function mocacota(cod){ const c=(cod||'').trim(); return c ? c.slice(0,S.cfg.moca) : ''; }
+function fmtFecha(iso){ if(!iso) return ''; const [y,m,d]=iso.split('-'); return `${d}/${m}/${y}`; }
+
+/* Resumen de un palé a partir de sus bultos escaneados.
+   completos = el tamaño de bulto más repetido; el resto son picos. */
+function res(p){
+  const s = p.scans || [];
+  if(!s.length) return {n:0,total:0,cod:'',moca:'',udsC:null,nC:0,picos:[],mixto:false};
+  const total = s.reduce((a,x)=>a+x.u,0);
+  const cnt = {}; s.forEach(x=>cnt[x.u]=(cnt[x.u]||0)+1);
+  const udsC = Number(Object.keys(cnt).sort((a,b)=> cnt[b]-cnt[a] || Number(b)-Number(a))[0]);
+  const picos = s.filter(x=>x.u!==udsC);
+  const mocas = [...new Set(s.map(x=>mocacota(x.c)))];
+  return {n:s.length, total, cod:s[0].c, moca:mocas[0], udsC, nC:cnt[udsC], picos, mixto:mocas.length>1, mocas};
+}
+const totalDe = p => res(p).total;
+const layoutDe = p => { const r=res(p); return r.moca && r.total ? `${r.moca} ${r.total}` : ''; };
+function coordDe(p){
+  if(p.pasillo==='' || p.altura==='' || p.numero==='') return p.coordManual || '';
+  return S.ubic[`${p.pasillo}-${p.altura}-${p.numero}`] || p.coordManual || '';
+}
+function estadoPalet(p){
+  const grabado = (p.scans||[]).length > 0;
+  const co = coordDe(p);
+  const okUb = !!co && !!p.escaneado && p.escaneado.trim().toUpperCase()===co.trim().toUpperCase();
+  return {grabado, ubicado:!!co, okUb};
+}
+const cont = ()=> S.conts.find(c=>c.id===S.sel) || null;
+const nuevoPalet = n => ({n, scans:[], tono:'', pasillo:'', altura:'', numero:'', escaneado:'', coordManual:'', ts:null, operario:'', coordinador:''});
+const qrTexto = (c,p)=> `P${p.n} ${c.codigo} ${fmtFecha(c.fecha)}`;
+
+/* migración desde el formato antiguo (bultos completos + pico) */
+function migra(){
+  S.conts.forEach(c=>c.palets.forEach(p=>{
+    if(p.scans) return;
+    p.scans = [];
+    const u = p.udsManual || udsDeCodigo(p.cod);
+    if(p.cod && u && p.bultos){
+      for(let i=0;i<Number(p.bultos);i++) p.scans.push({c:p.cod, u:Number(u), t:p.ts||null});
+      if(Number(p.pico)>0) p.scans.push({c:p.cod, u:Number(p.pico), t:p.ts||null, pico:true});
+    }
+    delete p.cod; delete p.bultos; delete p.pico; delete p.udsManual;
+  }));
+}
+async function load(){
+  const c = await Store.get('palets_cfg');
+  if(c){ S.cfg=Object.assign({...DEF},c.cfg||{}); S.ubic=c.ubic||{}; S.sel=c.sel||null; }
+  S.conts = (await Store.get('palets_conts')) || [];
+  migra();
+  if(S.sel && !S.conts.some(x=>x.id===S.sel)) S.sel=null;
+  if(!S.sel && S.conts.length) S.sel=S.conts[0].id;
+}
+
+/* ================= navegación ================= */
+$('#nav').addEventListener('click', e=>{
+  const b = e.target.closest('button[data-v]'); if(!b) return;
+  VIEW = b.dataset.v;
+  $$('#nav button').forEach(x=>x.classList.toggle('on',x===b));
+  $$('main > section').forEach(s=>s.classList.add('hide'));
+  $('#v-'+VIEW).classList.remove('hide');
+  render();
+  if(VIEW==='grab') setTimeout(foco,60);
+  if(VIEW==='hist') setTimeout(()=>$('#h_art').focus(),60);
+});
+function render(){
+  renderSelector();
+  ({cont:renderConts, qr:renderQrPanel, grab:renderGrab, hist:renderHist, mapa:renderMapa, datos:renderDatos}[VIEW]||(()=>{}))();
+}
+function renderSelector(){
+  const s=$('#selCont');
+  if(!S.conts.length){ s.innerHTML='<option>Sin contenedores</option>'; s.disabled=true; return; }
+  s.disabled=false;
+  s.innerHTML = S.conts.map(c=>{
+    const g=c.palets.filter(p=>estadoPalet(p).grabado).length;
+    return `<option value="${c.id}" ${c.id===S.sel?'selected':''}>${esc(c.codigo)} · ${g}/${c.palets.length}</option>`;
+  }).join('');
+}
+$('#selCont').addEventListener('change',e=>{ S.sel=e.target.value; PAL=null; save(); render(); });
+
+/* ================= contenedores ================= */
+function renderConts(){
+  const L=$('#contList');
+  if(!S.conts.length){ L.innerHTML='<div class="empty">Todavía no hay contenedores.</div>'; return; }
+  L.innerHTML = S.conts.map(c=>{
+    const g=c.palets.filter(p=>estadoPalet(p).grabado).length;
+    const u=c.palets.filter(p=>estadoPalet(p).okUb).length;
+    const uds=c.palets.reduce((a,p)=>a+totalDe(p),0);
+    const pct=c.palets.length?Math.round(g/c.palets.length*100):0;
+    return `<div class="citem ${c.id===S.sel?'sel':''}">
+      <div style="flex:1 1 200px">
+        <div class="cid">${esc(c.codigo)} ${c.cerrado?'<span class="chip pend">cerrado</span>':''}</div>
+        <div class="meta">${fmtFecha(c.fecha)} · ${c.palets.length} palés · ${g} grabados · ${u} ubicados · ${uds} uds</div>
+      </div>
+      <div class="bar"><i style="width:${pct}%"></i></div>
+      <div style="display:flex;gap:6px;flex-wrap:wrap">
+        ${c.id===S.sel?'<span class="chip warn">activo</span>':`<button class="btn gh sm" data-act="sel" data-id="${c.id}">Activar</button>`}
+        <button class="btn gh sm" data-act="xlsx" data-id="${c.id}">Excel</button>
+        <button class="btn gh sm" data-act="cerrar" data-id="${c.id}">${c.cerrado?'Reabrir':'Cerrar'}</button>
+        <button class="btn gh sm dgr" data-act="del" data-id="${c.id}">Borrar</button>
+      </div></div>`;
+  }).join('');
+}
+$('#contList').addEventListener('click', e=>{
+  const b=e.target.closest('button[data-act]'); if(!b) return;
+  const c=S.conts.find(x=>x.id===b.dataset.id); if(!c) return;
+  const a=b.dataset.act;
+  if(a==='sel'){ S.sel=c.id; PAL=null; }
+  if(a==='cerrar') c.cerrado=!c.cerrado;
+  if(a==='xlsx'){ descargaXLSX(hojas([c]), `palets_${c.codigo}_${c.fecha}.xlsx`); return; }
+  if(a==='del'){
+    if(!confirm(`¿Borrar ${c.codigo} y sus ${c.palets.length} palés?`)) return;
+    S.conts=S.conts.filter(x=>x.id!==c.id);
+    if(S.sel===c.id) S.sel=S.conts.length?S.conts[0].id:null;
+  }
+  save(); render();
+});
+$('#nc_modo').addEventListener('change',e=>$('#nc_sigWrap').classList.toggle('hide', e.target.value!=='imagen'));
+$('#nc_add').addEventListener('click', ()=>{
+  const cod=$('#nc_cod').value.trim().toUpperCase(), fec=$('#nc_fec').value, np=parseInt($('#nc_np').value,10);
+  if(!cod) return toast('Falta el contenedor','ko');
+  if(!fec) return toast('Falta la fecha','ko');
+  if(!np||np<1||np>300) return toast('Nº de palés entre 1 y 300','ko');
+  if(S.conts.some(c=>c.codigo===cod && c.fecha===fec)) return toast('Ese contenedor ya existe','ko');
+  const c={id:'C'+Date.now().toString(36), codigo:cod, fecha:fec, cerrado:false, creado:new Date().toISOString(),
+           modo:$('#nc_modo').value, imgSig:$('#nc_sig').value, patron:null,
+           palets:Array.from({length:np},(_,i)=>nuevoPalet(i+1))};
+  S.conts.unshift(c); S.sel=c.id; $('#nc_cod').value='';
+  save(); render(); toast(`${cod} creado con ${np} palés`,'ok');
+});
+
+/* ================= etiquetas QR ================= */
+function qrSVG(txt){
+  try{
+    const q=qrcode(0,'M'); q.addData(txt); q.make();
+    return q.createSvgTag({cellSize:4, margin:2, scalable:true});
+  }catch(e){ return '<div class="hint">QR no disponible</div>'; }
+}
+function renderQrPanel(){
+  const c=cont();
+  if(!c){ $('#qrGrid').innerHTML='<div class="empty">Selecciona un contenedor.</div>'; $('#qr_info').textContent=''; return; }
+  if(!$('#qr_a').dataset.tocado) $('#qr_a').value=c.palets.length;
+  pintaEtiquetas();
+}
+$('#qr_a').addEventListener('input',e=>e.target.dataset.tocado='1');
+function pintaEtiquetas(){
+  const c=cont(); if(!c) return;
+  const de=Math.max(1,parseInt($('#qr_de').value,10)||1);
+  const a =Math.min(c.palets.length, parseInt($('#qr_a').value,10)||c.palets.length);
+  const out=[];
+  c.palets.forEach(p=>{
+    if(p.n<de||p.n>a) return;
+    const t=qrTexto(c,p);
+    out.push(`<div class="lab"><div class="qr">${qrSVG(t)}</div>
+      <div class="tx"><div class="pn">P${p.n}</div><div class="cn">${esc(c.codigo)}</div><div class="fd">${fmtFecha(c.fecha)}</div></div></div>`);
+  });
+  $('#qrGrid').innerHTML = out.join('') || '<div class="empty">Ese rango no tiene palés.</div>';
+  $('#qr_info').innerHTML = `${out.length} etiquetas · el QR contiene <b>${esc(qrTexto(c,c.palets[0]))}</b>`;
+}
+$('#qr_gen').addEventListener('click', pintaEtiquetas);
+$('#qr_fmt').addEventListener('change', aplicaFormato);
+function aplicaFormato(){
+  const f=$('#qr_fmt').value;
+  document.body.classList.toggle('fmt-rollo', f==='rollo');
+  document.body.classList.toggle('fmt-a4', f==='a4');
+  $('#pageRule').textContent = f==='rollo' ? '@page{size:100mm 64mm;margin:0}' : '@page{size:A4;margin:10mm}';
+}
+$('#qr_print').addEventListener('click', ()=>{
+  pintaEtiquetas(); aplicaFormato();
+  setTimeout(()=>window.print(), 200);
+});
+
+/* ================= grabar palé =================
+   Un solo campo. La app decide sola qué se ha escaneado:
+   QR de palé  -> cierra el palé anterior y abre el nuevo
+   etiqueta de bulto -> lo suma al palé abierto
+   Cada lectura se guarda al instante: no hay que pulsar nada. */
+function buscaPalet(txt){
+  const c=cont(); if(!c) return null;
+  const s=txt.trim().toUpperCase(); if(!s) return null;
+  const m=s.match(/^P?(\d+)\b/); if(!m) return null;
+  const n=parseInt(m[1],10), codQr=s.split(/\s+/)[1];
+  if(codQr && codQr!==c.codigo.toUpperCase()){
+    const otro=S.conts.find(x=>x.codigo.toUpperCase()===codQr);
+    if(otro){ S.sel=otro.id; save(); renderSelector(); return otro.palets.find(x=>x.n===n)||null; }
+  }
+  return c.palets.find(x=>x.n===n)||null;
+}
+/* Un QR de palé empieza por P; un código de bulto es una tirada larga de dígitos. */
+function esQrPalet(s){
+  const t=s.trim().toUpperCase();
+  return /^P\s?\d+(\s|$)/.test(t) || /^\d{1,3}$/.test(t);
+}
+
+let AC=null;
+function beep(ok){
+  if(!S.cfg.sonido) return;
+  try{
+    AC = AC || new (window.AudioContext||window.webkitAudioContext)();
+    if(AC.state==='suspended') AC.resume();
+    const o=AC.createOscillator(), g=AC.createGain();
+    o.frequency.value = ok?900:200; g.gain.value=0.07;
+    o.connect(g); g.connect(AC.destination);
+    o.start(); o.stop(AC.currentTime + (ok?0.08:0.3));
+  }catch(e){}
+}
+function eco(clase, grande, chico){
+  const e=$('#g_eco');
+  e.className='eco on '+clase;
+  e.innerHTML=`<span class="big">${esc(grande)}</span><span class="sm">${esc(chico)}</span>`;
+  clearTimeout(e._h); e._h=setTimeout(()=>{ e.className='eco'; }, 3500);
+}
+
+/* El patrón lo fija el PRIMER bulto del contenedor. A partir de ahí, todo lo
+   que no encaje se avisa como anomalía, pero nunca se bloquea: decide el operario. */
+function patronTxt(c){
+  if(!c||!c.patron) return 'sin definir (lo fija el primer bulto)';
+  return `${c.patron.largo} ${c.patron.num?'números':'caracteres'}`;
+}
+function fijaPatron(c,cod){ c.patron={largo:cod.length, num:/^\d+$/.test(cod)}; save(); }
+function anomaliaDe(cod){
+  const c=cont();
+  if(c && !c.patron) return null;                     // el primero define el patrón
+  const p=c.patron;
+  if(p.num && !/^\d+$/.test(cod))
+    return {tit:'Etiqueta distinta', txt:'Los bultos de este camión son sólo números y este trae letras u otros caracteres.'};
+  if(cod.length!==p.largo)
+    return {tit:cod.length<p.largo?'Le faltan dígitos':'Le sobran dígitos',
+            txt:`Tiene ${cod.length} y los bultos de este camión tienen ${p.largo}.`};
+  const r=res(PAL);
+  // El artículo sólo se puede comparar si el código es más largo que la mocacota
+  // y no estamos leyendo una pegatina cuyo número son las unidades.
+  const comparaArt = cod.length > S.cfg.moca && !(c && c.modo==='imagen' && c.imgSig!=='codigo');
+  if(comparaArt && r.moca && mocacota(cod)!==r.moca)
+    return {tit:'Otro artículo', txt:`Este palé es ${r.moca} y este bulto es ${mocacota(cod)}.`};
+  return null;
+}
+
+let ultimoScan={c:'',t:0};
+let pendCambio={n:null, t:0};
+let pendAnom=null;              // {cod, uds, motivo}
+
+function pideConfirmar(cod, uds, motivo){
+  pendAnom={cod, uds, motivo};
+  $('#an_tit').textContent=motivo.tit;
+  $('#an_txt').textContent=motivo.txt+' ¿Lo damos por bueno?';
+  $('#an_cod').textContent = uds!==null ? `${cod} · ${uds} uds` : cod;
+  $('#g_anom').classList.remove('hide');
+  beep(false);
+  verUltimo(cod, null, true);
+}
+function cierraAnom(){ pendAnom=null; $('#g_anom').classList.add('hide'); }
+$('#an_ok').addEventListener('click',()=>{
+  if(!pendAnom) return;
+  const {cod,uds,motivo}=pendAnom; cierraAnom();
+  apunta(cod, uds===null?0:uds, motivo.tit);
+  foco();
+});
+$('#an_no').addEventListener('click',()=>{
+  if(!pendAnom) return;
+  const c=pendAnom.cod; cierraAnom();
+  eco('bad','Descartado', esc(c)+' no se ha guardado');
+  foco();
+});
+
+function apunta(cod, uds, anom){
+  const ahora=Date.now();
+  const dup = cod===ultimoScan.c && (ahora-ultimoScan.t)<600 && !anom;
+  const c=cont();
+  if(c && !c.patron) fijaPatron(c,cod);
+  PAL.scans.push({c:cod, u:uds, t:new Date().toISOString(), dup, anom:anom||''});
+  PAL.ts=new Date().toISOString();
+  PAL.operario=S.cfg.operario||PAL.operario||'';
+  ultimoScan={c:cod, t:ahora};
+  pendCambio={n:null,t:0};
+  save(); pintaBultos();
+  const r=res(PAL);
+  verUltimo(cod, uds);
+  if(anom){ eco('good','Aceptado · +'+uds+' uds',`Bulto ${r.n} · queda marcado como anomalía`); beep(true); }
+  else if(dup){ beep(false); eco('bad','¿Has disparado dos veces?',`Bulto ${r.n} · quítalo si es un error`); }
+  else{ beep(true); if(navigator.vibrate) navigator.vibrate(35);
+        eco('good','+'+uds+' uds',`Bulto ${r.n} · llevas ${r.total} uds`); }
+}
+
+/* Punto de entrada único: da igual si viene del lector o de una foto. */
+function entra(txt, deFoto){
+  txt=(txt||'').trim().toUpperCase();
+  if(!txt) return;
+  if(pendAnom) cierraAnom();          // un escaneo nuevo descarta la anomalía pendiente
+  const esPalet = !deFoto && esQrPalet(txt);
+
+  if(!PAL){
+    if(!esPalet){
+      pideConfirmar(txt, null, {tit:'Falta abrir el palé',
+        txt:'Todavía no hay ningún palé abierto, así que esto no se puede apuntar.'});
+      $('#an_ok').classList.add('hide');
+      foco(); return;
+    }
+    const p=buscaPalet(txt);
+    if(!p){ beep(false); eco('bad','Palé no encontrado','Ese QR no es de este contenedor'); verUltimo(txt,null,true); foco(); return; }
+    abre(p, txt); return;
+  }
+  $('#an_ok').classList.remove('hide');
+
+  if(esPalet){
+    const p=buscaPalet(txt);
+    if(!p){ beep(false); eco('bad','Palé no encontrado','Ese QR no es de este contenedor'); verUltimo(txt,null,true); foco(); return; }
+    if(p===PAL){ beep(false); eco('bad','Ya estás en P'+p.n,'Sigue con los bultos'); verUltimo(txt,null,true); foco(); return; }
+    const ahora=Date.now();
+    if(pendCambio.n===p.n && ahora-pendCambio.t<8000){ cierraPalet(true); abre(p,txt); return; }
+    pendCambio={n:p.n, t:ahora};
+    beep(false);
+    eco('bad','Estás en P'+PAL.n, `Llevas ${res(PAL).n} bultos. Para pasar a P${p.n}, dispara otra vez ese QR`);
+    verUltimo(txt,null,true); foco(); return;
+  }
+
+  const c=cont();
+  const uds = (deFoto && c && c.imgSig==='uds') ? parseInt(txt,10) : udsDeCodigo(txt);
+  const motivo = anomaliaDe(txt) || ((uds===null||isNaN(uds)||uds<=0)
+      ? {tit:'No se leen las unidades', txt:'De esa etiqueta no sale una cantidad válida.'} : null);
+  if(motivo) return pideConfirmar(txt, (uds&&!isNaN(uds))?uds:null, motivo), foco();
+  apunta(txt, uds, '');
+  foco();
+}
+function procesaScan(){ const el=$('#g_scan'), t=el.value; el.value=''; entra(t,false); }
+function abre(p, txt){
+  PAL=p; ultimoScan={c:'',t:0}; pendCambio={n:null,t:0};
+  if(!PAL.operario) PAL.operario=S.cfg.operario||'';
+  const r=res(PAL);
+  beep(true);
+  eco('good','P'+PAL.n, r.n ? `Ya tenía ${r.n} bultos · seguirá sumando` : 'Empieza a escanear los bultos');
+  verUltimo(txt,null);
+  save(); pintaForm(); foco();
+}
+function verUltimo(cod, uds, malo){
+  $('#g_ultimo').innerHTML = uds!==null && uds!==undefined
+    ? `Último código: <b>${esc(cod)}</b> · ${uds} uds`
+    : `${malo?'Rechazado':'Último'}: <b>${esc(cod)}</b>`;
+}
+$('#g_scan').addEventListener('keydown',e=>{ if(e.key==='Enter'){ e.preventDefault(); procesaScan(); } });
+$('#g_scan').addEventListener('change', procesaScan);
+
+/* El foco no se pierde: el operario no debe tocar la pantalla entre lecturas. */
+function foco(){
+  if(VIEW!=='grab') return;
+  if(!(S.cfg.operario||'').trim()) return;
+  const a=document.activeElement;
+  if($('#camWrap').classList.contains('on')) return;
+  if(a && a!==document.body && /^(INPUT|TEXTAREA|SELECT)$/.test(a.tagName) && a.id!=='g_scan') return;
+  const el=$('#g_scan');
+  if(document.activeElement!==el) el.focus();
+  marcaFoco();
+}
+function marcaFoco(){
+  const f=$('#g_foco'), activo = document.activeElement===$('#g_scan');
+  f.className = 'foco'+(activo?'':' off');
+  f.textContent = activo ? (PAL ? 'Listo · escanea el siguiente bulto' : 'Listo para escanear') : 'Toca el recuadro para seguir escaneando';
+}
+$('#g_scan').addEventListener('focus',marcaFoco);
+$('#g_scan').addEventListener('blur',()=>{ setTimeout(()=>{ foco(); marcaFoco(); },120); });
+setInterval(()=>{ if(VIEW==='grab') foco(); }, 700);
+$('#g_card').addEventListener('click',e=>{ if(!e.target.closest('button')) foco(); });
+
+function cierraPalet(silencioso){
+  if(!PAL) return;
+  const r=res(PAL);
+  if(r.n){
+    PAL.scans.forEach(x=>delete x.dup);
+    PAL.ts=new Date().toISOString();
+    save();
+    if(!silencioso) toast(`P${PAL.n} cerrado · ${r.n} bultos · ${r.total} uds`,'ok');
+  }
+  PAL=null;
+  renderGrab(); renderSelector(); pintaForm();
+}
+$('#g_next').addEventListener('click',()=>{ cierraPalet(false); eco('good','Palé cerrado','Escanea el QR del siguiente palé'); foco(); });
+$('#g_undo').addEventListener('click',()=>{
+  if(!PAL||!PAL.scans.length) return toast('No hay nada que quitar','ko');
+  const x=PAL.scans.pop(); save(); pintaBultos();
+  eco('bad','−'+x.u+' uds','Bulto quitado');
+  foco();
+});
+$('#g_clear').addEventListener('click',()=>{
+  if(!PAL||!PAL.scans.length) return;
+  if(!confirm(`¿Vaciar los ${PAL.scans.length} bultos de P${PAL.n}?`)) return;
+  PAL.scans=[]; save(); pintaBultos(); foco();
+});
+$('#g_copy').addEventListener('click',()=>copia(layoutDe(PAL||{}),'Layout copiado'));
+$('#g_tono').addEventListener('input',()=>{ if(PAL){ PAL.tono=$('#g_tono').value.trim().toUpperCase(); save(); } });
+$('#g_tono').addEventListener('keydown',e=>{ if(e.key==='Enter'){ e.preventDefault(); foco(); } });
+function puertaOperario(){
+  const hay=!!(S.cfg.operario||'').trim();
+  $('#g_gate').classList.toggle('hide',hay);
+  $('#g_card').classList.toggle('hide',!hay);
+  if(!hay) $('#g_form').classList.add('hide');
+  $('#g_operShow').textContent=S.cfg.operario||'';
+  if(hay) foco(); else setTimeout(()=>$('#g_oper').focus(),60);
+}
+function entraOperario(){
+  const v=$('#g_oper').value.trim();
+  if(v.length<2){ beep(false); toast('Escribe tu nombre para empezar','ko'); $('#g_oper').focus(); return; }
+  S.cfg.operario=v; save(); puertaOperario(); toast('Hola, '+v,'ok');
+}
+$('#g_start').addEventListener('click',entraOperario);
+$('#g_oper').addEventListener('keydown',e=>{ if(e.key==='Enter'){ e.preventDefault(); entraOperario(); } });
+$('#g_operChg').addEventListener('click',()=>{
+  if(PAL) cierraPalet(true);
+  $('#g_oper').value=S.cfg.operario||''; $('#m_coord').value=S.cfg.coordinador||''; S.cfg.operario=''; save(); puertaOperario();
+});
+$('#g_sonido').addEventListener('click',()=>{
+  S.cfg.sonido=!S.cfg.sonido; save();
+  $('#g_sonido').textContent='Sonido: '+(S.cfg.sonido?'activado':'apagado');
+  $('#g_oper').value=S.cfg.operario||''; $('#m_coord').value=S.cfg.coordinador||'';
+  if(S.cfg.sonido) beep(true);
+});
+
+function pintaModo(){
+  const c=cont();
+  if(!c){ $('#g_modoTxt').textContent=''; $('#g_foto').classList.add('hide'); return; }
+  if(!c.modo) c.modo='codigo';
+  const foto = c.modo==='imagen';
+  $('#g_modoTxt').innerHTML = `Lectura: <b>${foto?'foto del número':'lector de códigos'}</b> · patrón: <b>${esc(patronTxt(c))}</b>`;
+  $('#g_foto').classList.toggle('hide', !foto || !PAL);
+  $('#g_scan').placeholder = foto ? (PAL?'O escribe el número a mano':'Escanea el QR del palé') : (PAL?'Escanea bulto tras bulto':'Dispara el lector aquí');
+}
+$('#g_modoChg').addEventListener('click',()=>{
+  const c=cont(); if(!c) return;
+  c.modo = c.modo==='imagen' ? 'codigo' : 'imagen';
+  if(c.modo==='imagen' && !c.imgSig) c.imgSig='uds';
+  save(); pintaModo();
+  toast('Lectura por '+(c.modo==='imagen'?'foto del número':'lector de códigos'),'ok');
+});
+function pintaForm(){
+  const c=cont(), f=$('#g_form');
+  pintaModo();
+  if(!PAL||!c){
+    f.classList.add('hide');
+    $('#g_cab').className='paso';
+    $('#g_cab').innerHTML='<div class="pasoN">1</div><div><b>Escanea el QR del palé</b><i>El del papel que has pegado encima</i></div>';
+    marcaFoco(); return;
+  }
+  f.classList.remove('hide');
+  $('#g_cab').className='paso ok';
+  $('#g_cab').innerHTML=`<div class="pasoN">2</div><div><b>P${PAL.n} abierto · escanea los bultos</b><i>${esc(c.codigo)} · al terminar, escanea el QR del siguiente palé</i></div>`;
+  $('#g_tono').value=PAL.tono||'';
+  pintaModo(); pintaBultos(); marcaFoco();
+}
+function pintaBultos(){
+  if(!PAL) return;
+  const r=res(PAL);
+  $('#r_nb').textContent=r.n;
+  $('#r_total').textContent=r.total;
+  $('#r_desg').textContent = r.n
+    ? (r.nC+' bultos de '+r.udsC+(r.picos.length?' + pico de '+r.picos.map(x=>x.u).join(' + '):''))
+    : 'Todavía sin bultos';
+  $('#r_layout').value=layoutDe(PAL);
+  const av=[];
+  if(PAL.scans.some(x=>x.dup)) av.push('<span class="chip ko">posible doble lectura en rojo</span>');
+  const na=PAL.scans.filter(x=>x.anom).length;
+  if(na) av.push(`<span class="chip warn">${na} bulto${na>1?'s':''} aceptado${na>1?'s':''} con anomalía</span>`);
+  $('#g_avisos').innerHTML = av.length?'<div style="margin-top:10px;display:flex;gap:6px;flex-wrap:wrap">'+av.join('')+'</div>':'';
+  // contador visual: un cuadro por bulto, ámbar si es un pico
+  const ult=PAL.scans.length-1;
+  $('#g_bultos').innerHTML = PAL.scans.map((x,i)=>
+    `<div class="t ${x.anom?'anomal':(x.u!==r.udsC?'pico':'')} ${i===ult?'nuevo':''}" data-del="${i}" title="${esc(x.anom||'Tocar para quitar')}">${i+1}<small>${x.u} uds</small></div>`
+  ).join('') || '<div class="hueco"></div><div class="hueco"></div><div class="hueco"></div>';
+}
+$('#g_bultos').addEventListener('click',e=>{
+  const b=e.target.closest('[data-del]'); if(!b||!PAL) return;
+  const i=Number(b.dataset.del);
+  if(!confirm(`¿Quitar el bulto ${i+1} de ${PAL.scans.length}?`)) { foco(); return; }
+  PAL.scans.splice(i,1); save(); pintaBultos(); foco();
+});
+function renderGrab(){
+  puertaOperario(); pintaModo();
+  const c=cont(), L=$('#g_list');
+  if(!c){ L.innerHTML='<div class="empty">Selecciona un contenedor.</div>'; return; }
+  L.innerHTML = `<table><thead><tr>
+    <th>Palé</th><th>Artículo</th><th>Bultos</th><th>Desglose</th><th>Total uds</th><th>Tono</th><th>Copiar en layout</th><th></th>
+  </tr></thead><tbody>${c.palets.map(p=>{
+    const r=res(p), st=estadoPalet(p);
+    return `<tr class="${st.grabado?'done':''}">
+      <td class="m"><b>P${p.n}</b></td>
+      <td class="m">${esc(r.moca||'—')}</td>
+      <td class="m">${r.n||'—'}</td>
+      <td class="m">${r.n?(r.nC+'×'+r.udsC+(r.picos.length?' +'+r.picos.map(x=>x.u).join('+'):'')):'—'}</td>
+      <td class="m"><b>${r.total||'—'}</b></td>
+      <td class="m">${esc(p.tono||'—')}</td>
+      <td class="m">${esc(layoutDe(p)||'—')}</td>
+      <td><button class="btn gh sm" data-p="${p.n}">Abrir</button></td></tr>`;
+  }).join('')}</tbody></table>`;
+}
+$('#g_list').addEventListener('click',e=>{
+  const b=e.target.closest('button[data-p]'); if(!b) return;
+  if(PAL) cierraPalet(true);
+  PAL=cont().palets.find(x=>x.n===Number(b.dataset.p));
+  pintaForm(); window.scrollTo({top:0,behavior:'smooth'});
+  setTimeout(foco,250);
+});
+$('#g_pack').addEventListener('click',()=>{
+  const c=cont(); if(!c) return toast('Selecciona un contenedor','ko');
+  const filas=[];
+  c.palets.forEach(p=> (p.scans||[]).forEach((x,i)=>{
+    filas.push([c.codigo, fmtFecha(c.fecha), 'P'+p.n, i+1, x.c, mocacota(x.c), x.u, p.tono, coordDe(p),
+                p.operario||'', x.anom||'', x.t?new Date(x.t).toLocaleString('es-ES'):'']);
+  }));
+  if(!filas.length) return toast('Aún no hay bultos escaneados','ko');
+  descargaXLSX([
+    {name:'Packing list', header:['Contenedor','Fecha','Palé','Nº bulto','Código bulto','Mocacota','Uds','Tono','Coord','Operario','Anomalía','Hora'], rows:filas},
+    {name:'Check list', header:CAB, rows:filasDe([c])}
+  ], `packinglist_${c.codigo}_${c.fecha}.xlsx`);
+});
+
+/* ================= buscar / histórico ================= */
+/* Subset-sum por programación dinámica: para cada suma alcanzable
+   guardamos el mínimo de palés y desde qué palé se llegó. */
+function combina(items, objetivo){
+  const maxU = items.reduce((a,x)=>Math.max(a,x.uds),0);
+  const disp = items.reduce((a,x)=>a+x.uds,0);
+  const lim = Math.min(objetivo + maxU, disp);
+  const dp = new Int32Array(lim+1).fill(-1); dp[0]=0;
+  const via = new Int32Array(lim+1).fill(-1);
+  const desde = new Int32Array(lim+1).fill(-1);
+  items.forEach((it,idx)=>{
+    for(let s=lim; s>=it.uds; s--){
+      const prev=s-it.uds;
+      if(dp[prev]>=0 && (dp[s]<0 || dp[prev]+1<dp[s])){ dp[s]=dp[prev]+1; via[s]=idx; desde[s]=prev; }
+    }
+  });
+  const rec = s=>{ const out=[]; let cur=s; while(cur>0 && via[cur]>=0){ out.push(items[via[cur]]); cur=desde[cur]; } return out; };
+  const sols=[];
+  const add=(s,tit)=>{ if(s<0||dp[s]<0) return; if(sols.some(x=>x.suma===s)) return; sols.push({titulo:tit, suma:s, palets:rec(s)}); };
+  if(objetivo<=lim && dp[objetivo]>=0) add(objetivo,'Exacto');
+  let menor=-1; for(let s=objetivo;s<=lim;s++) if(dp[s]>=0){ menor=s; break; }
+  if(menor>=0) add(menor,'Menor sobrante');
+  let pocos=-1, best=1e9;
+  for(let s=objetivo;s<=lim;s++) if(dp[s]>=0 && dp[s]<best){ best=dp[s]; pocos=s; }
+  if(pocos>=0) add(pocos,'Menos palés');
+  let bajo=-1; for(let s=Math.min(objetivo,lim); s>=0; s--) if(dp[s]>=0){ bajo=s; break; }
+  if(!sols.length && bajo>0) add(bajo,'Lo más cerca por debajo');
+
+  // Gastar primero los palés incompletos: así no dejas restos sueltos en el rack.
+  const completo = moda(items.map(x=>x.uds));
+  const sueltos = items.filter(x=>x.uds!==completo).sort((a,b)=>b.uds-a.uds);
+  const llenos  = items.filter(x=>x.uds===completo);
+  if(sueltos.length){
+    const elegidos=[]; let acum=0;
+    for(const it of [...sueltos, ...llenos]){ if(acum>=objetivo) break; elegidos.push(it); acum+=it.uds; }
+    if(acum>=objetivo && !sols.some(s=>s.suma===acum && s.palets.length===elegidos.length))
+      sols.push({titulo:'Gastando antes los incompletos', suma:acum, palets:elegidos});
+  }
+
+  // Alternativa que no repite ningún palé de la primera propuesta (por si un hueco está bloqueado).
+  if(sols.length){
+    const usados=new Set(sols[0].palets);
+    const resto=items.filter(x=>!usados.has(x));
+    if(resto.reduce((a,x)=>a+x.uds,0)>=objetivo){
+      const alt=combina(resto,objetivo);
+      const a0=alt.sols[0];
+      if(a0 && !sols.some(s=>s.suma===a0.suma && s.palets.length===a0.palets.length))
+        sols.push({titulo:'Alternativa sin repetir huecos', suma:a0.suma, palets:a0.palets});
+    }
+  }
+  return {sols, disp};
+}
+function moda(a){
+  const c={}; a.forEach(x=>c[x]=(c[x]||0)+1);
+  return Number(Object.keys(c).sort((x,y)=>c[y]-c[x]||Number(y)-Number(x))[0]);
+}
+function paletsUbicados(){
+  const out=[];
+  S.conts.forEach(c=>c.palets.forEach(p=>{
+    const r=res(p); if(!r.n) return;
+    const co=coordDe(p); if(!co) return;
+    out.push({c, p, co, uds:r.total, moca:r.moca, tono:p.tono||'', et:`P${p.n} · ${c.codigo}`});
+  }));
+  return out;
+}
+function renderHist(){
+  // artículos y tonos disponibles
+  const todos=paletsUbicados();
+  const arts=[...new Set(todos.map(x=>x.moca).filter(Boolean))].sort();
+  $('#h_arts').innerHTML = arts.map(a=>`<option value="${esc(a)}">`).join('');
+  const tn=$('#h_tono'), prevT=tn.value;
+  const tonos=[...new Set(todos.map(x=>x.tono).filter(Boolean))].sort();
+  tn.innerHTML='<option value="">Cualquiera</option>'+tonos.map(t=>`<option value="${esc(t)}">${esc(t)}</option>`).join('');
+  tn.value = tonos.includes(prevT)?prevT:'';
+  // contenedores
+  const sc=$('#h_cont'), prevC=sc.value||'*';
+  sc.innerHTML='<option value="*">Todos</option>'+S.conts.map(c=>`<option value="${c.id}">${esc(c.codigo)}</option>`).join('');
+  sc.value = (prevC==='*'||S.conts.some(c=>c.id===prevC))?prevC:'*';
+  renderTablaHist();
+}
+$('#h_go').addEventListener('click', buscarCombis);
+$('#h_uds').addEventListener('keydown',e=>{ if(e.key==='Enter'){e.preventDefault();buscarCombis();} });
+$('#h_art').addEventListener('keydown',e=>{ if(e.key==='Enter'){e.preventDefault(); normalizaArt(); $('#h_uds').focus();} });
+$('#h_art').addEventListener('change', normalizaArt);
+function normalizaArt(){
+  const el=$('#h_art'), v=el.value.trim().toUpperCase();
+  if(v.length > S.cfg.moca) el.value = mocacota(v);   // si escanean un bulto entero, nos quedamos con la mocacota
+}
+$('#h_reset').addEventListener('click',()=>{
+  $('#h_art').value=''; $('#h_uds').value=''; $('#h_tono').value=''; $('#h_out').innerHTML='';
+  $('#h_art').focus();
+});
+function buscarCombis(){
+  normalizaArt();
+  const art=$('#h_art').value.trim().toUpperCase();
+  const obj=parseInt($('#h_uds').value,10);
+  const tono=$('#h_tono').value;
+  const O=$('#h_out');
+  if(!art) return toast('Indica el artículo','ko');
+
+  let items=paletsUbicados().filter(x=>x.moca===art);
+  if(tono) items=items.filter(x=>x.tono===tono);
+  if(!items.length){ O.innerHTML=`<div class="card"><div class="empty">No hay palés ubicados de <b>${esc(art)}</b>${tono?' con tono '+esc(tono):''}.</div></div>`; return; }
+
+  const disp=items.reduce((a,x)=>a+x.uds,0);
+  const cab=`<div class="card"><div class="sum">
+      <div><b>Palés en rack</b><span>${items.length}</span></div>
+      <div><b>Uds disponibles</b><span>${disp}</span></div>
+      <div><b>Necesitas</b><span>${obj||'—'}</span></div>
+      <div><b>Tonos</b><span>${[...new Set(items.map(x=>x.tono).filter(Boolean))].length||'—'}</span></div>
+    </div></div>`;
+
+  if(!obj){ O.innerHTML = cab + tarjetaLista(items,'Todo el stock ubicado de este artículo'); return; }
+  if(obj>disp){
+    O.innerHTML = cab + `<div class="card"><div class="combo short">
+      <h3>No llega</h3><div class="tot">${disp} uds</div>
+      <div class="sub">Faltan ${obj-disp} uds. Esto es todo lo que hay ubicado:</div>
+      <div class="picks">${items.map(pk).join('')}</div></div></div>`;
+    return;
+  }
+
+  const {sols}=combina(items,obj);
+  const cards=sols.map(s=>{
+    const dif=s.suma-obj;
+    const cls = dif===0?'':(dif>0?'over':'short');
+    const nota = dif===0?'justo':(dif>0?`sobran ${dif} uds`:`faltan ${-dif} uds`);
+    return `<div class="combo ${cls}">
+      <h3>${esc(s.titulo)}</h3>
+      <div class="tot">${s.suma} uds</div>
+      <div class="sub">${s.palets.length} palé${s.palets.length>1?'s':''} · ${nota}</div>
+      <div class="picks">${s.palets.map(pk).join('')}</div>
+      <div class="actions"><button class="btn gh sm" data-cp="${esc(s.palets.map(x=>`${x.co}\t${x.et}\t${x.uds}`).join('\n'))}">Copiar</button></div>
+    </div>`;
+  }).join('');
+  O.innerHTML = cab + `<div class="card"><h2>Combinaciones</h2>${cards}</div>` + tarjetaLista(items,'Todos los palés de este artículo');
+}
+function pk(x){
+  return `<div class="pick"><div class="co">${esc(x.co)}</div>
+    <div class="de">${esc(x.et)} · <b>${x.uds}</b> uds${x.tono?' · tono '+esc(x.tono):''}</div></div>`;
+}
+function tarjetaLista(items,tit){
+  return `<div class="card"><h2>${esc(tit)}</h2><div class="picks">${items.sort((a,b)=>b.uds-a.uds).map(pk).join('')}</div></div>`;
+}
+$('#h_out').addEventListener('click',e=>{
+  const b=e.target.closest('button[data-cp]'); if(!b) return;
+  copia(b.dataset.cp,'Combinación copiada');
+});
+
+/* ---------- registro histórico a tres niveles ---------- */
+let NIVEL='palet';
+$('#h_niv').addEventListener('click',e=>{
+  const b=e.target.closest('button[data-n]'); if(!b) return;
+  NIVEL=b.dataset.n;
+  $$('#h_niv button').forEach(x=>x.classList.toggle('on',x===b));
+  renderTablaHist();
+});
+['#h_q','#h_cont','#h_des','#h_has'].forEach(s=>$(s).addEventListener('input',renderTablaHist));
+$('#h_limpia').addEventListener('click',()=>{
+  $('#h_q').value=''; $('#h_cont').value='*'; $('#h_des').value=''; $('#h_has').value='';
+  renderTablaHist();
+});
+
+function enRango(c){
+  const d=$('#h_des').value, hh=$('#h_has').value;
+  if(d && c.fecha < d) return false;
+  if(hh && c.fecha > hh) return false;
+  return true;
+}
+/* Devuelve la lista plana de bultos que cumple el filtro. De ahí se derivan
+   los otros dos niveles, así las uds siempre cuadran entre las tres vistas. */
+function filtroBultos(){
+  const q=$('#h_q').value.trim().toUpperCase(), fc=$('#h_cont').value||'*';
+  const out=[];
+  S.conts.forEach(c=>{
+    if(fc!=='*' && c.id!==fc) return;
+    if(!enRango(c)) return;
+    c.palets.forEach(p=>{
+      const co=coordDe(p), r=res(p);
+      (p.scans||[]).forEach((x,i)=>{
+        if(q){
+          const t=[x.c, mocacota(x.c), p.tono, co, p.escaneado, c.codigo, 'P'+p.n,
+                   p.operario, p.coordinador, x.anom, layoutDe(p), String(x.u)].join(' ').toUpperCase();
+          if(!t.includes(q)) return;
+        }
+        out.push({c,p,x,i,co,r});
+      });
+    });
+  });
+  return out;
+}
+function filtroPalets(){
+  const q=$('#h_q').value.trim().toUpperCase(), fc=$('#h_cont').value||'*';
+  const out=[];
+  S.conts.forEach(c=>{
+    if(fc!=='*' && c.id!==fc) return;
+    if(!enRango(c)) return;
+    c.palets.forEach(p=>{
+      const r=res(p), co=coordDe(p);
+      if(!r.n && !co) return;
+      if(q){
+        const t=[r.cod,r.moca,p.tono,co,p.escaneado,c.codigo,'P'+p.n,p.operario,p.coordinador,
+                 layoutDe(p),String(r.total)].join(' ').toUpperCase();
+        const enBultos=(p.scans||[]).some(x=>x.c.toUpperCase().includes(q));
+        if(!t.includes(q) && !enBultos) return;
+      }
+      out.push({c,p,r,co});
+    });
+  });
+  return out;
+}
+function renderTablaHist(){
+  const T=$('#h_tabla'), SUM=$('#h_sum');
+
+  if(NIVEL==='bulto'){
+    const rows=filtroBultos();
+    const uds=rows.reduce((a,z)=>a+z.x.u,0);
+    SUM.innerHTML=tarjetasSum([['Bultos',rows.length],['Total uds',uds],
+      ['Palés',new Set(rows.map(z=>z.c.id+'|'+z.p.n)).size],['Camiones',new Set(rows.map(z=>z.c.id)).size]]);
+    if(!rows.length) return T.innerHTML='<div class="empty">Sin resultados.</div>';
+    T.innerHTML=`<table><thead><tr><th>Camión</th><th>Fecha</th><th>Palé</th><th>Nº</th><th>Código bulto</th>
+      <th>Uds</th><th>Artículo</th><th>Tono</th><th>Ubicación</th><th>Operario</th><th>Anomalía</th><th>Hora</th></tr></thead><tbody>${
+      rows.slice(0,600).map(({c,p,x,i,co})=>`<tr>
+        <td class="m">${esc(c.codigo)}</td><td>${fmtFecha(c.fecha)}</td><td class="m"><b>P${p.n}</b></td>
+        <td class="m">${i+1}</td><td class="m">${esc(x.c)}</td><td class="m"><b>${x.u}</b></td>
+        <td class="m">${esc(mocacota(x.c))}</td><td class="m">${esc(p.tono||'—')}</td>
+        <td class="m">${esc(co||'—')}</td><td>${esc(p.operario||'—')}</td>
+        <td>${x.anom?`<span class="chip warn">${esc(x.anom)}</span>`:'—'}</td>
+        <td>${x.t?new Date(x.t).toLocaleString('es-ES'):'—'}</td></tr>`).join('')}</tbody></table>
+      ${rows.length>600?`<p class="hint" style="margin-top:8px">Se muestran 600 de ${rows.length}. Descarga el Excel para verlos todos.</p>`:''}`;
+    return;
+  }
+
+  if(NIVEL==='cont'){
+    const rows=filtroBultos();
+    const porC={};
+    rows.forEach(({c,p,x})=>{
+      porC[c.id]=porC[c.id]||{c, bultos:0, uds:0, palets:new Set(), arts:new Set(), anom:0};
+      const e=porC[c.id]; e.bultos++; e.uds+=x.u; e.palets.add(p.n);
+      if(mocacota(x.c)) e.arts.add(mocacota(x.c));
+      if(x.anom) e.anom++;
+    });
+    const lista=Object.values(porC);
+    SUM.innerHTML=tarjetasSum([['Camiones',lista.length],['Palés',lista.reduce((a,e)=>a+e.palets.size,0)],
+      ['Bultos',lista.reduce((a,e)=>a+e.bultos,0)],['Total uds',lista.reduce((a,e)=>a+e.uds,0)]]);
+    if(!lista.length) return T.innerHTML='<div class="empty">Sin resultados.</div>';
+    T.innerHTML=`<table><thead><tr><th>Camión</th><th>Fecha</th><th>Palés</th><th>Bultos</th><th>Total uds</th>
+      <th>Artículos</th><th>Anomalías</th><th>Estado</th></tr></thead><tbody>${
+      lista.sort((a,b)=>b.c.fecha.localeCompare(a.c.fecha)).map(e=>`<tr>
+        <td class="m"><b>${esc(e.c.codigo)}</b></td><td>${fmtFecha(e.c.fecha)}</td>
+        <td class="m">${e.palets.size}</td><td class="m">${e.bultos}</td><td class="m"><b>${e.uds}</b></td>
+        <td class="m">${esc([...e.arts].join(', ')||'—')}</td>
+        <td>${e.anom?`<span class="chip warn">${e.anom}</span>`:'—'}</td>
+        <td>${e.c.cerrado?'<span class="chip pend">cerrado</span>':'<span class="chip ok">abierto</span>'}</td></tr>`).join('')}</tbody></table>`;
+    return;
+  }
+
+  const rows=filtroPalets();
+  SUM.innerHTML=tarjetasSum([['Palés',rows.length],['Bultos',rows.reduce((a,z)=>a+z.r.n,0)],
+    ['Total uds',rows.reduce((a,z)=>a+z.r.total,0)],['Ubicados',rows.filter(z=>z.co).length]]);
+  if(!rows.length) return T.innerHTML='<div class="empty">Sin resultados.</div>';
+  T.innerHTML=`<table><thead><tr><th>Camión</th><th>Fecha</th><th>Palé</th><th>Artículo</th><th>Bultos</th>
+    <th>Total uds</th><th>Tono</th><th>Ubicación</th><th>Operario</th><th>Check</th></tr></thead><tbody>${
+    rows.map(({c,p,r,co})=>{
+      const st=estadoPalet(p);
+      const chip=!co?'<span class="chip pend">sin ubicar</span>':!p.escaneado?'<span class="chip warn">sin escanear</span>':st.okUb?'<span class="chip ok">OK</span>':'<span class="chip ko">NO COINCIDE</span>';
+      return `<tr><td class="m">${esc(c.codigo)}</td><td>${fmtFecha(c.fecha)}</td><td class="m"><b>P${p.n}</b></td>
+        <td class="m">${esc(r.moca||'—')}</td><td class="m">${r.n||'—'}</td><td class="m"><b>${r.total||'—'}</b></td>
+        <td class="m">${esc(p.tono||'—')}</td><td class="m"><b>${esc(co||'—')}</b></td>
+        <td>${esc(p.operario||'—')}</td><td>${chip}</td></tr>`;
+    }).join('')}</tbody></table>`;
+}
+function tarjetasSum(pares){
+  return pares.map(([k,v])=>`<div><b>${esc(k)}</b><span>${v}</span></div>`).join('');
+}
+$('#h_copyUb').addEventListener('click',()=>{
+  const r=filtroPalets().filter(x=>x.co);
+  if(!r.length) return toast('No hay ubicaciones','ko');
+  copia(r.map(({c,p,r:rr,co})=>`${co}\tP${p.n}\t${c.codigo}\t${rr.moca}\t${rr.total}`).join('\n'),'Copiado');
+});
+$('#h_xlsx').addEventListener('click',()=>{
+  const nom=`historico_${NIVEL}_${new Date().toISOString().slice(0,10)}.xlsx`;
+  if(NIVEL==='bulto'){
+    const rows=filtroBultos();
+    if(!rows.length) return toast('No hay resultados','ko');
+    descargaXLSX([{name:'Bultos', header:['Camión','Fecha','Palé','Nº bulto','Código bulto','Uds','Artículo','Tono','Ubicación','Operario','Coordinador','Anomalía','Hora'],
+      rows:rows.map(({c,p,x,i,co})=>[c.codigo,fmtFecha(c.fecha),'P'+p.n,i+1,x.c,x.u,mocacota(x.c),p.tono,co,
+        p.operario||'',p.coordinador||'',x.anom||'',x.t?new Date(x.t).toLocaleString('es-ES'):''])}], nom);
+    return;
+  }
+  if(NIVEL==='cont'){
+    const ids=new Set(filtroBultos().map(z=>z.c.id));
+    const cs=S.conts.filter(c=>ids.has(c.id));
+    if(!cs.length) return toast('No hay resultados','ko');
+    descargaXLSX(hojas(cs), nom);
+    return;
+  }
+  const rows=filtroPalets();
+  if(!rows.length) return toast('No hay resultados','ko');
+  descargaXLSX([{name:'Palés', header:CAB, rows:rows.map(({c,p})=>fila(c,p))}], nom);
+});
+
+/* ================= mapa ================= */
+function renderMapa(){
+  puertaCoordinador();
+  if(!(S.cfg.coordinador||'').trim()) return;
+  const c=cont(), T=$('#mapaTabla');
+  if(!c){ T.innerHTML='<div class="empty">Selecciona un contenedor.</div>'; $('#m_aviso').innerHTML=''; return; }
+  const n=Object.keys(S.ubic).length;
+  $('#m_aviso').innerHTML = n?`<span class="chip ok">maestro cargado · ${n} ubicaciones</span>`:'<span class="chip warn">sin maestro de ubicaciones</span>';
+  T.innerHTML=`<table><thead><tr>
+    <th>Palé</th><th>Copiar en layout</th><th>Pasillo</th><th>Altura</th><th>Número</th><th>Coord</th><th>Escaneado</th><th>Check</th>
+  </tr></thead><tbody>${c.palets.map(p=>{
+    const co=coordDe(p), st=estadoPalet(p);
+    const chip=!p.escaneado?'<span class="chip pend">—</span>':st.okUb?'<span class="chip ok">OK</span>':'<span class="chip ko">NO COINCIDE</span>';
+    return `<tr class="${st.grabado?'done':''}">
+      <td class="m"><b>P${p.n}</b></td><td class="m">${esc(layoutDe(p)||'—')}</td>
+      <td><input class="w60" inputmode="numeric" data-f="pasillo" data-p="${p.n}" value="${esc(p.pasillo)}"></td>
+      <td><input class="w60" inputmode="numeric" data-f="altura" data-p="${p.n}" value="${esc(p.altura)}"></td>
+      <td><input class="w90" inputmode="numeric" data-f="numero" data-p="${p.n}" value="${esc(p.numero)}"></td>
+      <td>${co?`<b class="m">${esc(co)}</b>`:`<input class="mono w130" data-f="coordManual" data-p="${p.n}" value="${esc(p.coordManual||'')}" placeholder="a mano">`}</td>
+      <td><input class="mono w130" data-f="escaneado" data-p="${p.n}" value="${esc(p.escaneado)}" placeholder="escanear"></td>
+      <td>${chip}</td></tr>`;
+  }).join('')}</tbody></table>`;
+}
+$('#mapaTabla').addEventListener('input',e=>{
+  const el=e.target; if(!el.dataset.f) return;
+  const p=cont().palets.find(x=>x.n===Number(el.dataset.p)); if(!p) return;
+  p[el.dataset.f]=el.value.trim().toUpperCase();
+  if(['pasillo','altura','numero','coordManual'].includes(el.dataset.f)) p.coordinador=S.cfg.coordinador||p.coordinador||'';
+  save();
+  const tr=el.closest('tr'), co=coordDe(p), st=estadoPalet(p);
+  if(el.dataset.f!=='coordManual'){
+    tr.children[5].innerHTML = co?`<b class="m">${esc(co)}</b>`:`<input class="mono w130" data-f="coordManual" data-p="${p.n}" value="${esc(p.coordManual||'')}" placeholder="a mano">`;
+  }
+  tr.children[7].innerHTML = !p.escaneado?'<span class="chip pend">—</span>':st.okUb?'<span class="chip ok">OK</span>':'<span class="chip ko">NO COINCIDE</span>';
+});
+function puertaCoordinador(){
+  const hay=!!(S.cfg.coordinador||'').trim();
+  $('#m_gate').classList.toggle('hide',hay);
+  $('#m_card').classList.toggle('hide',!hay);
+  $('#m_tablaCard').classList.toggle('hide',!hay);
+  $('#m_coordShow').textContent=S.cfg.coordinador||'';
+  if(!hay) setTimeout(()=>$('#m_coord').focus(),60);
+}
+function entraCoordinador(){
+  const v=$('#m_coord').value.trim();
+  if(v.length<2){ toast('Escribe tu nombre para empezar','ko'); $('#m_coord').focus(); return; }
+  S.cfg.coordinador=v; save(); puertaCoordinador(); renderMapa(); toast('Hola, '+v,'ok');
+}
+$('#m_start').addEventListener('click',entraCoordinador);
+$('#m_coord').addEventListener('keydown',e=>{ if(e.key==='Enter'){ e.preventDefault(); entraCoordinador(); } });
+$('#m_coordChg').addEventListener('click',()=>{
+  $('#m_coord').value=S.cfg.coordinador||''; S.cfg.coordinador=''; save(); puertaCoordinador();
+});
+$('#m_copyLayout').addEventListener('click',()=>{
+  const c=cont(); if(!c) return;
+  copia(c.palets.map(layoutDe).filter(Boolean).join('\n'),'Columna copiada');
+});
+$('#m_copyTabla').addEventListener('click',()=>{
+  const c=cont(); if(!c) return;
+  const h=['Palé','Copiar en layout','Pasillo','Altura','Número','Coord','Escaneado','Check'].join('\t');
+  copia(h+'\n'+c.palets.map(p=>{
+    const st=estadoPalet(p);
+    return [`P${p.n}`,layoutDe(p),p.pasillo,p.altura,p.numero,coordDe(p),p.escaneado,p.escaneado?(st.okUb?'OK':'NO'):''].join('\t');
+  }).join('\n'),'Tabla copiada');
+});
+$('#m_xlsx').addEventListener('click',()=>{ const c=cont(); if(c) descargaXLSX(hojas([c]),`palets_${c.codigo}_${c.fecha}.xlsx`); });
+
+/* ================= datos ================= */
+function renderDatos(){
+  $('#s_pos').value=S.cfg.pos; $('#s_len').value=S.cfg.len; $('#s_moca').value=S.cfg.moca; $('#s_largo').value=patronTxt(cont());
+  const ej='84178016200200287';
+  $('#s_demo').innerHTML=`Con <code>${ej}</code> → uds <b>${udsDeCodigo(ej)}</b>, mocacota <b>${mocacota(ej)}</b>.`;
+  const n=Object.keys(S.ubic).length;
+  $('#ub_info').textContent = n?`${n} ubicaciones cargadas.`:'Maestro vacío: la coordenada se escribe a mano.';
+  const tp=S.conts.reduce((a,c)=>a+c.palets.length,0);
+  const tb=S.conts.reduce((a,c)=>a+c.palets.reduce((b,p)=>b+(p.scans||[]).length,0),0);
+  $('#d_info').textContent=`${S.conts.length} contenedores · ${tp} palés · ${tb} bultos escaneados.`;
+}
+$('#s_test').addEventListener('input',e=>{
+  const v=e.target.value.trim().toUpperCase();
+  $('#s_testout').innerHTML = v?`uds <b>${udsDeCodigo(v) ?? '—'}</b> · mocacota <b>${esc(mocacota(v))}</b>`:'';
+});
+$('#s_save').addEventListener('click',()=>{
+  S.cfg.pos=Math.max(2,parseInt($('#s_pos').value,10)||3);
+  S.cfg.len=Math.max(1,parseInt($('#s_len').value,10)||2);
+  S.cfg.moca=Math.max(1,parseInt($('#s_moca').value,10)||12);
+  save(); renderDatos(); toast('Reglas guardadas','ok');
+});
+$('#s_repat').addEventListener('click',()=>{
+  const c=cont(); if(!c) return toast('Selecciona un contenedor','ko');
+  c.patron=null; save(); renderDatos(); pintaModo();
+  toast('El próximo bulto fijará el patrón','ok');
+});
+$('#ub_load').addEventListener('click',()=>{
+  let n=0;
+  $('#ub_txt').value.split(/\r?\n/).forEach(l=>{
+    const p=l.trim().split(/[;\t,]/).map(x=>x.trim()).filter(Boolean);
+    if(p.length>=4){ S.ubic[`${p[0]}-${p[1]}-${p[2]}`]=p[3].toUpperCase(); n++; }
+    else if(p.length===2){ S.ubic[p[0].toUpperCase()]=p[1].toUpperCase(); n++; }
+  });
+  if(!n) return toast('Ninguna línea reconocida','ko');
+  save(); renderDatos(); toast(`${n} ubicaciones cargadas`,'ok');
+});
+$('#ub_file').addEventListener('change',e=>{
+  const f=e.target.files[0]; if(!f) return;
+  const r=new FileReader(); r.onload=()=>{ $('#ub_txt').value=r.result; $('#ub_load').click(); };
+  r.readAsText(f,'utf-8'); e.target.value='';
+});
+$('#ub_clear').addEventListener('click',()=>{ if(confirm('¿Vaciar el maestro?')){ S.ubic={}; save(); renderDatos(); } });
+
+/* ================= exportación ================= */
+const CAB=['Contenedor','Fecha descarga','Palé','Codificación QR','Artículo (mocacota)','Código bulto',
+           'Bultos','Uds x bulto','Picos','Uds en picos','Total uds','Tono','Copiar en layout',
+           'Pasillo','Altura','Número','Coord','Escaneado','Check','Operario','Coordinador','Grabado'];
+const num=v=>(v!==''&&v!==null&&v!==undefined&&!isNaN(v))?Number(v):v;
+function fila(c,p){
+  const r=res(p), st=estadoPalet(p);
+  return [c.codigo, fmtFecha(c.fecha), 'P'+p.n, qrTexto(c,p), r.moca, r.cod,
+          r.n||'', r.udsC ?? '', r.picos.length||'', r.picos.reduce((a,x)=>a+x.u,0)||'',
+          r.total||'', p.tono, layoutDe(p),
+          num(p.pasillo), num(p.altura), num(p.numero), coordDe(p), p.escaneado,
+          p.escaneado?(st.okUb?'OK':'NO COINCIDE'):'',
+          p.operario||'', p.coordinador||'',
+          p.ts?new Date(p.ts).toLocaleString('es-ES'):''];
+}
+const filasDe = cs => cs.flatMap(c=>c.palets.map(p=>fila(c,p)));
+function hojas(cs){
+  const h=[{name:'Palés', header:CAB, rows:filasDe(cs)}];
+  const pack=[];
+  cs.forEach(c=>c.palets.forEach(p=>(p.scans||[]).forEach((x,i)=>
+    pack.push([c.codigo, fmtFecha(c.fecha), 'P'+p.n, i+1, x.c, mocacota(x.c), x.u, p.tono, coordDe(p),
+               p.operario||'', x.anom||'', x.t?new Date(x.t).toLocaleString('es-ES'):'']))));
+  if(pack.length) h.push({name:'Packing list', header:['Contenedor','Fecha','Palé','Nº bulto','Código bulto','Mocacota','Uds','Tono','Coord','Operario','Anomalía','Hora'], rows:pack});
+  h.push({name:'Resumen', header:['Contenedor','Fecha','Palés','Grabados','Ubicados OK','Bultos','Total uds','Estado'],
+    rows:cs.map(c=>[c.codigo, fmtFecha(c.fecha), c.palets.length,
+      c.palets.filter(p=>estadoPalet(p).grabado).length,
+      c.palets.filter(p=>estadoPalet(p).okUb).length,
+      c.palets.reduce((a,p)=>a+(p.scans||[]).length,0),
+      c.palets.reduce((a,p)=>a+totalDe(p),0), c.cerrado?'Cerrado':'Abierto'])});
+  const act={};
+  cs.forEach(c=>c.palets.forEach(p=>{
+    const r=res(p);
+    if(r.n){ const k='O|'+(p.operario||'(sin nombre)')+'|'+c.codigo;
+      act[k]=act[k]||{quien:p.operario||'(sin nombre)', papel:'Operario', cont:c.codigo, palets:0, bultos:0, uds:0};
+      act[k].palets++; act[k].bultos+=r.n; act[k].uds+=r.total; }
+    if(coordDe(p)){ const k='C|'+(p.coordinador||'(sin nombre)')+'|'+c.codigo;
+      act[k]=act[k]||{quien:p.coordinador||'(sin nombre)', papel:'Coordinador', cont:c.codigo, palets:0, bultos:0, uds:0};
+      act[k].palets++; act[k].bultos+=r.n; act[k].uds+=r.total; }
+  }));
+  const filasAct=Object.values(act).map(a=>[a.quien,a.papel,a.cont,a.palets,a.bultos,a.uds]);
+  if(filasAct.length) h.push({name:'Seguimiento', header:['Nombre','Papel','Contenedor','Palés','Bultos','Uds'], rows:filasAct});
+  const ub=Object.entries(S.ubic).map(([k,v])=>{ const q=k.split('-'); return [k,num(q[0]),num(q[1]),num(q[2]),v]; });
+  if(ub.length) h.push({name:'Maestro ubicaciones', header:['Clave','Pasillo','Altura','Número','Coordenada'], rows:ub});
+  return h;
+}
+$('#d_xlsxAll').addEventListener('click',()=>{
+  if(!S.conts.length) return toast('No hay datos','ko');
+  descargaXLSX(hojas(S.conts), `historico_palets_${new Date().toISOString().slice(0,10)}.xlsx`);
+});
+$('#d_backup').addEventListener('click',()=>{
+  baja(new Blob([JSON.stringify(S,null,1)],{type:'application/json'}), `respaldo_palets_${new Date().toISOString().slice(0,10)}.json`);
+  toast('Respaldo descargado','ok');
+});
+$('#d_restore').addEventListener('change',e=>{
+  const f=e.target.files[0]; if(!f) return;
+  const r=new FileReader();
+  r.onload=()=>{ try{
+    const d=JSON.parse(r.result); if(!d.conts) throw 0;
+    if(!confirm('Esto sustituye los datos del dispositivo. ¿Seguir?')) return;
+    S={cfg:Object.assign({...DEF},d.cfg||{}), ubic:d.ubic||{}, conts:d.conts, sel:d.sel||null};
+    migra(); if(!S.sel&&S.conts.length) S.sel=S.conts[0].id;
+    save(); render(); toast('Respaldo restaurado','ok');
+  }catch(err){ toast('Archivo no válido','ko'); } };
+  r.readAsText(f,'utf-8'); e.target.value='';
+});
+
+/* ============ generador XLSX (ZIP sin comprimir + CRC32) ============ */
+const CRCT=(()=>{const t=new Uint32Array(256);for(let n=0;n<256;n++){let c=n;for(let k=0;k<8;k++)c=c&1?0xEDB88320^(c>>>1):c>>>1;t[n]=c>>>0;}return t;})();
+const crc32=b=>{let c=0xFFFFFFFF;for(let i=0;i<b.length;i++)c=CRCT[(c^b[i])&0xFF]^(c>>>8);return (c^0xFFFFFFFF)>>>0;};
+const u8=s=>new TextEncoder().encode(s);
+const xe=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&apos;'}[c])).replace(/[\x00-\x08\x0B\x0C\x0E-\x1F]/g,'');
+function zip(files){
+  const parts=[],cen=[];let off=0;const dt=0,dd=((2026-1980)<<9)|(1<<5)|1;
+  for(const f of files){
+    const nb=u8(f.name),cr=crc32(f.data),ln=f.data.length;
+    const lh=new Uint8Array(30+nb.length),dv=new DataView(lh.buffer);
+    dv.setUint32(0,0x04034b50,true);dv.setUint16(4,20,true);dv.setUint16(6,0x0800,true);
+    dv.setUint16(10,dt,true);dv.setUint16(12,dd,true);dv.setUint32(14,cr,true);
+    dv.setUint32(18,ln,true);dv.setUint32(22,ln,true);dv.setUint16(26,nb.length,true);
+    lh.set(nb,30);parts.push(lh,f.data);
+    const ch=new Uint8Array(46+nb.length),cv=new DataView(ch.buffer);
+    cv.setUint32(0,0x02014b50,true);cv.setUint16(4,20,true);cv.setUint16(6,20,true);cv.setUint16(8,0x0800,true);
+    cv.setUint16(12,dt,true);cv.setUint16(14,dd,true);cv.setUint32(16,cr,true);cv.setUint32(20,ln,true);
+    cv.setUint32(24,ln,true);cv.setUint16(28,nb.length,true);cv.setUint32(42,off,true);
+    ch.set(nb,46);cen.push(ch);off+=lh.length+ln;
+  }
+  let cs=0;cen.forEach(c=>cs+=c.length);
+  const e=new Uint8Array(22),ev=new DataView(e.buffer);
+  ev.setUint32(0,0x06054b50,true);ev.setUint16(8,cen.length,true);ev.setUint16(10,cen.length,true);
+  ev.setUint32(12,cs,true);ev.setUint32(16,off,true);
+  return [...parts,...cen,e];
+}
+const colN=i=>{let s='';i++;while(i>0){const r=(i-1)%26;s=String.fromCharCode(65+r)+s;i=Math.floor((i-1)/26);}return s;};
+function hojaXml(head,rows){
+  const cols=head.map((h,i)=>`<col min="${i+1}" max="${i+1}" width="${Math.min(40,Math.max(11,String(h).length+4))}" customWidth="1"/>`).join('');
+  const fs=[`<row r="1" ht="20" customHeight="1">`+head.map((h,i)=>`<c r="${colN(i)}1" s="1" t="inlineStr"><is><t>${xe(h)}</t></is></c>`).join('')+`</row>`];
+  rows.forEach((r,ri)=>{
+    fs.push(`<row r="${ri+2}">`+r.map((v,i)=>{
+      if(v===''||v===null||v===undefined) return '';
+      const ref=`${colN(i)}${ri+2}`;
+      return (typeof v==='number'&&isFinite(v)) ? `<c r="${ref}"><v>${v}</v></c>` : `<c r="${ref}" t="inlineStr"><is><t>${xe(v)}</t></is></c>`;
+    }).join('')+`</row>`);
+  });
+  return `<?xml version="1.0" encoding="UTF-8" standalone="yes"?><worksheet xmlns="http://schemas.openxmlformats.org/spreadsheetml/2006/main"><cols>${cols}</cols><sheetData>${fs.join('')}</sheetData></worksheet>`;
+}
+function descargaXLSX(sheets,nombre){
+  try{
+    const ss=sheets.map((s,i)=>({...s,id:i+1,name:(s.name||'Hoja'+(i+1)).replace(/[\\\/\?\*\[\]:]/g,'').slice(0,31)}));
+    const F=[],add=(n,s)=>F.push({name:n,data:u8(s)});
+    add('[Content_Types].xml',`<?xml version="1.0" encoding="UTF-8" standalone="yes"?><Types xmlns="http://schemas.openxmlformats.org/package/2006/content-types"><Default Extension="rels" ContentType="application/vnd.openxmlformats-package.relationships+xml"/><Default Extension="xml" ContentType="application/xml"/><Override PartName="/xl/workbook.xml" ContentType="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet.main+xml"/>${ss.map(s=>`<Override PartName="/xl/worksheets/sheet${s.id}.xml" ContentType="application/vnd.openxmlformats-officedocument.spreadsheetml.worksheet+xml"/>`).join('')}<Override PartName="/xl/styles.xml" ContentType="application/vnd.openxmlformats-officedocument.spreadsheetml.styles+xml"/></Types>`);
+    add('_rels/.rels',`<?xml version="1.0" encoding="UTF-8" standalone="yes"?><Relationships xmlns="http://schemas.openxmlformats.org/package/2006/relationships"><Relationship Id="rId1" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/officeDocument" Target="xl/workbook.xml"/></Relationships>`);
+    add('xl/workbook.xml',`<?xml version="1.0" encoding="UTF-8" standalone="yes"?><workbook xmlns="http://schemas.openxmlformats.org/spreadsheetml/2006/main" xmlns:r="http://schemas.openxmlformats.org/officeDocument/2006/relationships"><sheets>${ss.map(s=>`<sheet name="${xe(s.name)}" sheetId="${s.id}" r:id="rId${s.id}"/>`).join('')}</sheets></workbook>`);
+    add('xl/_rels/workbook.xml.rels',`<?xml version="1.0" encoding="UTF-8" standalone="yes"?><Relationships xmlns="http://schemas.openxmlformats.org/package/2006/relationships">${ss.map(s=>`<Relationship Id="rId${s.id}" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/worksheet" Target="worksheets/sheet${s.id}.xml"/>`).join('')}<Relationship Id="rId${ss.length+1}" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/styles" Target="styles.xml"/></Relationships>`);
+    add('xl/styles.xml',`<?xml version="1.0" encoding="UTF-8" standalone="yes"?><styleSheet xmlns="http://schemas.openxmlformats.org/spreadsheetml/2006/main"><fonts count="2"><font><sz val="11"/><name val="Arial"/></font><font><b/><sz val="11"/><color rgb="FFFFFFFF"/><name val="Arial"/></font></fonts><fills count="3"><fill><patternFill patternType="none"/></fill><fill><patternFill patternType="gray125"/></fill><fill><patternFill patternType="solid"><fgColor rgb="FF14181C"/><bgColor indexed="64"/></patternFill></fill></fills><borders count="1"><border><left/><right/><top/><bottom/><diagonal/></border></borders><cellStyleXfs count="1"><xf numFmtId="0" fontId="0" fillId="0" borderId="0"/></cellStyleXfs><cellXfs count="2"><xf numFmtId="0" fontId="0" fillId="0" borderId="0" xfId="0"/><xf numFmtId="0" fontId="1" fillId="2" borderId="0" xfId="0" applyFont="1" applyFill="1"/></cellXfs></styleSheet>`);
+    ss.forEach(s=>add(`xl/worksheets/sheet${s.id}.xml`,hojaXml(s.header,s.rows)));
+    baja(new Blob(zip(F),{type:'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'}),nombre);
+    toast('Excel descargado','ok');
+  }catch(e){ toast('No se pudo generar el Excel','ko'); }
+}
+function baja(blob,nombre){
+  const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download=nombre;
+  document.body.appendChild(a);a.click();setTimeout(()=>{URL.revokeObjectURL(a.href);a.remove();},400);
+}
+
+/* ================= cámara: lectura de códigos y de números en foto ================= */
+const Cam=(()=>{
+  let st=null,det=null,raf=null,dest=null,face='environment',on=false,modoFoto=false,worker=null;
+  const vid=$('#camVid'),wrap=$('#camWrap'),msg=$('#camMsg'),cv=document.createElement('canvas');
+  const shot=$('#camShot'),guia=$('#camGuia'),lee=$('#camLee'),cap=$('#camCap');
+  const hay=()=>!!(navigator.mediaDevices&&navigator.mediaDevices.getUserMedia);
+
+  async function abrir(id,foto){
+    if(!hay()) return toast('Este dispositivo no permite la cámara','ko');
+    if(!window.isSecureContext) return toast('La cámara necesita HTTPS','ko');
+    dest=id; modoFoto=!!foto;
+    wrap.classList.add('on'); msg.textContent='Iniciando…';
+    guia.classList.toggle('hide',!modoFoto);
+    cap.classList.toggle('hide',!modoFoto);
+    lee.classList.add('hide'); shot.classList.add('hide'); vid.classList.remove('hide');
+    try{
+      st=await navigator.mediaDevices.getUserMedia({video:{facingMode:{ideal:face},width:{ideal:1920}},audio:false});
+      vid.srcObject=st; await vid.play();
+      msg.textContent = modoFoto ? 'Encuadra el número dentro del recuadro' : 'Apunta al código';
+      on=true;
+      if(!modoFoto){
+        if('BarcodeDetector' in window){ try{ det=new window.BarcodeDetector({formats:await window.BarcodeDetector.getSupportedFormats()}); }catch(e){ det=null; } }
+        bucle();
+      }
+    }catch(e){ cerrar(); toast(e&&e.name==='NotAllowedError'?'Permiso denegado':'No se pudo abrir la cámara','ko'); }
+  }
+  async function bucle(){
+    if(!on||modoFoto) return;
+    let txt=null;
+    try{
+      if(det){ const r=await det.detect(vid); if(r&&r.length) txt=r[0].rawValue; }
+      else if(typeof jsQR==='function'&&vid.videoWidth){
+        const w=Math.min(640,vid.videoWidth),hh=Math.round(vid.videoHeight*w/vid.videoWidth);
+        cv.width=w;cv.height=hh;
+        const cx=cv.getContext('2d',{willReadFrequently:true});
+        cx.drawImage(vid,0,0,w,hh);
+        const r=jsQR(cx.getImageData(0,0,w,hh).data,w,hh,{inversionAttempts:'dontInvert'});
+        if(r&&r.data) txt=r.data;
+      }
+    }catch(e){}
+    if(txt){ const el=document.getElementById(dest); cerrar();
+      if(el){ el.value=txt.trim().toUpperCase(); if(navigator.vibrate)navigator.vibrate(60);
+              el.dispatchEvent(new Event('change',{bubbles:true})); } return; }
+    raf=requestAnimationFrame(bucle);
+  }
+
+  /* --- foto: recorta el recuadro, lo limpia y lee los dígitos --- */
+  async function capturar(){
+    if(!on||!vid.videoWidth) return;
+    const W=vid.videoWidth,H=vid.videoHeight;
+    const rw=Math.round(W*0.78), rh=Math.round(H*0.22);
+    const rx=Math.round((W-rw)/2), ry=Math.round((H-rh)/2);
+    const esc=3;                                    // ampliar mejora mucho la lectura
+    shot.width=rw*esc; shot.height=rh*esc;
+    const cx=shot.getContext('2d',{willReadFrequently:true});
+    cx.imageSmoothingQuality='high';
+    cx.drawImage(vid,rx,ry,rw,rh,0,0,shot.width,shot.height);
+    // gris + contraste
+    const im=cx.getImageData(0,0,shot.width,shot.height), d=im.data;
+    let min=255,max=0;
+    for(let i=0;i<d.length;i+=4){ const g=(d[i]*.299+d[i+1]*.587+d[i+2]*.114)|0; d[i]=d[i+1]=d[i+2]=g;
+      if(g<min)min=g; if(g>max)max=g; }
+    const rango=Math.max(1,max-min);
+    for(let i=0;i<d.length;i+=4){ const v=Math.max(0,Math.min(255,((d[i]-min)*255/rango)|0)); d[i]=d[i+1]=d[i+2]=v; }
+    cx.putImageData(im,0,0);
+    vid.classList.add('hide'); shot.classList.remove('hide'); guia.classList.add('hide');
+    msg.textContent='Leyendo el número…';
+    const num=await leeDigitos(shot);
+    lee.classList.remove('hide');
+    $('#camNum').value=num||'';
+    msg.textContent = num ? 'Comprueba que el número es correcto' : 'No se ha podido leer: escríbelo a mano';
+    if(!num) beep(false);
+    setTimeout(()=>{ $('#camNum').focus(); $('#camNum').select(); },80);
+  }
+  async function leeDigitos(canvas){
+    try{
+      if(!window.Tesseract){
+        const ok=await new Promise(r=>{ const s=document.createElement('script');
+          s.src='https://cdn.jsdelivr.net/npm/tesseract.js@5.1.1/dist/tesseract.min.js';
+          s.onload=()=>r(true); s.onerror=()=>r(false); document.head.appendChild(s);
+          setTimeout(()=>r(!!window.Tesseract),15000); });
+        if(!ok) return null;
+      }
+      if(!worker){
+        worker=await Tesseract.createWorker('eng');
+        await worker.setParameters({tessedit_char_whitelist:'0123456789', tessedit_pageseg_mode:'7'});
+      }
+      const {data}=await worker.recognize(canvas);
+      const m=(data.text||'').match(/\d{3,8}/g);
+      return m ? m.sort((a,b)=>b.length-a.length)[0] : null;
+    }catch(e){ return null; }
+  }
+  function confirmar(){
+    const v=$('#camNum').value.trim();
+    if(!v) return toast('Escribe el número','ko');
+    cerrar(); entra(v,true);
+  }
+  function repetir(){
+    lee.classList.add('hide'); shot.classList.add('hide');
+    vid.classList.remove('hide'); guia.classList.remove('hide');
+    msg.textContent='Encuadra el número dentro del recuadro';
+  }
+  function cerrar(){ on=false; if(raf)cancelAnimationFrame(raf),raf=null;
+    if(st){st.getTracks().forEach(t=>t.stop());st=null;}
+    vid.srcObject=null; wrap.classList.remove('on'); det=null; modoFoto=false;
+    lee.classList.add('hide'); shot.classList.add('hide'); vid.classList.remove('hide'); }
+  function girar(){ face=face==='environment'?'user':'environment'; const d=dest,f=modoFoto; cerrar(); setTimeout(()=>abrir(d,f),200); }
+  return {abrir,cerrar,girar,hay,capturar,confirmar,repetir};
+})();
+document.addEventListener('click',e=>{ const b=e.target.closest('[data-cam]'); if(b) Cam.abrir(b.dataset.cam,false); });
+$('#g_foto').addEventListener('click',()=>Cam.abrir('g_scan',true));
+$('#camCap').addEventListener('click',()=>Cam.capturar());
+$('#camOk').addEventListener('click',()=>Cam.confirmar());
+$('#camRe').addEventListener('click',()=>Cam.repetir());
+$('#camNum').addEventListener('keydown',e=>{ if(e.key==='Enter'){ e.preventDefault(); Cam.confirmar(); } });
+$('#camClose').addEventListener('click',()=>Cam.cerrar());
+$('#camSwap').addEventListener('click',()=>Cam.girar());
+document.addEventListener('keydown',e=>{ if(e.key==='Escape') Cam.cerrar(); });
+
+/* ================= utilidades ================= */
+function copia(txt,msg){
+  if(!txt) return toast('Nada que copiar','ko');
+  const ok=()=>toast(msg||'Copiado','ok');
+  const fb=()=>{ const ta=document.createElement('textarea');ta.value=txt;ta.style.position='fixed';ta.style.opacity='0';
+    document.body.appendChild(ta);ta.select();try{document.execCommand('copy');ok();}catch(e){toast('Copia manual: '+txt);}ta.remove(); };
+  if(navigator.clipboard&&window.isSecureContext) navigator.clipboard.writeText(txt).then(ok).catch(fb); else fb();
+}
+
+/* ================= arranque ================= */
+(async function(){
+  $('#nc_fec').value=new Date().toISOString().slice(0,10);
+  await load(); aplicaFormato(); render();
+  $('#g_sonido').textContent='Sonido: '+(S.cfg.sonido?'activado':'apagado');
+  $('#g_oper').value=S.cfg.operario||''; $('#m_coord').value=S.cfg.coordinador||'';
+  if(Cam.hay()&&window.isSecureContext) $$('.camBtn').forEach(b=>b.classList.remove('hide'));
+  if('serviceWorker' in navigator && location.protocol.startsWith('http'))
+    navigator.serviceWorker.register('sw.js').catch(()=>{});
+})();
+</script>
+</body>
+</html>
