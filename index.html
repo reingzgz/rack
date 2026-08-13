@@ -548,7 +548,7 @@ details summary{cursor:pointer;font-size:12px;letter-spacing:.1em;text-transform
   <div class="card">
     <h2>Versión</h2>
     <p class="hint">Si una PDA se comporta distinto a otra, compara este número. Si no coincide, esa PDA tiene una copia antigua guardada: ciérrala del todo y vuelve a abrirla con cobertura.</p>
-    <p style="font-family:var(--mono);font-size:22px;font-weight:800;margin:8px 0 0">v6</p>
+    <p style="font-family:var(--mono);font-size:22px;font-weight:800;margin:8px 0 0">v7</p>
   </div>
 
   <div class="card">
@@ -2951,18 +2951,24 @@ function res(p){
 }
 const totalDe = p => res(p).total;
 const layoutDe = p => { const r=res(p); return r.moca && r.total ? `${r.moca} ${r.total}` : ''; };
+/* Hueco que sale del maestro a partir de pasillo/altura/número. */
+function ubicMaestro(p){
+  if(p.pasillo==='' || p.altura==='' || p.numero==='') return '';
+  return S.ubic[`${p.pasillo}-${p.altura}-${p.numero}`] || '';
+}
+/* La ubicación buena es la que se ha escaneado en el rack; si aún no se ha
+   escaneado, se usa la del maestro o la escrita a mano. */
 function coordDe(p){
-  if(p.pasillo==='' || p.altura==='' || p.numero==='') return p.coordManual || '';
-  return S.ubic[`${p.pasillo}-${p.altura}-${p.numero}`] || p.coordManual || '';
+  return (p.escaneado||'').trim().toUpperCase() || ubicMaestro(p) || p.coordManual || '';
 }
 function estadoPalet(p){
   const grabado = (p.scans||[]).length > 0;
   const co = coordDe(p);
-  const okUb = !!co && !!p.escaneado && p.escaneado.trim().toUpperCase()===co.trim().toUpperCase();
+  const okUb = !!(p.paletScan||'').trim() && !!(p.escaneado||'').trim() && paletCoincide(p);
   return {grabado, ubicado:!!co, okUb};
 }
 const cont = ()=> S.conts.find(c=>c.id===S.sel) || null;
-const nuevoPalet = n => ({n, scans:[], tono:'', pasillo:'', altura:'', numero:'', escaneado:'', coordManual:'', ts:null, operario:'', coordinador:''});
+const nuevoPalet = n => ({n, scans:[], tono:'', pasillo:'', altura:'', numero:'', paletScan:'', escaneado:'', coordManual:'', ts:null, operario:'', coordinador:''});
 const qrTexto = (c,p)=> `P${p.n} ${c.codigo} ${fmtFecha(c.fecha)}`;
 
 /* migración desde el formato antiguo (bultos completos + pico) */
@@ -3167,7 +3173,12 @@ function anomaliaDe(cod){
   // y no estamos leyendo una pegatina cuyo número son las unidades.
   const comparaArt = cod.length > S.cfg.moca && !(c && c.modo==='imagen' && c.imgSig!=='codigo');
   if(comparaArt && r.moca && mocacota(cod)!==r.moca)
-    return {tit:'Otro artículo', txt:`Este palé es ${r.moca} y este bulto es ${mocacota(cod)}.`};
+    return {tit:'MAL ESTIRADO', txt:`Este bulto es de otro artículo: el palé es ${r.moca} y este es ${mocacota(cod)}.`};
+
+  // Un bulto que no es igual al anterior: palé mal estirado, o es el pico.
+  const previo = PAL && PAL.scans.length ? PAL.scans[PAL.scans.length-1].c : '';
+  if(previo && cod!==previo)
+    return {tit:'MAL ESTIRADO', txt:`Este bulto no es igual al anterior. Antes: ${previo}. Ahora: ${cod}. Si es el pico del palé, acéptalo.`};
   return null;
 }
 
@@ -3717,7 +3728,7 @@ function renderTablaHist(){
     <th>Total uds</th><th>Tono</th><th>Ubicación</th><th>Operario</th><th>Check</th></tr></thead><tbody>${
     rows.map(({c,p,r,co})=>{
       const st=estadoPalet(p);
-      const chip=!co?'<span class="chip pend">sin ubicar</span>':!p.escaneado?'<span class="chip warn">sin escanear</span>':st.okUb?'<span class="chip ok">OK</span>':'<span class="chip ko">NO COINCIDE</span>';
+      const chip=chipMapa(p);
       return `<tr><td class="m">${esc(c.codigo)}</td><td>${fmtFecha(c.fecha)}</td><td class="m"><b>P${p.n}</b></td>
         <td class="m">${esc(r.moca||'—')}</td><td class="m">${r.n||'—'}</td><td class="m"><b>${r.total||'—'}</b></td>
         <td class="m">${esc(p.tono||'—')}</td><td class="m"><b>${esc(co||'—')}</b></td>
@@ -3763,49 +3774,47 @@ function renderMapa(){
   const n=Object.keys(S.ubic).length;
   $('#m_aviso').innerHTML = n?`<span class="chip ok">maestro cargado · ${n} ubicaciones</span>`:'<span class="chip warn">sin maestro de ubicaciones</span>';
   T.innerHTML=`<table><thead><tr>
-    <th>Palé</th><th>Copiar en layout</th><th>Pasillo</th><th>Altura</th><th>Número</th><th>Coord</th><th>Escaneado</th><th>Check</th>
+    <th>Palé</th><th>Copiar en layout</th><th>Pasillo</th><th>Altura</th><th>Número</th>
+    <th>Escanear palé</th><th>Escanear ubicación rack</th><th>Check</th>
   </tr></thead><tbody>${c.palets.map(p=>{
-    const co=coordDe(p), st=estadoPalet(p);
-    const chip=!p.escaneado?'<span class="chip pend">—</span>':st.okUb?'<span class="chip ok">OK</span>':'<span class="chip ko">NO COINCIDE</span>';
+    const st=estadoPalet(p);
     return `<tr class="${st.grabado?'done':''}">
       <td class="m"><b>P${p.n}</b></td><td class="m">${esc(layoutDe(p)||'—')}</td>
       <td><input class="w60" inputmode="numeric" data-f="pasillo" data-p="${p.n}" value="${esc(p.pasillo)}"></td>
       <td><input class="w60" inputmode="numeric" data-f="altura" data-p="${p.n}" value="${esc(p.altura)}"></td>
       <td><input class="w90" inputmode="numeric" data-f="numero" data-p="${p.n}" value="${esc(p.numero)}"></td>
-      <td>${co?`<b class="m">${esc(co)}</b>`:`<input class="mono w130" data-f="coordManual" data-p="${p.n}" value="${esc(p.coordManual||'')}" placeholder="a mano">`}</td>
-      <td><input class="mono w130" data-f="escaneado" data-p="${p.n}" value="${esc(p.escaneado)}" placeholder="escanear"></td>
-      <td>${chip}</td></tr>`;
+      <td><input class="mono w130" data-f="paletScan" data-p="${p.n}" value="${esc(p.paletScan||'')}" placeholder="escanear palé"></td>
+      <td><input class="mono w130" data-f="escaneado" data-p="${p.n}" value="${esc(p.escaneado)}" placeholder="escanear hueco"></td>
+      <td>${chipMapa(p)}</td></tr>`;
   }).join('')}</tbody></table>`;
+}
+/* El check sale cuando están escaneadas las dos cosas: el palé y su hueco. */
+function chipMapa(p){
+  const hayP=!!(p.paletScan||'').trim(), hayU=!!(p.escaneado||'').trim();
+  if(!hayP && !hayU) return '<span class="chip pend">—</span>';
+  if(!hayP) return '<span class="chip warn">falta el palé</span>';
+  if(!hayU) return '<span class="chip warn">falta el hueco</span>';
+  if(!paletCoincide(p)) return '<span class="chip ko">otro palé</span>';
+  const esperado=ubicMaestro(p);
+  if(esperado && esperado!==(p.escaneado||'').trim().toUpperCase())
+    return '<span class="chip ko">hueco distinto</span>';
+  return '<span class="chip ok">OK</span>';
+}
+/* Comprueba que lo escaneado en "Escanear palé" es realmente ese palé. */
+function paletCoincide(p){
+  const s=(p.paletScan||'').trim().toUpperCase();
+  if(!s) return false;
+  const m=s.match(/^P?(\d+)\b/);
+  return !!m && Number(m[1])===p.n;
 }
 $('#mapaTabla').addEventListener('input',e=>{
   const el=e.target; if(!el.dataset.f) return;
   const p=cont().palets.find(x=>x.n===Number(el.dataset.p)); if(!p) return;
   p[el.dataset.f]=el.value.trim().toUpperCase();
-  if(['pasillo','altura','numero','coordManual'].includes(el.dataset.f)) p.coordinador=S.cfg.coordinador||p.coordinador||'';
+  p.coordinador=S.cfg.coordinador||p.coordinador||'';
   save();
-  const tr=el.closest('tr'), co=coordDe(p), st=estadoPalet(p);
-  if(el.dataset.f!=='coordManual'){
-    tr.children[5].innerHTML = co?`<b class="m">${esc(co)}</b>`:`<input class="mono w130" data-f="coordManual" data-p="${p.n}" value="${esc(p.coordManual||'')}" placeholder="a mano">`;
-  }
-  tr.children[7].innerHTML = !p.escaneado?'<span class="chip pend">—</span>':st.okUb?'<span class="chip ok">OK</span>':'<span class="chip ko">NO COINCIDE</span>';
-});
-function puertaCoordinador(){
-  const hay=!!(S.cfg.coordinador||'').trim();
-  $('#m_gate').classList.toggle('hide',hay);
-  $('#m_card').classList.toggle('hide',!hay);
-  $('#m_tablaCard').classList.toggle('hide',!hay);
-  $('#m_coordShow').textContent=S.cfg.coordinador||'';
-  if(!hay) setTimeout(()=>$('#m_coord').focus(),60);
-}
-function entraCoordinador(){
-  const v=$('#m_coord').value.trim();
-  if(v.length<2){ toast('Escribe tu nombre para empezar','ko'); $('#m_coord').focus(); return; }
-  S.cfg.coordinador=v; save(); puertaCoordinador(); renderMapa(); toast('Hola, '+v,'ok');
-}
-$('#m_start').addEventListener('click',entraCoordinador);
-$('#m_coord').addEventListener('keydown',e=>{ if(e.key==='Enter'){ e.preventDefault(); entraCoordinador(); } });
-$('#m_coordChg').addEventListener('click',()=>{
-  $('#m_coord').value=S.cfg.coordinador||''; S.cfg.coordinador=''; save(); puertaCoordinador();
+  const tr=el.closest('tr');
+  if(tr) tr.children[7].innerHTML=chipMapa(p);
 });
 $('#m_copyLayout').addEventListener('click',()=>{
   const c=cont(); if(!c) return;
@@ -3885,15 +3894,26 @@ $('#ub_clear').addEventListener('click',()=>{ if(confirm('¿Vaciar el maestro?')
 /* ================= exportación ================= */
 const CAB=['Contenedor','Fecha descarga','Palé','Codificación QR','Artículo (mocacota)','Código bulto',
            'Bultos','Uds x bulto','Picos','Uds en picos','Total uds','Tono','Copiar en layout',
-           'Pasillo','Altura','Número','Coord','Escaneado','Check','Operario','Coordinador','Grabado'];
+           'Pasillo','Altura','Número','Palé escaneado','Ubicación rack escaneada','Hueco del maestro','Check','Operario','Coordinador','Grabado'];
 const num=v=>(v!==''&&v!==null&&v!==undefined&&!isNaN(v))?Number(v):v;
+/* Mismo criterio que el check del mapa, en texto para el Excel. */
+function textoCheck(p){
+  const hayP=!!(p.paletScan||'').trim(), hayU=!!(p.escaneado||'').trim();
+  if(!hayP && !hayU) return '';
+  if(!hayP) return 'FALTA EL PALÉ';
+  if(!hayU) return 'FALTA EL HUECO';
+  if(!paletCoincide(p)) return 'OTRO PALÉ';
+  const e=ubicMaestro(p);
+  if(e && e!==(p.escaneado||'').trim().toUpperCase()) return 'HUECO DISTINTO';
+  return 'OK';
+}
 function fila(c,p){
   const r=res(p), st=estadoPalet(p);
   return [c.codigo, fmtFecha(c.fecha), 'P'+p.n, qrTexto(c,p), r.moca, r.cod,
           r.n||'', r.udsC ?? '', r.picos.length||'', r.picos.reduce((a,x)=>a+x.u,0)||'',
           r.total||'', p.tono, layoutDe(p),
-          num(p.pasillo), num(p.altura), num(p.numero), coordDe(p), p.escaneado,
-          p.escaneado?(st.okUb?'OK':'NO COINCIDE'):'',
+          num(p.pasillo), num(p.altura), num(p.numero), p.paletScan||'', p.escaneado||'', ubicMaestro(p),
+          textoCheck(p),
           p.operario||'', p.coordinador||'',
           p.ts?new Date(p.ts).toLocaleString('es-ES'):''];
 }
