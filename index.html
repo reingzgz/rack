@@ -548,7 +548,7 @@ details summary{cursor:pointer;font-size:12px;letter-spacing:.1em;text-transform
   <div class="card">
     <h2>Versión</h2>
     <p class="hint">Si una PDA se comporta distinto a otra, compara este número. Si no coincide, esa PDA tiene una copia antigua guardada: ciérrala del todo y vuelve a abrirla con cobertura.</p>
-    <p style="font-family:var(--mono);font-size:22px;font-weight:800;margin:8px 0 0">v7</p>
+    <p style="font-family:var(--mono);font-size:22px;font-weight:800;margin:8px 0 0">v8</p>
   </div>
 
   <div class="card">
@@ -3766,6 +3766,29 @@ $('#h_xlsx').addEventListener('click',()=>{
 });
 
 /* ================= mapa ================= */
+/* Puerta del coordinador: sin nombre no se ve la tabla. */
+function puertaCoordinador(){
+  const hay=!!(S.cfg.coordinador||'').trim();
+  $('#m_gate').classList.toggle('hide',hay);
+  $('#m_card').classList.toggle('hide',!hay);
+  $('#m_tablaCard').classList.toggle('hide',!hay);
+  $('#m_coordShow').textContent=S.cfg.coordinador||'';
+  if(!hay) setTimeout(()=>$('#m_coord').focus(),60);
+}
+function entraCoordinador(){
+  const v=$('#m_coord').value.trim();
+  if(v.length<2){ toast('Escribe tu nombre para empezar','ko'); $('#m_coord').focus(); return; }
+  S.cfg.coordinador=v; save();
+  puertaCoordinador(); renderMapa();
+  toast('Hola, '+v,'ok');
+}
+$('#m_start').addEventListener('click',entraCoordinador);
+$('#m_coord').addEventListener('keydown',e=>{ if(e.key==='Enter'){ e.preventDefault(); entraCoordinador(); } });
+$('#m_coordChg').addEventListener('click',()=>{
+  $('#m_coord').value=S.cfg.coordinador||'';
+  S.cfg.coordinador=''; save(); puertaCoordinador();
+});
+
 function renderMapa(){
   puertaCoordinador();
   if(!(S.cfg.coordinador||'').trim()) return;
