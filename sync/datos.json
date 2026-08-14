@@ -5,8 +5,8 @@
   "moca": 12,
   "sonido": true,
   "largo": 0,
-  "operario": "Carlos Gonzalez",
-  "coordinador": "Omar"
+  "operario": "",
+  "coordinador": ""
  },
  "ubic": {
   "R/_�K�KOH.��NB\u0002!�\u0016:��`�)6.ظ��.m��X��%ٖd�2��\u001e\u001e��ծvV���μ3�\u0019�\u0004\u0002\u0000\u0000\u0000\u0000p'��\u000b\u0000\u0000\u0000\u0000��\u001f\u0004\u001c\u0000\u0000\u0000\u0000p-\b8\u0000\u0000\u0000\u0000�v\u0010p\u0000\u0000\u0000\u0000�� �\u0000\u0000\u0000\u0000��A�\u0001\u0000\u0000\u0000\u0000���\u0003\u0000\u0000\u0000\u0000n\u0007\u0001\u0007\u0000\u0000\u0000\u0000�\u000e\u0002\u000e\u0000\u0000\u0000\u0000�\u001d\u0004\u001c\u0000\u0000\u0000\u0000p-��\u0005\u0000\u0000\u0000\u0000:PVV\u001a\u0011\u0011��Rt ??��O": "6>���޽{{�<�",
@@ -178,6 +178,2716 @@
   "B\b!�$�\u0001\u0007B\b!�$�\u0001\u0007B\b!�$�\u0001\u0007B\b!�$�\u0001\u0007B\b!�$�\u0001\u0007B\b!�$�\u0001\u0007B\b!�$�\u0001\u0007B\b!�$�\u0001\u0007B\b!�$�\u0001\u0007B\b!�$�\u0001\u0007B\b!�$�\u0001\u0007B\b!�$�\u001d�": "��`��\u0000\u0000\u0000\u0000IEND�B`�"
  },
  "conts": [
+  {
+   "id": "Cmssvjmi8",
+   "codigo": "R 9226 BBX",
+   "fecha": "2026-08-12",
+   "cerrado": false,
+   "creado": "2026-08-14T11:39:12.176Z",
+   "modo": "codigo",
+   "imgSig": "uds",
+   "patron": null,
+   "palets": [
+    {
+     "n": 1,
+     "scans": [],
+     "tono": "",
+     "pasillo": "",
+     "altura": "",
+     "numero": "",
+     "paletScan": "",
+     "escaneado": "",
+     "coordManual": "",
+     "ts": null,
+     "operario": "",
+     "coordinador": ""
+    },
+    {
+     "n": 2,
+     "scans": [],
+     "tono": "",
+     "pasillo": "",
+     "altura": "",
+     "numero": "",
+     "paletScan": "",
+     "escaneado": "",
+     "coordManual": "",
+     "ts": null,
+     "operario": "",
+     "coordinador": ""
+    },
+    {
+     "n": 3,
+     "scans": [],
+     "tono": "",
+     "pasillo": "",
+     "altura": "",
+     "numero": "",
+     "paletScan": "",
+     "escaneado": "",
+     "coordManual": "",
+     "ts": null,
+     "operario": "",
+     "coordinador": ""
+    },
+    {
+     "n": 4,
+     "scans": [],
+     "tono": "",
+     "pasillo": "",
+     "altura": "",
+     "numero": "",
+     "paletScan": "",
+     "escaneado": "",
+     "coordManual": "",
+     "ts": null,
+     "operario": "",
+     "coordinador": ""
+    },
+    {
+     "n": 5,
+     "scans": [],
+     "tono": "",
+     "pasillo": "",
+     "altura": "",
+     "numero": "",
+     "paletScan": "",
+     "escaneado": "",
+     "coordManual": "",
+     "ts": null,
+     "operario": "",
+     "coordinador": ""
+    },
+    {
+     "n": 6,
+     "scans": [],
+     "tono": "",
+     "pasillo": "",
+     "altura": "",
+     "numero": "",
+     "paletScan": "",
+     "escaneado": "",
+     "coordManual": "",
+     "ts": null,
+     "operario": "",
+     "coordinador": ""
+    },
+    {
+     "n": 7,
+     "scans": [],
+     "tono": "",
+     "pasillo": "",
+     "altura": "",
+     "numero": "",
+     "paletScan": "",
+     "escaneado": "",
+     "coordManual": "",
+     "ts": null,
+     "operario": "",
+     "coordinador": ""
+    },
+    {
+     "n": 8,
+     "scans": [],
+     "tono": "",
+     "pasillo": "",
+     "altura": "",
+     "numero": "",
+     "paletScan": "",
+     "escaneado": "",
+     "coordManual": "",
+     "ts": null,
+     "operario": "",
+     "coordinador": ""
+    },
+    {
+     "n": 9,
+     "scans": [],
+     "tono": "",
+     "pasillo": "",
+     "altura": "",
+     "numero": "",
+     "paletScan": "",
+     "escaneado": "",
+     "coordManual": "",
+     "ts": null,
+     "operario": "",
+     "coordinador": ""
+    },
+    {
+     "n": 10,
+     "scans": [],
+     "tono": "",
+     "pasillo": "",
+     "altura": "",
+     "numero": "",
+     "paletScan": "",
+     "escaneado": "",
+     "coordManual": "",
+     "ts": null,
+     "operario": "",
+     "coordinador": ""
+    },
+    {
+     "n": 11,
+     "scans": [],
+     "tono": "",
+     "pasillo": "",
+     "altura": "",
+     "numero": "",
+     "paletScan": "",
+     "escaneado": "",
+     "coordManual": "",
+     "ts": null,
+     "operario": "",
+     "coordinador": ""
+    },
+    {
+     "n": 12,
+     "scans": [],
+     "tono": "",
+     "pasillo": "",
+     "altura": "",
+     "numero": "",
+     "paletScan": "",
+     "escaneado": "",
+     "coordManual": "",
+     "ts": null,
+     "operario": "",
+     "coordinador": ""
+    },
+    {
+     "n": 13,
+     "scans": [],
+     "tono": "",
+     "pasillo": "",
+     "altura": "",
+     "numero": "",
+     "paletScan": "",
+     "escaneado": "",
+     "coordManual": "",
+     "ts": null,
+     "operario": "",
+     "coordinador": ""
+    },
+    {
+     "n": 14,
+     "scans": [],
+     "tono": "",
+     "pasillo": "",
+     "altura": "",
+     "numero": "",
+     "paletScan": "",
+     "escaneado": "",
+     "coordManual": "",
+     "ts": null,
+     "operario": "",
+     "coordinador": ""
+    },
+    {
+     "n": 15,
+     "scans": [],
+     "tono": "",
+     "pasillo": "",
+     "altura": "",
+     "numero": "",
+     "paletScan": "",
+     "escaneado": "",
+     "coordManual": "",
+     "ts": null,
+     "operario": "",
+     "coordinador": ""
+    },
+    {
+     "n": 16,
+     "scans": [],
+     "tono": "",
+     "pasillo": "",
+     "altura": "",
+     "numero": "",
+     "paletScan": "",
+     "escaneado": "",
+     "coordManual": "",
+     "ts": null,
+     "operario": "",
+     "coordinador": ""
+    },
+    {
+     "n": 17,
+     "scans": [],
+     "tono": "",
+     "pasillo": "",
+     "altura": "",
+     "numero": "",
+     "paletScan": "",
+     "escaneado": "",
+     "coordManual": "",
+     "ts": null,
+     "operario": "",
+     "coordinador": ""
+    },
+    {
+     "n": 18,
+     "scans": [],
+     "tono": "",
+     "pasillo": "",
+     "altura": "",
+     "numero": "",
+     "paletScan": "",
+     "escaneado": "",
+     "coordManual": "",
+     "ts": null,
+     "operario": "",
+     "coordinador": ""
+    },
+    {
+     "n": 19,
+     "scans": [],
+     "tono": "",
+     "pasillo": "",
+     "altura": "",
+     "numero": "",
+     "paletScan": "",
+     "escaneado": "",
+     "coordManual": "",
+     "ts": null,
+     "operario": "",
+     "coordinador": ""
+    },
+    {
+     "n": 20,
+     "scans": [],
+     "tono": "",
+     "pasillo": "",
+     "altura": "",
+     "numero": "",
+     "paletScan": "",
+     "escaneado": "",
+     "coordManual": "",
+     "ts": null,
+     "operario": "",
+     "coordinador": ""
+    },
+    {
+     "n": 21,
+     "scans": [],
+     "tono": "",
+     "pasillo": "",
+     "altura": "",
+     "numero": "",
+     "paletScan": "",
+     "escaneado": "",
+     "coordManual": "",
+     "ts": null,
+     "operario": "",
+     "coordinador": ""
+    },
+    {
+     "n": 22,
+     "scans": [],
+     "tono": "",
+     "pasillo": "",
+     "altura": "",
+     "numero": "",
+     "paletScan": "",
+     "escaneado": "",
+     "coordManual": "",
+     "ts": null,
+     "operario": "",
+     "coordinador": ""
+    },
+    {
+     "n": 23,
+     "scans": [],
+     "tono": "",
+     "pasillo": "",
+     "altura": "",
+     "numero": "",
+     "paletScan": "",
+     "escaneado": "",
+     "coordManual": "",
+     "ts": null,
+     "operario": "",
+     "coordinador": ""
+    },
+    {
+     "n": 24,
+     "scans": [],
+     "tono": "",
+     "pasillo": "",
+     "altura": "",
+     "numero": "",
+     "paletScan": "",
+     "escaneado": "",
+     "coordManual": "",
+     "ts": null,
+     "operario": "",
+     "coordinador": ""
+    },
+    {
+     "n": 25,
+     "scans": [],
+     "tono": "",
+     "pasillo": "",
+     "altura": "",
+     "numero": "",
+     "paletScan": "",
+     "escaneado": "",
+     "coordManual": "",
+     "ts": null,
+     "operario": "",
+     "coordinador": ""
+    },
+    {
+     "n": 26,
+     "scans": [],
+     "tono": "",
+     "pasillo": "",
+     "altura": "",
+     "numero": "",
+     "paletScan": "",
+     "escaneado": "",
+     "coordManual": "",
+     "ts": null,
+     "operario": "",
+     "coordinador": ""
+    },
+    {
+     "n": 27,
+     "scans": [],
+     "tono": "",
+     "pasillo": "",
+     "altura": "",
+     "numero": "",
+     "paletScan": "",
+     "escaneado": "",
+     "coordManual": "",
+     "ts": null,
+     "operario": "",
+     "coordinador": ""
+    },
+    {
+     "n": 28,
+     "scans": [],
+     "tono": "",
+     "pasillo": "",
+     "altura": "",
+     "numero": "",
+     "paletScan": "",
+     "escaneado": "",
+     "coordManual": "",
+     "ts": null,
+     "operario": "",
+     "coordinador": ""
+    },
+    {
+     "n": 29,
+     "scans": [],
+     "tono": "",
+     "pasillo": "",
+     "altura": "",
+     "numero": "",
+     "paletScan": "",
+     "escaneado": "",
+     "coordManual": "",
+     "ts": null,
+     "operario": "",
+     "coordinador": ""
+    },
+    {
+     "n": 30,
+     "scans": [],
+     "tono": "",
+     "pasillo": "",
+     "altura": "",
+     "numero": "",
+     "paletScan": "",
+     "escaneado": "",
+     "coordManual": "",
+     "ts": null,
+     "operario": "",
+     "coordinador": ""
+    },
+    {
+     "n": 31,
+     "scans": [],
+     "tono": "",
+     "pasillo": "",
+     "altura": "",
+     "numero": "",
+     "paletScan": "",
+     "escaneado": "",
+     "coordManual": "",
+     "ts": null,
+     "operario": "",
+     "coordinador": ""
+    }
+   ]
+  },
+  {
+   "id": "Cmssnyny7",
+   "codigo": "R 8811 BDG",
+   "fecha": "2026-08-13",
+   "cerrado": false,
+   "creado": "2026-08-14T08:06:56.959Z",
+   "modo": "codigo",
+   "imgSig": "uds",
+   "patron": null,
+   "palets": [
+    {
+     "n": 1,
+     "scans": [],
+     "tono": "",
+     "pasillo": "",
+     "altura": "",
+     "numero": "",
+     "paletScan": "",
+     "escaneado": "",
+     "coordManual": "",
+     "ts": null,
+     "operario": "",
+     "coordinador": ""
+    },
+    {
+     "n": 2,
+     "scans": [],
+     "tono": "",
+     "pasillo": "",
+     "altura": "",
+     "numero": "",
+     "paletScan": "",
+     "escaneado": "",
+     "coordManual": "",
+     "ts": null,
+     "operario": "",
+     "coordinador": ""
+    },
+    {
+     "n": 3,
+     "scans": [],
+     "tono": "",
+     "pasillo": "",
+     "altura": "",
+     "numero": "",
+     "paletScan": "",
+     "escaneado": "",
+     "coordManual": "",
+     "ts": null,
+     "operario": "",
+     "coordinador": ""
+    },
+    {
+     "n": 4,
+     "scans": [],
+     "tono": "",
+     "pasillo": "",
+     "altura": "",
+     "numero": "",
+     "paletScan": "",
+     "escaneado": "",
+     "coordManual": "",
+     "ts": null,
+     "operario": "",
+     "coordinador": ""
+    },
+    {
+     "n": 5,
+     "scans": [],
+     "tono": "",
+     "pasillo": "",
+     "altura": "",
+     "numero": "",
+     "paletScan": "",
+     "escaneado": "",
+     "coordManual": "",
+     "ts": null,
+     "operario": "",
+     "coordinador": ""
+    },
+    {
+     "n": 6,
+     "scans": [],
+     "tono": "",
+     "pasillo": "",
+     "altura": "",
+     "numero": "",
+     "paletScan": "",
+     "escaneado": "",
+     "coordManual": "",
+     "ts": null,
+     "operario": "",
+     "coordinador": ""
+    },
+    {
+     "n": 7,
+     "scans": [],
+     "tono": "",
+     "pasillo": "",
+     "altura": "",
+     "numero": "",
+     "paletScan": "",
+     "escaneado": "",
+     "coordManual": "",
+     "ts": null,
+     "operario": "",
+     "coordinador": ""
+    },
+    {
+     "n": 8,
+     "scans": [],
+     "tono": "",
+     "pasillo": "",
+     "altura": "",
+     "numero": "",
+     "paletScan": "",
+     "escaneado": "",
+     "coordManual": "",
+     "ts": null,
+     "operario": "",
+     "coordinador": ""
+    },
+    {
+     "n": 9,
+     "scans": [],
+     "tono": "",
+     "pasillo": "",
+     "altura": "",
+     "numero": "",
+     "paletScan": "",
+     "escaneado": "",
+     "coordManual": "",
+     "ts": null,
+     "operario": "",
+     "coordinador": ""
+    },
+    {
+     "n": 10,
+     "scans": [],
+     "tono": "",
+     "pasillo": "",
+     "altura": "",
+     "numero": "",
+     "paletScan": "",
+     "escaneado": "",
+     "coordManual": "",
+     "ts": null,
+     "operario": "",
+     "coordinador": ""
+    },
+    {
+     "n": 11,
+     "scans": [],
+     "tono": "",
+     "pasillo": "",
+     "altura": "",
+     "numero": "",
+     "paletScan": "",
+     "escaneado": "",
+     "coordManual": "",
+     "ts": null,
+     "operario": "",
+     "coordinador": ""
+    },
+    {
+     "n": 12,
+     "scans": [],
+     "tono": "",
+     "pasillo": "",
+     "altura": "",
+     "numero": "",
+     "paletScan": "",
+     "escaneado": "",
+     "coordManual": "",
+     "ts": null,
+     "operario": "",
+     "coordinador": ""
+    },
+    {
+     "n": 13,
+     "scans": [],
+     "tono": "",
+     "pasillo": "",
+     "altura": "",
+     "numero": "",
+     "paletScan": "",
+     "escaneado": "",
+     "coordManual": "",
+     "ts": null,
+     "operario": "",
+     "coordinador": ""
+    },
+    {
+     "n": 14,
+     "scans": [],
+     "tono": "",
+     "pasillo": "",
+     "altura": "",
+     "numero": "",
+     "paletScan": "",
+     "escaneado": "",
+     "coordManual": "",
+     "ts": null,
+     "operario": "",
+     "coordinador": ""
+    },
+    {
+     "n": 15,
+     "scans": [],
+     "tono": "",
+     "pasillo": "",
+     "altura": "",
+     "numero": "",
+     "paletScan": "",
+     "escaneado": "",
+     "coordManual": "",
+     "ts": null,
+     "operario": "",
+     "coordinador": ""
+    },
+    {
+     "n": 16,
+     "scans": [],
+     "tono": "",
+     "pasillo": "",
+     "altura": "",
+     "numero": "",
+     "paletScan": "",
+     "escaneado": "",
+     "coordManual": "",
+     "ts": null,
+     "operario": "",
+     "coordinador": ""
+    },
+    {
+     "n": 17,
+     "scans": [],
+     "tono": "",
+     "pasillo": "",
+     "altura": "",
+     "numero": "",
+     "paletScan": "",
+     "escaneado": "",
+     "coordManual": "",
+     "ts": null,
+     "operario": "",
+     "coordinador": ""
+    },
+    {
+     "n": 18,
+     "scans": [],
+     "tono": "",
+     "pasillo": "",
+     "altura": "",
+     "numero": "",
+     "paletScan": "",
+     "escaneado": "",
+     "coordManual": "",
+     "ts": null,
+     "operario": "",
+     "coordinador": ""
+    },
+    {
+     "n": 19,
+     "scans": [],
+     "tono": "",
+     "pasillo": "",
+     "altura": "",
+     "numero": "",
+     "paletScan": "",
+     "escaneado": "",
+     "coordManual": "",
+     "ts": null,
+     "operario": "",
+     "coordinador": ""
+    },
+    {
+     "n": 20,
+     "scans": [],
+     "tono": "",
+     "pasillo": "",
+     "altura": "",
+     "numero": "",
+     "paletScan": "",
+     "escaneado": "",
+     "coordManual": "",
+     "ts": null,
+     "operario": "",
+     "coordinador": ""
+    },
+    {
+     "n": 21,
+     "scans": [],
+     "tono": "",
+     "pasillo": "",
+     "altura": "",
+     "numero": "",
+     "paletScan": "",
+     "escaneado": "",
+     "coordManual": "",
+     "ts": null,
+     "operario": "",
+     "coordinador": ""
+    },
+    {
+     "n": 22,
+     "scans": [],
+     "tono": "",
+     "pasillo": "",
+     "altura": "",
+     "numero": "",
+     "paletScan": "",
+     "escaneado": "",
+     "coordManual": "",
+     "ts": null,
+     "operario": "",
+     "coordinador": ""
+    },
+    {
+     "n": 23,
+     "scans": [],
+     "tono": "",
+     "pasillo": "",
+     "altura": "",
+     "numero": "",
+     "paletScan": "",
+     "escaneado": "",
+     "coordManual": "",
+     "ts": null,
+     "operario": "",
+     "coordinador": ""
+    },
+    {
+     "n": 24,
+     "scans": [],
+     "tono": "",
+     "pasillo": "",
+     "altura": "",
+     "numero": "",
+     "paletScan": "",
+     "escaneado": "",
+     "coordManual": "",
+     "ts": null,
+     "operario": "",
+     "coordinador": ""
+    },
+    {
+     "n": 25,
+     "scans": [],
+     "tono": "",
+     "pasillo": "",
+     "altura": "",
+     "numero": "",
+     "paletScan": "",
+     "escaneado": "",
+     "coordManual": "",
+     "ts": null,
+     "operario": "",
+     "coordinador": ""
+    },
+    {
+     "n": 26,
+     "scans": [],
+     "tono": "",
+     "pasillo": "",
+     "altura": "",
+     "numero": "",
+     "paletScan": "",
+     "escaneado": "",
+     "coordManual": "",
+     "ts": null,
+     "operario": "",
+     "coordinador": ""
+    },
+    {
+     "n": 27,
+     "scans": [],
+     "tono": "",
+     "pasillo": "",
+     "altura": "",
+     "numero": "",
+     "paletScan": "",
+     "escaneado": "",
+     "coordManual": "",
+     "ts": null,
+     "operario": "",
+     "coordinador": ""
+    },
+    {
+     "n": 28,
+     "scans": [],
+     "tono": "",
+     "pasillo": "",
+     "altura": "",
+     "numero": "",
+     "paletScan": "",
+     "escaneado": "",
+     "coordManual": "",
+     "ts": null,
+     "operario": "",
+     "coordinador": ""
+    }
+   ]
+  },
+  {
+   "id": "Cmssmtujs",
+   "codigo": "R 9226 BBX",
+   "fecha": "2026-08-13",
+   "cerrado": false,
+   "creado": "2026-08-14T07:35:12.616Z",
+   "modo": "codigo",
+   "imgSig": "uds",
+   "patron": null,
+   "palets": [
+    {
+     "n": 1,
+     "scans": [
+      {
+       "c": "080733328000100098",
+       "u": 9,
+       "t": "2026-08-14T07:49:33.147Z",
+       "anom": ""
+      },
+      {
+       "c": "080733328000100098",
+       "u": 9,
+       "t": "2026-08-14T07:49:51.240Z",
+       "anom": ""
+      },
+      {
+       "c": "080733328000100098",
+       "u": 9,
+       "t": "2026-08-14T07:50:05.048Z",
+       "anom": ""
+      },
+      {
+       "c": "080733328000100098",
+       "u": 9,
+       "t": "2026-08-14T07:50:07.367Z",
+       "anom": ""
+      },
+      {
+       "c": "080733328000100098",
+       "u": 9,
+       "t": "2026-08-14T07:50:09.810Z",
+       "anom": ""
+      },
+      {
+       "c": "080733328000100098",
+       "u": 9,
+       "t": "2026-08-14T07:50:11.322Z",
+       "anom": ""
+      },
+      {
+       "c": "080733328000100098",
+       "u": 9,
+       "t": "2026-08-14T07:50:12.753Z",
+       "anom": ""
+      },
+      {
+       "c": "080733328000100098",
+       "u": 9,
+       "t": "2026-08-14T07:50:14.541Z",
+       "anom": ""
+      }
+     ],
+     "tono": "",
+     "pasillo": "",
+     "altura": "",
+     "numero": "",
+     "paletScan": "",
+     "escaneado": "",
+     "coordManual": "",
+     "ts": "2026-08-14T07:50:32.828Z",
+     "operario": "Wendy",
+     "coordinador": ""
+    },
+    {
+     "n": 2,
+     "scans": [
+      {
+       "c": "080733328000200095",
+       "u": 9,
+       "t": "2026-08-14T07:57:03.347Z",
+       "anom": ""
+      },
+      {
+       "c": "080733328000200095",
+       "u": 9,
+       "t": "2026-08-14T07:57:09.362Z",
+       "anom": ""
+      },
+      {
+       "c": "080733328000200095",
+       "u": 9,
+       "t": "2026-08-14T07:57:12.134Z",
+       "anom": ""
+      },
+      {
+       "c": "080733328000200095",
+       "u": 9,
+       "t": "2026-08-14T07:57:14.150Z",
+       "anom": ""
+      },
+      {
+       "c": "080733328000200095",
+       "u": 9,
+       "t": "2026-08-14T07:57:16.762Z",
+       "anom": ""
+      },
+      {
+       "c": "080733328000200095",
+       "u": 9,
+       "t": "2026-08-14T07:57:30.538Z",
+       "anom": ""
+      },
+      {
+       "c": "080733328000200095",
+       "u": 9,
+       "t": "2026-08-14T07:57:33.495Z",
+       "anom": ""
+      },
+      {
+       "c": "080733328000200095",
+       "u": 9,
+       "t": "2026-08-14T07:57:35.860Z",
+       "anom": ""
+      }
+     ],
+     "tono": "",
+     "pasillo": "",
+     "altura": "",
+     "numero": "",
+     "paletScan": "",
+     "escaneado": "",
+     "coordManual": "",
+     "ts": "2026-08-14T07:58:07.868Z",
+     "operario": "Wendy",
+     "coordinador": ""
+    },
+    {
+     "n": 3,
+     "scans": [
+      {
+       "c": "080733328000100098",
+       "u": 9,
+       "t": "2026-08-14T07:59:01.871Z",
+       "anom": ""
+      },
+      {
+       "c": "080733328000100098",
+       "u": 9,
+       "t": "2026-08-14T07:59:08.619Z",
+       "anom": ""
+      },
+      {
+       "c": "080733328000100098",
+       "u": 9,
+       "t": "2026-08-14T07:59:10.826Z",
+       "anom": ""
+      },
+      {
+       "c": "080733328000100098",
+       "u": 9,
+       "t": "2026-08-14T07:59:12.831Z",
+       "anom": ""
+      },
+      {
+       "c": "080733328000100098",
+       "u": 9,
+       "t": "2026-08-14T07:59:15.235Z",
+       "anom": ""
+      },
+      {
+       "c": "080733328000100098",
+       "u": 9,
+       "t": "2026-08-14T07:59:17.078Z",
+       "anom": ""
+      },
+      {
+       "c": "080733328000100098",
+       "u": 9,
+       "t": "2026-08-14T07:59:18.921Z",
+       "anom": ""
+      },
+      {
+       "c": "080733328000100098",
+       "u": 9,
+       "t": "2026-08-14T07:59:20.598Z",
+       "anom": ""
+      }
+     ],
+     "tono": "",
+     "pasillo": "",
+     "altura": "",
+     "numero": "",
+     "paletScan": "",
+     "escaneado": "",
+     "coordManual": "",
+     "ts": "2026-08-14T07:59:26.739Z",
+     "operario": "Wendy",
+     "coordinador": ""
+    },
+    {
+     "n": 4,
+     "scans": [
+      {
+       "c": "080733328000100098",
+       "u": 9,
+       "t": "2026-08-14T07:59:49.784Z",
+       "anom": ""
+      },
+      {
+       "c": "080733328000100098",
+       "u": 9,
+       "t": "2026-08-14T07:59:58.025Z",
+       "anom": ""
+      },
+      {
+       "c": "080733328000100098",
+       "u": 9,
+       "t": "2026-08-14T08:00:10.508Z",
+       "anom": ""
+      },
+      {
+       "c": "080733328000100098",
+       "u": 9,
+       "t": "2026-08-14T08:00:15.118Z",
+       "anom": ""
+      },
+      {
+       "c": "080733328000100098",
+       "u": 9,
+       "t": "2026-08-14T08:00:19.753Z",
+       "anom": ""
+      },
+      {
+       "c": "080733328000100098",
+       "u": 9,
+       "t": "2026-08-14T08:00:21.579Z",
+       "anom": ""
+      },
+      {
+       "c": "080733328000100098",
+       "u": 9,
+       "t": "2026-08-14T08:00:23.503Z",
+       "anom": ""
+      },
+      {
+       "c": "080733328000100098",
+       "u": 9,
+       "t": "2026-08-14T08:00:25.185Z",
+       "anom": ""
+      }
+     ],
+     "tono": "",
+     "pasillo": "",
+     "altura": "",
+     "numero": "",
+     "paletScan": "",
+     "escaneado": "",
+     "coordManual": "",
+     "ts": "2026-08-14T08:00:30.047Z",
+     "operario": "Wendy",
+     "coordinador": ""
+    },
+    {
+     "n": 5,
+     "scans": [
+      {
+       "c": "080733328000200095",
+       "u": 9,
+       "t": "2026-08-14T08:00:49.866Z",
+       "anom": ""
+      },
+      {
+       "c": "080733328000200095",
+       "u": 9,
+       "t": "2026-08-14T08:00:51.739Z",
+       "anom": ""
+      },
+      {
+       "c": "080733328000200095",
+       "u": 9,
+       "t": "2026-08-14T08:00:54.538Z",
+       "anom": ""
+      },
+      {
+       "c": "080733328000200095",
+       "u": 9,
+       "t": "2026-08-14T08:00:56.463Z",
+       "anom": ""
+      },
+      {
+       "c": "080733328000200095",
+       "u": 9,
+       "t": "2026-08-14T08:00:58.563Z",
+       "anom": ""
+      },
+      {
+       "c": "080733328000200095",
+       "u": 9,
+       "t": "2026-08-14T08:01:00.469Z",
+       "anom": ""
+      },
+      {
+       "c": "080733328000200095",
+       "u": 9,
+       "t": "2026-08-14T08:01:02.353Z",
+       "anom": ""
+      },
+      {
+       "c": "080733328000200095",
+       "u": 9,
+       "t": "2026-08-14T08:01:03.902Z",
+       "anom": ""
+      }
+     ],
+     "tono": "",
+     "pasillo": "",
+     "altura": "",
+     "numero": "",
+     "paletScan": "",
+     "escaneado": "",
+     "coordManual": "",
+     "ts": "2026-08-14T08:01:07.891Z",
+     "operario": "Wendy",
+     "coordinador": ""
+    },
+    {
+     "n": 6,
+     "scans": [
+      {
+       "c": "080733328000300092",
+       "u": 9,
+       "t": "2026-08-14T08:01:28.368Z",
+       "anom": ""
+      },
+      {
+       "c": "080733328000300092",
+       "u": 9,
+       "t": "2026-08-14T08:01:30.457Z",
+       "anom": ""
+      },
+      {
+       "c": "080733328000300092",
+       "u": 9,
+       "t": "2026-08-14T08:01:32.328Z",
+       "anom": ""
+      },
+      {
+       "c": "080733328000300092",
+       "u": 9,
+       "t": "2026-08-14T08:01:34.308Z",
+       "anom": ""
+      },
+      {
+       "c": "080733328000300092",
+       "u": 9,
+       "t": "2026-08-14T08:01:36.590Z",
+       "anom": ""
+      },
+      {
+       "c": "080733328000300092",
+       "u": 9,
+       "t": "2026-08-14T08:01:38.889Z",
+       "anom": ""
+      },
+      {
+       "c": "080733328000300092",
+       "u": 9,
+       "t": "2026-08-14T08:01:40.480Z",
+       "anom": ""
+      },
+      {
+       "c": "080733328000300092",
+       "u": 9,
+       "t": "2026-08-14T08:01:42.096Z",
+       "anom": ""
+      }
+     ],
+     "tono": "",
+     "pasillo": "",
+     "altura": "",
+     "numero": "",
+     "paletScan": "",
+     "escaneado": "",
+     "coordManual": "",
+     "ts": "2026-08-14T08:01:45.880Z",
+     "operario": "Wendy",
+     "coordinador": ""
+    },
+    {
+     "n": 7,
+     "scans": [
+      {
+       "c": "080733328000300092",
+       "u": 9,
+       "t": "2026-08-14T08:02:11.482Z",
+       "anom": ""
+      },
+      {
+       "c": "080733328000300092",
+       "u": 9,
+       "t": "2026-08-14T08:02:13.177Z",
+       "anom": ""
+      },
+      {
+       "c": "080733328000300092",
+       "u": 9,
+       "t": "2026-08-14T08:02:16.739Z",
+       "anom": ""
+      },
+      {
+       "c": "080733328000300092",
+       "u": 9,
+       "t": "2026-08-14T08:02:36.440Z",
+       "anom": ""
+      },
+      {
+       "c": "080733328000300092",
+       "u": 9,
+       "t": "2026-08-14T08:02:40.215Z",
+       "anom": ""
+      },
+      {
+       "c": "080733328000300092",
+       "u": 9,
+       "t": "2026-08-14T08:02:41.901Z",
+       "anom": ""
+      },
+      {
+       "c": "080733328000300092",
+       "u": 9,
+       "t": "2026-08-14T08:02:43.621Z",
+       "anom": ""
+      },
+      {
+       "c": "080733328000300092",
+       "u": 9,
+       "t": "2026-08-14T08:02:45.439Z",
+       "anom": ""
+      }
+     ],
+     "tono": "",
+     "pasillo": "",
+     "altura": "",
+     "numero": "",
+     "paletScan": "",
+     "escaneado": "",
+     "coordManual": "",
+     "ts": "2026-08-14T08:02:48.033Z",
+     "operario": "Wendy",
+     "coordinador": ""
+    },
+    {
+     "n": 8,
+     "scans": [
+      {
+       "c": "080733328000300092",
+       "u": 9,
+       "t": "2026-08-14T08:03:23.344Z",
+       "anom": ""
+      },
+      {
+       "c": "080733328000300092",
+       "u": 9,
+       "t": "2026-08-14T08:03:25.752Z",
+       "anom": ""
+      },
+      {
+       "c": "080733328000300092",
+       "u": 9,
+       "t": "2026-08-14T08:03:29.122Z",
+       "anom": ""
+      },
+      {
+       "c": "080733328000300092",
+       "u": 9,
+       "t": "2026-08-14T08:03:32.084Z",
+       "anom": ""
+      },
+      {
+       "c": "080733328000300092",
+       "u": 9,
+       "t": "2026-08-14T08:03:35.206Z",
+       "anom": ""
+      },
+      {
+       "c": "080733328000300092",
+       "u": 9,
+       "t": "2026-08-14T08:03:37.584Z",
+       "anom": ""
+      },
+      {
+       "c": "080733328000300092",
+       "u": 9,
+       "t": "2026-08-14T08:03:39.361Z",
+       "anom": ""
+      },
+      {
+       "c": "080733328000300092",
+       "u": 9,
+       "t": "2026-08-14T08:03:41.280Z",
+       "anom": ""
+      }
+     ],
+     "tono": "",
+     "pasillo": "",
+     "altura": "",
+     "numero": "",
+     "paletScan": "",
+     "escaneado": "",
+     "coordManual": "",
+     "ts": "2026-08-14T08:03:45.821Z",
+     "operario": "Wendy",
+     "coordinador": ""
+    },
+    {
+     "n": 9,
+     "scans": [
+      {
+       "c": "080733328000300092",
+       "u": 9,
+       "t": "2026-08-14T08:04:05.983Z",
+       "anom": ""
+      },
+      {
+       "c": "080733328000300092",
+       "u": 9,
+       "t": "2026-08-14T08:04:07.787Z",
+       "anom": ""
+      },
+      {
+       "c": "080733328000300092",
+       "u": 9,
+       "t": "2026-08-14T08:04:10.019Z",
+       "anom": ""
+      },
+      {
+       "c": "080733328000300092",
+       "u": 9,
+       "t": "2026-08-14T08:04:12.034Z",
+       "anom": ""
+      },
+      {
+       "c": "080733328000300092",
+       "u": 9,
+       "t": "2026-08-14T08:04:13.943Z",
+       "anom": ""
+      },
+      {
+       "c": "080733328000300092",
+       "u": 9,
+       "t": "2026-08-14T08:04:15.562Z",
+       "anom": ""
+      },
+      {
+       "c": "080733328000300092",
+       "u": 9,
+       "t": "2026-08-14T08:04:17.874Z",
+       "anom": ""
+      },
+      {
+       "c": "080733328000300092",
+       "u": 9,
+       "t": "2026-08-14T08:04:19.631Z",
+       "anom": ""
+      }
+     ],
+     "tono": "",
+     "pasillo": "",
+     "altura": "",
+     "numero": "",
+     "paletScan": "",
+     "escaneado": "",
+     "coordManual": "",
+     "ts": "2026-08-14T08:04:23.294Z",
+     "operario": "Wendy",
+     "coordinador": ""
+    },
+    {
+     "n": 10,
+     "scans": [
+      {
+       "c": "080733328000300092",
+       "u": 9,
+       "t": "2026-08-14T08:04:45.583Z",
+       "anom": ""
+      },
+      {
+       "c": "080733328000300092",
+       "u": 9,
+       "t": "2026-08-14T08:04:47.627Z",
+       "anom": ""
+      },
+      {
+       "c": "080733328000300092",
+       "u": 9,
+       "t": "2026-08-14T08:04:49.120Z",
+       "anom": ""
+      },
+      {
+       "c": "080733328000300092",
+       "u": 9,
+       "t": "2026-08-14T08:04:50.436Z",
+       "anom": ""
+      },
+      {
+       "c": "080733328000300092",
+       "u": 9,
+       "t": "2026-08-14T08:04:53.548Z",
+       "anom": ""
+      },
+      {
+       "c": "080733328000300092",
+       "u": 9,
+       "t": "2026-08-14T08:04:55.008Z",
+       "anom": ""
+      },
+      {
+       "c": "080733328000300092",
+       "u": 9,
+       "t": "2026-08-14T08:04:56.430Z",
+       "anom": ""
+      },
+      {
+       "c": "080733328000300092",
+       "u": 9,
+       "t": "2026-08-14T08:04:57.933Z",
+       "anom": ""
+      }
+     ],
+     "tono": "",
+     "pasillo": "",
+     "altura": "",
+     "numero": "",
+     "paletScan": "",
+     "escaneado": "",
+     "coordManual": "",
+     "ts": "2026-08-14T08:05:01.033Z",
+     "operario": "Wendy",
+     "coordinador": ""
+    },
+    {
+     "n": 11,
+     "scans": [
+      {
+       "c": "080733328000200095",
+       "u": 9,
+       "t": "2026-08-14T08:05:54.941Z",
+       "anom": ""
+      },
+      {
+       "c": "080733328000200095",
+       "u": 9,
+       "t": "2026-08-14T08:05:56.803Z",
+       "anom": ""
+      },
+      {
+       "c": "080733328000200095",
+       "u": 9,
+       "t": "2026-08-14T08:05:58.450Z",
+       "anom": ""
+      },
+      {
+       "c": "080733328000200095",
+       "u": 9,
+       "t": "2026-08-14T08:06:00.063Z",
+       "anom": ""
+      },
+      {
+       "c": "080733328000200095",
+       "u": 9,
+       "t": "2026-08-14T08:06:01.929Z",
+       "anom": ""
+      },
+      {
+       "c": "080733328000200095",
+       "u": 9,
+       "t": "2026-08-14T08:06:03.506Z",
+       "anom": ""
+      },
+      {
+       "c": "080733328000200095",
+       "u": 9,
+       "t": "2026-08-14T08:06:05.082Z",
+       "anom": ""
+      },
+      {
+       "c": "080733328000200095",
+       "u": 9,
+       "t": "2026-08-14T08:06:06.469Z",
+       "anom": ""
+      }
+     ],
+     "tono": "",
+     "pasillo": "",
+     "altura": "",
+     "numero": "",
+     "paletScan": "",
+     "escaneado": "",
+     "coordManual": "",
+     "ts": "2026-08-14T08:06:09.718Z",
+     "operario": "Wendy",
+     "coordinador": ""
+    },
+    {
+     "n": 12,
+     "scans": [
+      {
+       "c": "080733328000200095",
+       "u": 9,
+       "t": "2026-08-14T08:06:38.537Z",
+       "anom": ""
+      },
+      {
+       "c": "080733328000200095",
+       "u": 9,
+       "t": "2026-08-14T08:06:40.414Z",
+       "anom": ""
+      },
+      {
+       "c": "080733328000200095",
+       "u": 9,
+       "t": "2026-08-14T08:06:46.011Z",
+       "anom": ""
+      },
+      {
+       "c": "080733328000200095",
+       "u": 9,
+       "t": "2026-08-14T08:06:47.521Z",
+       "anom": ""
+      },
+      {
+       "c": "080733328000200095",
+       "u": 9,
+       "t": "2026-08-14T08:06:50.122Z",
+       "anom": ""
+      },
+      {
+       "c": "080733328000200095",
+       "u": 9,
+       "t": "2026-08-14T08:06:51.751Z",
+       "anom": ""
+      },
+      {
+       "c": "080733328000200095",
+       "u": 9,
+       "t": "2026-08-14T08:07:00.013Z",
+       "anom": ""
+      },
+      {
+       "c": "080733328000200095",
+       "u": 9,
+       "t": "2026-08-14T08:07:01.742Z",
+       "anom": ""
+      }
+     ],
+     "tono": "",
+     "pasillo": "",
+     "altura": "",
+     "numero": "",
+     "paletScan": "",
+     "escaneado": "",
+     "coordManual": "",
+     "ts": "2026-08-14T08:07:05.112Z",
+     "operario": "Wendy",
+     "coordinador": ""
+    },
+    {
+     "n": 13,
+     "scans": [
+      {
+       "c": "080733328000400099",
+       "u": 9,
+       "t": "2026-08-14T08:07:28.119Z",
+       "anom": ""
+      },
+      {
+       "c": "080733328000400099",
+       "u": 9,
+       "t": "2026-08-14T08:07:34.054Z",
+       "anom": ""
+      },
+      {
+       "c": "080733328000400099",
+       "u": 9,
+       "t": "2026-08-14T08:07:39.229Z",
+       "anom": ""
+      },
+      {
+       "c": "080733328000400099",
+       "u": 9,
+       "t": "2026-08-14T08:07:40.825Z",
+       "anom": ""
+      },
+      {
+       "c": "080733328000400099",
+       "u": 9,
+       "t": "2026-08-14T08:07:43.265Z",
+       "anom": ""
+      },
+      {
+       "c": "080733328000400099",
+       "u": 9,
+       "t": "2026-08-14T08:07:50.670Z",
+       "anom": ""
+      },
+      {
+       "c": "080733328000400099",
+       "u": 9,
+       "t": "2026-08-14T08:07:52.883Z",
+       "anom": ""
+      },
+      {
+       "c": "080733328000400099",
+       "u": 9,
+       "t": "2026-08-14T08:07:54.908Z",
+       "anom": ""
+      }
+     ],
+     "tono": "",
+     "pasillo": "",
+     "altura": "",
+     "numero": "",
+     "paletScan": "",
+     "escaneado": "",
+     "coordManual": "",
+     "ts": "2026-08-14T08:07:59.326Z",
+     "operario": "Wendy",
+     "coordinador": ""
+    },
+    {
+     "n": 14,
+     "scans": [
+      {
+       "c": "080733328000400099",
+       "u": 9,
+       "t": "2026-08-14T08:08:32.138Z",
+       "anom": ""
+      },
+      {
+       "c": "080733328000400099",
+       "u": 9,
+       "t": "2026-08-14T08:08:35.180Z",
+       "anom": ""
+      },
+      {
+       "c": "080733328000400099",
+       "u": 9,
+       "t": "2026-08-14T08:08:37.008Z",
+       "anom": ""
+      },
+      {
+       "c": "080733328000400099",
+       "u": 9,
+       "t": "2026-08-14T08:08:38.631Z",
+       "anom": ""
+      },
+      {
+       "c": "080733328000400099",
+       "u": 9,
+       "t": "2026-08-14T08:08:40.823Z",
+       "anom": ""
+      },
+      {
+       "c": "080733328000400099",
+       "u": 9,
+       "t": "2026-08-14T08:08:42.728Z",
+       "anom": ""
+      },
+      {
+       "c": "080733328000400099",
+       "u": 9,
+       "t": "2026-08-14T08:08:45.332Z",
+       "anom": ""
+      },
+      {
+       "c": "080733328000400099",
+       "u": 9,
+       "t": "2026-08-14T08:08:48.684Z",
+       "anom": ""
+      }
+     ],
+     "tono": "",
+     "pasillo": "",
+     "altura": "",
+     "numero": "",
+     "paletScan": "",
+     "escaneado": "",
+     "coordManual": "",
+     "ts": "2026-08-14T08:08:52.213Z",
+     "operario": "Wendy",
+     "coordinador": ""
+    },
+    {
+     "n": 15,
+     "scans": [
+      {
+       "c": "080733328000400099",
+       "u": 9,
+       "t": "2026-08-14T08:09:27.212Z",
+       "anom": ""
+      },
+      {
+       "c": "080733328000400099",
+       "u": 9,
+       "t": "2026-08-14T08:09:30.224Z",
+       "anom": ""
+      },
+      {
+       "c": "080733328000400099",
+       "u": 9,
+       "t": "2026-08-14T08:09:33.762Z",
+       "anom": ""
+      },
+      {
+       "c": "080733328000400099",
+       "u": 9,
+       "t": "2026-08-14T08:09:35.115Z",
+       "anom": ""
+      },
+      {
+       "c": "080733328000400099",
+       "u": 9,
+       "t": "2026-08-14T08:09:37.013Z",
+       "anom": ""
+      },
+      {
+       "c": "080733328000400099",
+       "u": 9,
+       "t": "2026-08-14T08:09:38.416Z",
+       "anom": ""
+      },
+      {
+       "c": "080733328000400099",
+       "u": 9,
+       "t": "2026-08-14T08:09:45.305Z",
+       "anom": ""
+      },
+      {
+       "c": "080733328000400099",
+       "u": 9,
+       "t": "2026-08-14T08:09:49.807Z",
+       "anom": ""
+      }
+     ],
+     "tono": "",
+     "pasillo": "",
+     "altura": "",
+     "numero": "",
+     "paletScan": "",
+     "escaneado": "",
+     "coordManual": "",
+     "ts": "2026-08-14T08:09:54.534Z",
+     "operario": "Wendy",
+     "coordinador": ""
+    },
+    {
+     "n": 16,
+     "scans": [
+      {
+       "c": "080733328000300092",
+       "u": 9,
+       "t": "2026-08-14T08:10:27.166Z",
+       "anom": ""
+      },
+      {
+       "c": "080733328000300092",
+       "u": 9,
+       "t": "2026-08-14T08:10:29.898Z",
+       "anom": ""
+      },
+      {
+       "c": "080733328000300092",
+       "u": 9,
+       "t": "2026-08-14T08:10:31.067Z",
+       "anom": ""
+      },
+      {
+       "c": "080733328000300092",
+       "u": 9,
+       "t": "2026-08-14T08:10:32.287Z",
+       "anom": ""
+      },
+      {
+       "c": "080733328000300092",
+       "u": 9,
+       "t": "2026-08-14T08:10:34.222Z",
+       "anom": ""
+      },
+      {
+       "c": "080733328000300092",
+       "u": 9,
+       "t": "2026-08-14T08:10:35.532Z",
+       "anom": ""
+      },
+      {
+       "c": "080733328000300092",
+       "u": 9,
+       "t": "2026-08-14T08:10:36.706Z",
+       "anom": ""
+      },
+      {
+       "c": "080733328000300092",
+       "u": 9,
+       "t": "2026-08-14T08:10:38.140Z",
+       "anom": ""
+      }
+     ],
+     "tono": "",
+     "pasillo": "",
+     "altura": "",
+     "numero": "",
+     "paletScan": "",
+     "escaneado": "",
+     "coordManual": "",
+     "ts": "2026-08-14T08:10:42.820Z",
+     "operario": "Wendy",
+     "coordinador": ""
+    },
+    {
+     "n": 17,
+     "scans": [
+      {
+       "c": "080733328000200095",
+       "u": 9,
+       "t": "2026-08-14T08:11:04.189Z",
+       "anom": ""
+      },
+      {
+       "c": "080733328000200095",
+       "u": 9,
+       "t": "2026-08-14T08:11:05.678Z",
+       "anom": ""
+      },
+      {
+       "c": "080733328000200095",
+       "u": 9,
+       "t": "2026-08-14T08:11:07.150Z",
+       "anom": ""
+      },
+      {
+       "c": "080733328000200095",
+       "u": 9,
+       "t": "2026-08-14T08:11:08.655Z",
+       "anom": ""
+      },
+      {
+       "c": "080733328000200095",
+       "u": 9,
+       "t": "2026-08-14T08:11:11.298Z",
+       "anom": ""
+      },
+      {
+       "c": "080733328000200095",
+       "u": 9,
+       "t": "2026-08-14T08:11:12.925Z",
+       "anom": ""
+      },
+      {
+       "c": "080733328000200095",
+       "u": 9,
+       "t": "2026-08-14T08:11:39.893Z",
+       "anom": ""
+      },
+      {
+       "c": "080733328000200095",
+       "u": 9,
+       "t": "2026-08-14T08:11:46.199Z",
+       "anom": ""
+      }
+     ],
+     "tono": "",
+     "pasillo": "",
+     "altura": "",
+     "numero": "",
+     "paletScan": "",
+     "escaneado": "",
+     "coordManual": "",
+     "ts": "2026-08-14T08:11:49.869Z",
+     "operario": "Wendy",
+     "coordinador": ""
+    },
+    {
+     "n": 18,
+     "scans": [
+      {
+       "c": "080733328000200095",
+       "u": 9,
+       "t": "2026-08-14T08:12:07.094Z",
+       "anom": ""
+      },
+      {
+       "c": "080733328000200095",
+       "u": 9,
+       "t": "2026-08-14T08:12:11.419Z",
+       "anom": ""
+      },
+      {
+       "c": "080733328000200095",
+       "u": 9,
+       "t": "2026-08-14T08:12:14.241Z",
+       "anom": ""
+      },
+      {
+       "c": "080733328000200095",
+       "u": 9,
+       "t": "2026-08-14T08:12:16.494Z",
+       "anom": ""
+      },
+      {
+       "c": "080733328000200095",
+       "u": 9,
+       "t": "2026-08-14T08:12:19.852Z",
+       "anom": ""
+      },
+      {
+       "c": "080733328000200095",
+       "u": 9,
+       "t": "2026-08-14T08:12:21.222Z",
+       "anom": ""
+      },
+      {
+       "c": "080733328000200095",
+       "u": 9,
+       "t": "2026-08-14T08:12:27.250Z",
+       "anom": ""
+      },
+      {
+       "c": "080733328000200095",
+       "u": 9,
+       "t": "2026-08-14T08:12:36.207Z",
+       "anom": ""
+      }
+     ],
+     "tono": "",
+     "pasillo": "",
+     "altura": "",
+     "numero": "",
+     "paletScan": "",
+     "escaneado": "",
+     "coordManual": "",
+     "ts": "2026-08-14T08:12:38.282Z",
+     "operario": "Wendy",
+     "coordinador": ""
+    },
+    {
+     "n": 19,
+     "scans": [
+      {
+       "c": "080733328000500096",
+       "u": 9,
+       "t": "2026-08-14T08:13:03.066Z",
+       "anom": ""
+      },
+      {
+       "c": "080733328000500096",
+       "u": 9,
+       "t": "2026-08-14T08:13:04.921Z",
+       "anom": ""
+      },
+      {
+       "c": "080733328000500096",
+       "u": 9,
+       "t": "2026-08-14T08:13:06.732Z",
+       "anom": ""
+      },
+      {
+       "c": "080733328000500096",
+       "u": 9,
+       "t": "2026-08-14T08:13:08.278Z",
+       "anom": ""
+      },
+      {
+       "c": "080733328000500096",
+       "u": 9,
+       "t": "2026-08-14T08:13:12.598Z",
+       "anom": ""
+      },
+      {
+       "c": "080733328000500096",
+       "u": 9,
+       "t": "2026-08-14T08:13:14.368Z",
+       "anom": ""
+      },
+      {
+       "c": "080733328000500096",
+       "u": 9,
+       "t": "2026-08-14T08:13:22.039Z",
+       "anom": ""
+      },
+      {
+       "c": "080733328000500096",
+       "u": 9,
+       "t": "2026-08-14T08:13:23.733Z",
+       "anom": ""
+      }
+     ],
+     "tono": "",
+     "pasillo": "",
+     "altura": "",
+     "numero": "",
+     "paletScan": "",
+     "escaneado": "",
+     "coordManual": "",
+     "ts": "2026-08-14T08:13:29.922Z",
+     "operario": "Wendy",
+     "coordinador": ""
+    },
+    {
+     "n": 20,
+     "scans": [
+      {
+       "c": "080733328000500096",
+       "u": 9,
+       "t": "2026-08-14T08:14:44.019Z",
+       "anom": ""
+      },
+      {
+       "c": "080733328000500096",
+       "u": 9,
+       "t": "2026-08-14T08:14:52.798Z",
+       "anom": ""
+      },
+      {
+       "c": "080733328000500096",
+       "u": 9,
+       "t": "2026-08-14T08:14:55.103Z",
+       "anom": ""
+      },
+      {
+       "c": "080733328000500096",
+       "u": 9,
+       "t": "2026-08-14T08:14:58.369Z",
+       "anom": ""
+      },
+      {
+       "c": "080733328000500096",
+       "u": 9,
+       "t": "2026-08-14T08:15:00.376Z",
+       "anom": ""
+      },
+      {
+       "c": "080733328000500096",
+       "u": 9,
+       "t": "2026-08-14T08:15:04.229Z",
+       "anom": ""
+      }
+     ],
+     "tono": "",
+     "pasillo": "",
+     "altura": "",
+     "numero": "",
+     "paletScan": "",
+     "escaneado": "",
+     "coordManual": "",
+     "ts": "2026-08-14T08:15:58.112Z",
+     "operario": "Wendy",
+     "coordinador": ""
+    },
+    {
+     "n": 21,
+     "scans": [
+      {
+       "c": "080733328000200095",
+       "u": 9,
+       "t": "2026-08-14T08:16:26.256Z",
+       "anom": ""
+      },
+      {
+       "c": "080733328000200095",
+       "u": 9,
+       "t": "2026-08-14T08:16:30.819Z",
+       "anom": ""
+      },
+      {
+       "c": "080733328000200095",
+       "u": 9,
+       "t": "2026-08-14T08:16:37.011Z",
+       "anom": ""
+      },
+      {
+       "c": "080733328000200095",
+       "u": 9,
+       "t": "2026-08-14T08:16:39.649Z",
+       "anom": ""
+      },
+      {
+       "c": "080733328000200095",
+       "u": 9,
+       "t": "2026-08-14T08:16:43.416Z",
+       "anom": ""
+      },
+      {
+       "c": "080733328000200095",
+       "u": 9,
+       "t": "2026-08-14T08:16:45.416Z",
+       "anom": ""
+      },
+      {
+       "c": "080733328000200095",
+       "u": 9,
+       "t": "2026-08-14T08:16:48.370Z",
+       "anom": ""
+      },
+      {
+       "c": "080733328000200095",
+       "u": 9,
+       "t": "2026-08-14T08:16:50.035Z",
+       "anom": ""
+      }
+     ],
+     "tono": "",
+     "pasillo": "",
+     "altura": "",
+     "numero": "",
+     "paletScan": "",
+     "escaneado": "",
+     "coordManual": "",
+     "ts": "2026-08-14T08:16:55.999Z",
+     "operario": "Wendy",
+     "coordinador": ""
+    },
+    {
+     "n": 22,
+     "scans": [
+      {
+       "c": "080733328000200095",
+       "u": 9,
+       "t": "2026-08-14T08:17:44.317Z",
+       "anom": ""
+      },
+      {
+       "c": "080733328000200095",
+       "u": 9,
+       "t": "2026-08-14T08:17:45.985Z",
+       "anom": ""
+      },
+      {
+       "c": "080733328000200095",
+       "u": 9,
+       "t": "2026-08-14T08:17:49.590Z",
+       "anom": ""
+      },
+      {
+       "c": "080733328000200095",
+       "u": 9,
+       "t": "2026-08-14T08:17:50.963Z",
+       "anom": ""
+      },
+      {
+       "c": "080733328000200095",
+       "u": 9,
+       "t": "2026-08-14T08:17:55.006Z",
+       "anom": ""
+      },
+      {
+       "c": "080733328000200095",
+       "u": 9,
+       "t": "2026-08-14T08:17:57.011Z",
+       "anom": ""
+      },
+      {
+       "c": "080733328000200095",
+       "u": 9,
+       "t": "2026-08-14T08:17:58.502Z",
+       "anom": ""
+      },
+      {
+       "c": "080733328000200095",
+       "u": 9,
+       "t": "2026-08-14T08:17:59.931Z",
+       "anom": ""
+      }
+     ],
+     "tono": "",
+     "pasillo": "",
+     "altura": "",
+     "numero": "",
+     "paletScan": "",
+     "escaneado": "",
+     "coordManual": "",
+     "ts": "2026-08-14T08:18:04.413Z",
+     "operario": "Wendy",
+     "coordinador": ""
+    },
+    {
+     "n": 23,
+     "scans": [
+      {
+       "c": "080733328000200095",
+       "u": 9,
+       "t": "2026-08-14T08:18:20.349Z",
+       "anom": ""
+      },
+      {
+       "c": "080733328000200095",
+       "u": 9,
+       "t": "2026-08-14T08:18:22.407Z",
+       "anom": ""
+      },
+      {
+       "c": "080733328000200095",
+       "u": 9,
+       "t": "2026-08-14T08:18:23.568Z",
+       "anom": ""
+      },
+      {
+       "c": "080733328000200095",
+       "u": 9,
+       "t": "2026-08-14T08:18:25.191Z",
+       "anom": ""
+      },
+      {
+       "c": "080733328000200095",
+       "u": 9,
+       "t": "2026-08-14T08:18:26.383Z",
+       "anom": ""
+      },
+      {
+       "c": "080733328000200095",
+       "u": 9,
+       "t": "2026-08-14T08:18:27.624Z",
+       "anom": ""
+      },
+      {
+       "c": "080733328000200095",
+       "u": 9,
+       "t": "2026-08-14T08:18:28.931Z",
+       "anom": ""
+      },
+      {
+       "c": "080733328000200095",
+       "u": 9,
+       "t": "2026-08-14T08:18:34.006Z",
+       "anom": ""
+      }
+     ],
+     "tono": "",
+     "pasillo": "",
+     "altura": "",
+     "numero": "",
+     "paletScan": "",
+     "escaneado": "",
+     "coordManual": "",
+     "ts": "2026-08-14T08:18:36.279Z",
+     "operario": "Wendy",
+     "coordinador": ""
+    },
+    {
+     "n": 24,
+     "scans": [
+      {
+       "c": "080733328000200095",
+       "u": 9,
+       "t": "2026-08-14T08:19:08.216Z",
+       "anom": ""
+      },
+      {
+       "c": "080733328000200095",
+       "u": 9,
+       "t": "2026-08-14T08:19:09.969Z",
+       "anom": ""
+      },
+      {
+       "c": "080733328000200095",
+       "u": 9,
+       "t": "2026-08-14T08:19:11.308Z",
+       "anom": ""
+      },
+      {
+       "c": "080733328000200095",
+       "u": 9,
+       "t": "2026-08-14T08:19:13.142Z",
+       "anom": ""
+      },
+      {
+       "c": "080733328000200095",
+       "u": 9,
+       "t": "2026-08-14T08:19:15.738Z",
+       "anom": ""
+      },
+      {
+       "c": "080733328000200095",
+       "u": 9,
+       "t": "2026-08-14T08:19:16.887Z",
+       "anom": ""
+      },
+      {
+       "c": "080733328000200095",
+       "u": 9,
+       "t": "2026-08-14T08:19:18.704Z",
+       "anom": ""
+      },
+      {
+       "c": "080733328000200095",
+       "u": 9,
+       "t": "2026-08-14T08:19:26.643Z",
+       "anom": ""
+      }
+     ],
+     "tono": "",
+     "pasillo": "",
+     "altura": "",
+     "numero": "",
+     "paletScan": "",
+     "escaneado": "",
+     "coordManual": "",
+     "ts": "2026-08-14T08:19:30.585Z",
+     "operario": "Wendy",
+     "coordinador": ""
+    },
+    {
+     "n": 25,
+     "scans": [
+      {
+       "c": "080733328000200095",
+       "u": 9,
+       "t": "2026-08-14T08:19:45.531Z",
+       "anom": ""
+      },
+      {
+       "c": "080733328000200095",
+       "u": 9,
+       "t": "2026-08-14T08:19:47.296Z",
+       "anom": ""
+      },
+      {
+       "c": "080733328000200095",
+       "u": 9,
+       "t": "2026-08-14T08:19:48.438Z",
+       "anom": ""
+      },
+      {
+       "c": "080733328000200095",
+       "u": 9,
+       "t": "2026-08-14T08:19:50.296Z",
+       "anom": ""
+      },
+      {
+       "c": "080733328000200095",
+       "u": 9,
+       "t": "2026-08-14T08:19:56.406Z",
+       "anom": ""
+      },
+      {
+       "c": "080733328000200095",
+       "u": 9,
+       "t": "2026-08-14T08:19:59.885Z",
+       "anom": ""
+      },
+      {
+       "c": "080733328000200095",
+       "u": 9,
+       "t": "2026-08-14T08:20:02.596Z",
+       "anom": ""
+      },
+      {
+       "c": "080733328000200095",
+       "u": 9,
+       "t": "2026-08-14T08:20:03.994Z",
+       "anom": ""
+      }
+     ],
+     "tono": "",
+     "pasillo": "",
+     "altura": "",
+     "numero": "",
+     "paletScan": "",
+     "escaneado": "",
+     "coordManual": "",
+     "ts": "2026-08-14T08:20:11.125Z",
+     "operario": "Wendy",
+     "coordinador": ""
+    },
+    {
+     "n": 26,
+     "scans": [
+      {
+       "c": "080733328000300092",
+       "u": 9,
+       "t": "2026-08-14T08:20:26.780Z",
+       "anom": ""
+      },
+      {
+       "c": "080733328000300092",
+       "u": 9,
+       "t": "2026-08-14T08:20:28.146Z",
+       "anom": ""
+      },
+      {
+       "c": "080733328000300092",
+       "u": 9,
+       "t": "2026-08-14T08:20:29.526Z",
+       "anom": ""
+      },
+      {
+       "c": "080733328000300092",
+       "u": 9,
+       "t": "2026-08-14T08:20:33.558Z",
+       "anom": ""
+      },
+      {
+       "c": "080733328000300092",
+       "u": 9,
+       "t": "2026-08-14T08:20:35.328Z",
+       "anom": ""
+      },
+      {
+       "c": "080733328000300092",
+       "u": 9,
+       "t": "2026-08-14T08:20:45.185Z",
+       "anom": ""
+      },
+      {
+       "c": "080733328000300092",
+       "u": 9,
+       "t": "2026-08-14T08:20:47.489Z",
+       "anom": ""
+      },
+      {
+       "c": "080733328000300092",
+       "u": 9,
+       "t": "2026-08-14T08:20:48.918Z",
+       "anom": ""
+      }
+     ],
+     "tono": "",
+     "pasillo": "",
+     "altura": "",
+     "numero": "",
+     "paletScan": "",
+     "escaneado": "",
+     "coordManual": "",
+     "ts": "2026-08-14T08:20:51.917Z",
+     "operario": "Wendy",
+     "coordinador": ""
+    },
+    {
+     "n": 27,
+     "scans": [
+      {
+       "c": "080733328000300092",
+       "u": 9,
+       "t": "2026-08-14T08:21:05.971Z",
+       "anom": ""
+      },
+      {
+       "c": "080733328000300092",
+       "u": 9,
+       "t": "2026-08-14T08:21:08.608Z",
+       "anom": ""
+      },
+      {
+       "c": "080733328000300092",
+       "u": 9,
+       "t": "2026-08-14T08:21:13.400Z",
+       "anom": ""
+      },
+      {
+       "c": "080733328000300092",
+       "u": 9,
+       "t": "2026-08-14T08:21:21.838Z",
+       "anom": ""
+      },
+      {
+       "c": "080733328000300092",
+       "u": 9,
+       "t": "2026-08-14T08:21:24.430Z",
+       "anom": ""
+      },
+      {
+       "c": "080733328000300092",
+       "u": 9,
+       "t": "2026-08-14T08:21:28.361Z",
+       "anom": ""
+      },
+      {
+       "c": "080733328000300092",
+       "u": 9,
+       "t": "2026-08-14T08:21:30.768Z",
+       "anom": ""
+      },
+      {
+       "c": "080733328000300092",
+       "u": 9,
+       "t": "2026-08-14T08:21:37.576Z",
+       "anom": ""
+      }
+     ],
+     "tono": "",
+     "pasillo": "",
+     "altura": "",
+     "numero": "",
+     "paletScan": "",
+     "escaneado": "",
+     "coordManual": "",
+     "ts": "2026-08-14T08:21:41.087Z",
+     "operario": "Wendy",
+     "coordinador": ""
+    },
+    {
+     "n": 28,
+     "scans": [
+      {
+       "c": "080733328000300092",
+       "u": 9,
+       "t": "2026-08-14T08:23:49.625Z",
+       "anom": ""
+      },
+      {
+       "c": "080733328000300092",
+       "u": 9,
+       "t": "2026-08-14T08:24:01.195Z",
+       "anom": ""
+      },
+      {
+       "c": "080733328000300092",
+       "u": 9,
+       "t": "2026-08-14T08:24:02.666Z",
+       "anom": ""
+      },
+      {
+       "c": "080733328000300092",
+       "u": 9,
+       "t": "2026-08-14T08:24:04.170Z",
+       "anom": ""
+      },
+      {
+       "c": "080733328000300092",
+       "u": 9,
+       "t": "2026-08-14T08:24:06.054Z",
+       "anom": ""
+      },
+      {
+       "c": "080733328000300092",
+       "u": 9,
+       "t": "2026-08-14T08:24:07.497Z",
+       "anom": ""
+      },
+      {
+       "c": "080733328000300092",
+       "u": 9,
+       "t": "2026-08-14T08:24:09.222Z",
+       "anom": ""
+      },
+      {
+       "c": "080733328000300092",
+       "u": 9,
+       "t": "2026-08-14T08:24:10.670Z",
+       "anom": ""
+      }
+     ],
+     "tono": "",
+     "pasillo": "",
+     "altura": "",
+     "numero": "",
+     "paletScan": "",
+     "escaneado": "",
+     "coordManual": "",
+     "ts": "2026-08-14T08:24:13.812Z",
+     "operario": "Wendy",
+     "coordinador": ""
+    },
+    {
+     "n": 29,
+     "scans": [
+      {
+       "c": "080733328000300092",
+       "u": 9,
+       "t": "2026-08-14T08:24:31.404Z",
+       "anom": ""
+      },
+      {
+       "c": "080733328000300092",
+       "u": 9,
+       "t": "2026-08-14T08:24:37.294Z",
+       "anom": ""
+      },
+      {
+       "c": "080733328000300092",
+       "u": 9,
+       "t": "2026-08-14T08:24:38.981Z",
+       "anom": ""
+      },
+      {
+       "c": "080733328000300092",
+       "u": 9,
+       "t": "2026-08-14T08:24:40.978Z",
+       "anom": ""
+      },
+      {
+       "c": "080733328000300092",
+       "u": 9,
+       "t": "2026-08-14T08:24:47.208Z",
+       "anom": ""
+      },
+      {
+       "c": "080733328000300092",
+       "u": 9,
+       "t": "2026-08-14T08:24:49.078Z",
+       "anom": ""
+      },
+      {
+       "c": "080733328000300092",
+       "u": 9,
+       "t": "2026-08-14T08:24:51.864Z",
+       "anom": ""
+      },
+      {
+       "c": "080733328000300092",
+       "u": 9,
+       "t": "2026-08-14T08:24:53.099Z",
+       "anom": ""
+      }
+     ],
+     "tono": "",
+     "pasillo": "",
+     "altura": "",
+     "numero": "",
+     "paletScan": "",
+     "escaneado": "",
+     "coordManual": "",
+     "ts": "2026-08-14T08:24:55.721Z",
+     "operario": "Wendy",
+     "coordinador": ""
+    },
+    {
+     "n": 30,
+     "scans": [
+      {
+       "c": "080733328000300092",
+       "u": 9,
+       "t": "2026-08-14T08:25:21.561Z",
+       "anom": ""
+      },
+      {
+       "c": "080733328000300092",
+       "u": 9,
+       "t": "2026-08-14T08:25:34.489Z",
+       "anom": ""
+      },
+      {
+       "c": "080733328000300092",
+       "u": 9,
+       "t": "2026-08-14T08:25:36.055Z",
+       "anom": ""
+      }
+     ],
+     "tono": "",
+     "pasillo": "",
+     "altura": "",
+     "numero": "",
+     "paletScan": "",
+     "escaneado": "",
+     "coordManual": "",
+     "ts": "2026-08-14T08:25:44.563Z",
+     "operario": "Wendy",
+     "coordinador": ""
+    }
+   ]
+  },
   {
    "id": "Cmsrdf8fq",
    "codigo": "R 1189 BCX",
@@ -943,12 +3653,12 @@
      "pasillo": "",
      "altura": "",
      "numero": "",
-     "paletScan": "P11 R 1188 BDJ 05/08/2026",
-     "escaneado": "PM1002B074",
+     "paletScan": "",
+     "escaneado": "",
      "coordManual": "",
      "ts": "2026-08-13T12:09:44.286Z",
      "operario": "Carlos Gonzalez",
-     "coordinador": "Omar"
+     "coordinador": ""
     },
     {
      "n": 12,
@@ -1030,12 +3740,12 @@
      "pasillo": "",
      "altura": "",
      "numero": "",
-     "paletScan": "P12 R 1188 BDJ 05/08/2026",
-     "escaneado": "PM1002C074",
+     "paletScan": "",
+     "escaneado": "",
      "coordManual": "",
      "ts": "2026-08-13T12:08:57.987Z",
      "operario": "Carlos Gonzalez",
-     "coordinador": "Omar"
+     "coordinador": ""
     },
     {
      "n": 13,
@@ -1118,11 +3828,11 @@
      "altura": "",
      "numero": "",
      "paletScan": "",
-     "escaneado": "PM1002D084",
+     "escaneado": "",
      "coordManual": "",
      "ts": "2026-08-13T12:07:28.461Z",
      "operario": "Carlos Gonzalez",
-     "coordinador": "Omar"
+     "coordinador": ""
     },
     {
      "n": 14,
@@ -1193,11 +3903,11 @@
      "altura": "",
      "numero": "",
      "paletScan": "",
-     "escaneado": "PM1002B084",
+     "escaneado": "",
      "coordManual": "",
      "ts": "2026-08-13T12:06:40.410Z",
      "operario": "Carlos Gonzalez",
-     "coordinador": "Omar"
+     "coordinador": ""
     },
     {
      "n": 15,
@@ -1616,11 +4326,11 @@
      "altura": "",
      "numero": "",
      "paletScan": "",
-     "escaneado": "PM1002B082",
+     "escaneado": "",
      "coordManual": "",
      "ts": "2026-08-13T12:02:15.578Z",
      "operario": "Carlos Gonzalez",
-     "coordinador": "Omar"
+     "coordinador": ""
     },
     {
      "n": 22,
@@ -1667,11 +4377,11 @@
      "altura": "",
      "numero": "",
      "paletScan": "",
-     "escaneado": "PM1002D082",
+     "escaneado": "",
      "coordManual": "",
      "ts": "2026-08-13T12:01:30.382Z",
      "operario": "Carlos Gonzalez",
-     "coordinador": "Omar"
+     "coordinador": ""
     },
     {
      "n": 23,
@@ -1754,11 +4464,11 @@
      "altura": "",
      "numero": "",
      "paletScan": "",
-     "escaneado": "PM1002C080",
+     "escaneado": "",
      "coordManual": "",
      "ts": "2026-08-13T12:00:29.294Z",
      "operario": "Carlos Gonzalez",
-     "coordinador": "Omar"
+     "coordinador": ""
     },
     {
      "n": 24,
@@ -1775,11 +4485,11 @@
      "altura": "",
      "numero": "",
      "paletScan": "",
-     "escaneado": "PM1002C082",
+     "escaneado": "",
      "coordManual": "",
      "ts": "2026-08-13T11:59:50.506Z",
      "operario": "Carlos Gonzalez",
-     "coordinador": "Omar"
+     "coordinador": ""
     },
     {
      "n": 25,
@@ -1838,11 +4548,11 @@
      "altura": "",
      "numero": "",
      "paletScan": "",
-     "escaneado": "PM1002B080",
+     "escaneado": "",
      "coordManual": "",
      "ts": "2026-08-13T11:58:00.533Z",
      "operario": "Carlos Gonzalez",
-     "coordinador": "Omar"
+     "coordinador": ""
     },
     {
      "n": 26,
@@ -1925,11 +4635,11 @@
      "altura": "",
      "numero": "",
      "paletScan": "",
-     "escaneado": "PM1002B078",
+     "escaneado": "",
      "coordManual": "",
      "ts": "2026-08-13T11:58:27.597Z",
      "operario": "Carlos Gonzalez",
-     "coordinador": "Omar"
+     "coordinador": ""
     },
     {
      "n": 27,
@@ -1946,11 +4656,11 @@
      "altura": "",
      "numero": "",
      "paletScan": "",
-     "escaneado": "PM1002C078",
+     "escaneado": "",
      "coordManual": "",
      "ts": "2026-08-13T11:50:01.415Z",
      "operario": "Carlos Gonzalez",
-     "coordinador": "Omar"
+     "coordinador": ""
     },
     {
      "n": 28,
@@ -2015,11 +4725,11 @@
      "altura": "",
      "numero": "",
      "paletScan": "",
-     "escaneado": "PM1002D076",
+     "escaneado": "",
      "coordManual": "",
      "ts": "2026-08-13T11:49:07.123Z",
      "operario": "Carlos Gonzalez",
-     "coordinador": "Omar"
+     "coordinador": ""
     },
     {
      "n": 29,
@@ -2042,11 +4752,11 @@
      "altura": "",
      "numero": "",
      "paletScan": "",
-     "escaneado": "PM1002C076",
+     "escaneado": "",
      "coordManual": "",
      "ts": "2026-08-13T11:48:01.051Z",
      "operario": "Carlos Gonzalez",
-     "coordinador": "Omar"
+     "coordinador": ""
     },
     {
      "n": 30,
@@ -2129,11 +4839,11 @@
      "altura": "",
      "numero": "",
      "paletScan": "",
-     "escaneado": "PM1002D078",
+     "escaneado": "",
      "coordManual": "",
      "ts": "2026-08-13T11:47:16.515Z",
      "operario": "Carlos Gonzalez",
-     "coordinador": "Omar"
+     "coordinador": ""
     },
     {
      "n": 31,
@@ -2198,11 +4908,11 @@
      "altura": "",
      "numero": "",
      "paletScan": "",
-     "escaneado": "PM1002D080",
+     "escaneado": "",
      "coordManual": "",
      "ts": "2026-08-13T11:40:25.221Z",
      "operario": "Carlos Gonzalez",
-     "coordinador": "Omar"
+     "coordinador": ""
     },
     {
      "n": 32,
@@ -2351,11 +5061,11 @@
      "altura": "",
      "numero": "",
      "paletScan": "",
-     "escaneado": "PM1002C084",
+     "escaneado": "",
      "coordManual": "",
      "ts": "2026-08-13T11:00:15.033Z",
      "operario": "Carlos Gonzalez",
-     "coordinador": "Omar"
+     "coordinador": ""
     },
     {
      "n": 35,
@@ -2480,11 +5190,11 @@
      "altura": "",
      "numero": "",
      "paletScan": "",
-     "escaneado": "PM1002D074",
+     "escaneado": "",
      "coordManual": "",
      "ts": "2026-08-13T10:55:45.183Z",
      "operario": "Carlos Gonzalez",
-     "coordinador": "Omar"
+     "coordinador": ""
     },
     {
      "n": 38,
@@ -2549,11 +5259,11 @@
      "altura": "",
      "numero": "",
      "paletScan": "",
-     "escaneado": "PM1002B076",
+     "escaneado": "",
      "coordManual": "",
      "ts": "2026-08-13T10:55:08.671Z",
      "operario": "Carlos Gonzalez",
-     "coordinador": "Omar"
+     "coordinador": ""
     },
     {
      "n": 39,
@@ -2827,12 +5537,11 @@
      "pasillo": "",
      "altura": "",
      "numero": "",
-     "escaneado": "PM1003C013",
+     "escaneado": "",
      "coordManual": "",
      "ts": "2026-08-12T13:00:15.328Z",
      "operario": "Hhh",
-     "coordinador": "Omar",
-     "paletScan": "P1 R 1289 BCX 07/08/2026"
+     "coordinador": ""
     },
     {
      "n": 2,
@@ -2914,12 +5623,11 @@
      "pasillo": "",
      "altura": "",
      "numero": "",
-     "escaneado": "PM1003D013",
+     "escaneado": "",
      "coordManual": "",
      "ts": "2026-08-12T13:03:29.040Z",
      "operario": "Manuel",
-     "coordinador": "Omar",
-     "paletScan": "P2 R 1289 BCX 07/08/2026"
+     "coordinador": ""
     },
     {
      "n": 3,
@@ -2983,12 +5691,11 @@
      "pasillo": "",
      "altura": "",
      "numero": "",
-     "escaneado": "PM1003D011",
+     "escaneado": "",
      "coordManual": "",
      "ts": "2026-08-12T13:04:29.096Z",
      "operario": "Manuel",
-     "coordinador": "Omar",
-     "paletScan": "P3 R 1289 BCX 07/08/2026"
+     "coordinador": ""
     },
     {
      "n": 4,
@@ -3046,12 +5753,11 @@
      "pasillo": "",
      "altura": "",
      "numero": "",
-     "escaneado": "PM1003B013",
+     "escaneado": "",
      "coordManual": "",
      "ts": "2026-08-12T13:09:00.839Z",
      "operario": "Manuel",
-     "coordinador": "Omar",
-     "paletScan": "P4 R 1289 BCX 07/08/2026"
+     "coordinador": ""
     },
     {
      "n": 5,
@@ -3157,12 +5863,11 @@
      "pasillo": "",
      "altura": "",
      "numero": "",
-     "escaneado": "PM1003B011",
+     "escaneado": "",
      "coordManual": "",
      "ts": "2026-08-12T13:10:34.614Z",
      "operario": "Manuel",
-     "coordinador": "Omar",
-     "paletScan": "P5 R 1289 BCX 07/08/2026"
+     "coordinador": ""
     },
     {
      "n": 6,
@@ -3232,12 +5937,11 @@
      "pasillo": "",
      "altura": "",
      "numero": "",
-     "escaneado": "PM1003C011",
+     "escaneado": "",
      "coordManual": "",
      "ts": "2026-08-12T13:11:28.225Z",
      "operario": "Manuel",
-     "coordinador": "Omar",
-     "paletScan": "P6 R 1289 BCX 07/08/2026"
+     "coordinador": ""
     },
     {
      "n": 7,
@@ -3325,12 +6029,11 @@
      "pasillo": "",
      "altura": "",
      "numero": "",
-     "escaneado": "PM1003B017",
+     "escaneado": "",
      "coordManual": "",
      "ts": "2026-08-12T13:12:39.863Z",
      "operario": "Manuel",
-     "coordinador": "Omar",
-     "paletScan": "P7 R 1289 BCX 07/08/2026"
+     "coordinador": ""
     },
     {
      "n": 8,
@@ -3382,12 +6085,11 @@
      "pasillo": "",
      "altura": "",
      "numero": "",
-     "escaneado": "PM1003D005",
+     "escaneado": "",
      "coordManual": "",
      "ts": "2026-08-12T13:13:47.197Z",
      "operario": "Manuel",
-     "coordinador": "Omar",
-     "paletScan": "P8 R 1289 BCX 07/08/2026"
+     "coordinador": ""
     },
     {
      "n": 9,
@@ -3427,12 +6129,11 @@
      "pasillo": "",
      "altura": "",
      "numero": "",
-     "escaneado": "PM1003B003",
+     "escaneado": "",
      "coordManual": "",
      "ts": "2026-08-12T13:14:36.935Z",
      "operario": "Manuel",
-     "coordinador": "Omar",
-     "paletScan": "P9 R 1289 BCX 07/08/2026"
+     "coordinador": ""
     },
     {
      "n": 10,
@@ -3472,12 +6173,11 @@
      "pasillo": "",
      "altura": "",
      "numero": "",
-     "escaneado": "PM1003C005",
+     "escaneado": "",
      "coordManual": "",
      "ts": "2026-08-12T13:15:56.046Z",
      "operario": "Manuel",
-     "coordinador": "Omar",
-     "paletScan": "P10 R 1289 BCX 07/08/2026"
+     "coordinador": ""
     },
     {
      "n": 11,
@@ -3565,12 +6265,11 @@
      "pasillo": "",
      "altura": "",
      "numero": "",
-     "escaneado": "PM1003C001",
+     "escaneado": "",
      "coordManual": "",
      "ts": "2026-08-12T13:18:08.779Z",
      "operario": "Manuel",
-     "coordinador": "Omar",
-     "paletScan": "P11 R 1289 BCX 07/08/2026"
+     "coordinador": ""
     },
     {
      "n": 12,
@@ -3628,12 +6327,11 @@
      "pasillo": "",
      "altura": "",
      "numero": "",
-     "escaneado": "PM1003D001",
+     "escaneado": "",
      "coordManual": "",
      "ts": "2026-08-12T13:18:47.474Z",
      "operario": "Manuel",
-     "coordinador": "Omar",
-     "paletScan": "P12 R 1289 BCX 07/08/2026"
+     "coordinador": ""
     },
     {
      "n": 13,
@@ -3739,12 +6437,11 @@
      "pasillo": "",
      "altura": "",
      "numero": "",
-     "escaneado": "PM1003B001",
+     "escaneado": "",
      "coordManual": "",
      "ts": "2026-08-12T13:20:08.552Z",
      "operario": "Manuel",
-     "coordinador": "Omar",
-     "paletScan": "P13 R 1289 BCX 07/08/2026"
+     "coordinador": ""
     },
     {
      "n": 14,
@@ -3826,12 +6523,11 @@
      "pasillo": "",
      "altura": "",
      "numero": "",
-     "escaneado": "PM1003B015",
+     "escaneado": "",
      "coordManual": "",
      "ts": "2026-08-13T06:49:48.263Z",
      "operario": "Manuel",
-     "coordinador": "Omar",
-     "paletScan": "P14 R 1289 BCX 07/08/2026"
+     "coordinador": ""
     },
     {
      "n": 15,
@@ -3919,12 +6615,11 @@
      "pasillo": "",
      "altura": "",
      "numero": "",
-     "escaneado": "PM1003C015",
+     "escaneado": "",
      "coordManual": "",
      "ts": "2026-08-13T06:52:08.276Z",
      "operario": "Manuel",
-     "coordinador": "Omar",
-     "paletScan": "P15 R 1289 BCX 07/08/2026"
+     "coordinador": ""
     },
     {
      "n": 16,
@@ -4018,12 +6713,11 @@
      "pasillo": "",
      "altura": "",
      "numero": "",
-     "escaneado": "PM1003C009",
+     "escaneado": "",
      "coordManual": "",
      "ts": "2026-08-13T06:54:01.892Z",
      "operario": "Manuel",
-     "coordinador": "Omar",
-     "paletScan": "P16 R 1289 BCX 07/08/2026"
+     "coordinador": ""
     },
     {
      "n": 17,
@@ -4105,12 +6799,11 @@
      "pasillo": "",
      "altura": "",
      "numero": "",
-     "escaneado": "PM1003D009",
+     "escaneado": "",
      "coordManual": "",
      "ts": "2026-08-13T06:56:11.185Z",
      "operario": "Manuel",
-     "coordinador": "Omar",
-     "paletScan": "P17 R 1289 BCX 07/08/2026"
+     "coordinador": ""
     },
     {
      "n": 18,
@@ -4198,12 +6891,11 @@
      "pasillo": "",
      "altura": "",
      "numero": "",
-     "escaneado": "PM1003B009",
+     "escaneado": "",
      "coordManual": "",
      "ts": "2026-08-13T06:59:32.062Z",
      "operario": "Manuel",
-     "coordinador": "Omar",
-     "paletScan": "P18 R 1289 BCX 07/08/2026"
+     "coordinador": ""
     },
     {
      "n": 19,
@@ -4285,12 +6977,11 @@
      "pasillo": "",
      "altura": "",
      "numero": "",
-     "escaneado": "PM1003D003",
+     "escaneado": "",
      "coordManual": "",
      "ts": "2026-08-13T07:00:32.551Z",
      "operario": "Manuel",
-     "coordinador": "Omar",
-     "paletScan": "P19 R 1289 BCX 07/08/2026"
+     "coordinador": ""
     },
     {
      "n": 20,
@@ -4330,12 +7021,11 @@
      "pasillo": "",
      "altura": "",
      "numero": "",
-     "escaneado": "PM1003D007",
+     "escaneado": "",
      "coordManual": "",
      "ts": "2026-08-13T07:01:11.316Z",
      "operario": "Manuel",
-     "coordinador": "Omar",
-     "paletScan": "P20 R 1289 BCX 07/08/2026"
+     "coordinador": ""
     },
     {
      "n": 21,
@@ -4441,12 +7131,11 @@
      "pasillo": "",
      "altura": "",
      "numero": "",
-     "escaneado": "PM1003C007",
+     "escaneado": "",
      "coordManual": "",
      "ts": "2026-08-13T07:04:51.064Z",
      "operario": "Manuel",
-     "coordinador": "Omar",
-     "paletScan": "P21 R 1289 BCX 07/08/2026"
+     "coordinador": ""
     },
     {
      "n": 22,
@@ -4486,12 +7175,11 @@
      "pasillo": "",
      "altura": "",
      "numero": "",
-     "escaneado": "PM1003B005",
+     "escaneado": "",
      "coordManual": "",
      "ts": "2026-08-13T07:05:56.685Z",
      "operario": "Manuel",
-     "coordinador": "Omar",
-     "paletScan": "P22 R 1289 BCX 07/08/2026"
+     "coordinador": ""
     },
     {
      "n": 23,
@@ -4579,12 +7267,11 @@
      "pasillo": "",
      "altura": "",
      "numero": "",
-     "escaneado": "PM1003C003",
+     "escaneado": "",
      "coordManual": "",
      "ts": "2026-08-13T07:07:13.654Z",
      "operario": "Manuel",
-     "coordinador": "Omar",
-     "paletScan": "P23 R 1289 BCX 07/08/2026"
+     "coordinador": ""
     },
     {
      "n": 24,
@@ -4678,12 +7365,11 @@
      "pasillo": "",
      "altura": "",
      "numero": "",
-     "escaneado": "PM1003D015",
+     "escaneado": "",
      "coordManual": "",
      "ts": "2026-08-13T07:17:32.308Z",
      "operario": "Manuel",
-     "coordinador": "Omar",
-     "paletScan": "P24 R 1289 BCX 07/08/2026"
+     "coordinador": ""
     },
     {
      "n": 25,
@@ -4699,12 +7385,11 @@
      "pasillo": "",
      "altura": "",
      "numero": "",
-     "escaneado": "PM1003B007",
+     "escaneado": "",
      "coordManual": "",
      "ts": "2026-08-13T07:18:02.567Z",
      "operario": "Manuel",
-     "coordinador": "Omar",
-     "paletScan": "P25 R 1289 BCX 07/08/2026"
+     "coordinador": ""
     }
    ]
   },
@@ -4783,12 +7468,12 @@
      "pasillo": "",
      "altura": "",
      "numero": "",
-     "paletScan": "P1 R 1188 BDJ 05/08/2026",
-     "escaneado": "PM1002D092",
+     "paletScan": "",
+     "escaneado": "",
      "coordManual": "",
      "ts": "2026-08-13T08:48:23.050Z",
      "operario": "Carlos Gonzalez",
-     "coordinador": "Omar"
+     "coordinador": ""
     },
     {
      "n": 2,
@@ -4852,12 +7537,12 @@
      "pasillo": "",
      "altura": "",
      "numero": "",
-     "paletScan": "P2 R 1188 BDJ 05/08/2026",
-     "escaneado": "PM1002D100",
+     "paletScan": "",
+     "escaneado": "",
      "coordManual": "",
      "ts": "2026-08-13T08:49:42.878Z",
      "operario": "Carlos Gonzalez",
-     "coordinador": "Omar"
+     "coordinador": ""
     },
     {
      "n": 3,
@@ -4897,12 +7582,12 @@
      "pasillo": "",
      "altura": "",
      "numero": "",
-     "paletScan": "P3 R 1188 BDJ 05/08/2026",
-     "escaneado": "PZ2002C092",
+     "paletScan": "",
+     "escaneado": "",
      "coordManual": "",
      "ts": "2026-08-13T08:53:04.713Z",
      "operario": "Carlos Gonzalez",
-     "coordinador": "Omar"
+     "coordinador": ""
     },
     {
      "n": 4,
@@ -4948,12 +7633,12 @@
      "pasillo": "",
      "altura": "",
      "numero": "",
-     "paletScan": "P4 R 1188 BDJ 05/08/2026",
-     "escaneado": "PM1002C100",
+     "paletScan": "",
+     "escaneado": "",
      "coordManual": "",
      "ts": "2026-08-13T08:54:37.102Z",
      "operario": "Carlos Gonzalez",
-     "coordinador": "Omar"
+     "coordinador": ""
     },
     {
      "n": 5,
@@ -4999,12 +7684,12 @@
      "pasillo": "",
      "altura": "",
      "numero": "",
-     "paletScan": "P5 R 1188 BDJ 05/08/2026",
-     "escaneado": "PM1002D088",
+     "paletScan": "",
+     "escaneado": "",
      "coordManual": "",
      "ts": "2026-08-13T08:58:14.363Z",
      "operario": "Carlos Gonzalez",
-     "coordinador": "Omar"
+     "coordinador": ""
     },
     {
      "n": 6,
@@ -5050,12 +7735,12 @@
      "pasillo": "",
      "altura": "",
      "numero": "",
-     "paletScan": "P6 R 1188 BDJ 05/08/2026",
-     "escaneado": "PM1002C094",
+     "paletScan": "",
+     "escaneado": "",
      "coordManual": "",
      "ts": "2026-08-13T08:59:14.510Z",
      "operario": "Carlos Gonzalez",
-     "coordinador": "Omar"
+     "coordinador": ""
     },
     {
      "n": 7,
@@ -5113,12 +7798,12 @@
      "pasillo": "",
      "altura": "",
      "numero": "",
-     "paletScan": "P7 R 1188 BDJ 05/08/2026",
-     "escaneado": "PM1002B102",
+     "paletScan": "",
+     "escaneado": "",
      "coordManual": "",
      "ts": "2026-08-13T09:00:06.893Z",
      "operario": "Carlos Gonzalez",
-     "coordinador": "Omar"
+     "coordinador": ""
     },
     {
      "n": 8,
@@ -5188,12 +7873,12 @@
      "pasillo": "",
      "altura": "",
      "numero": "",
-     "paletScan": "P8 R 1188 BDJ 05/08/2026",
-     "escaneado": "PM1002B104",
+     "paletScan": "",
+     "escaneado": "",
      "coordManual": "",
      "ts": "2026-08-13T09:01:07.649Z",
      "operario": "Carlos Gonzalez",
-     "coordinador": "Omar"
+     "coordinador": ""
     },
     {
      "n": 9,
@@ -5245,12 +7930,12 @@
      "pasillo": "",
      "altura": "",
      "numero": "",
-     "paletScan": "P9 R 1188 BDJ 05/08/2026",
-     "escaneado": "PM1002D102",
+     "paletScan": "",
+     "escaneado": "",
      "coordManual": "",
      "ts": "2026-08-13T09:01:46.120Z",
      "operario": "Carlos Gonzalez",
-     "coordinador": "Omar"
+     "coordinador": ""
     },
     {
      "n": 10,
@@ -5326,12 +8011,12 @@
      "pasillo": "",
      "altura": "",
      "numero": "",
-     "paletScan": "P10 R 1188 BDJ 05/08/2026",
-     "escaneado": "PM1002C102",
+     "paletScan": "",
+     "escaneado": "",
      "coordManual": "",
      "ts": "2026-08-13T09:02:52.683Z",
      "operario": "Carlos Gonzalez",
-     "coordinador": "Omar"
+     "coordinador": ""
     },
     {
      "n": 11,
@@ -5425,12 +8110,12 @@
      "pasillo": "",
      "altura": "",
      "numero": "",
-     "paletScan": "P11 R 1188 BDJ",
-     "escaneado": "PM1002B074",
+     "paletScan": "",
+     "escaneado": "",
      "coordManual": "",
      "ts": "2026-08-13T09:04:17.852Z",
      "operario": "Carlos Gonzalez",
-     "coordinador": "Omar"
+     "coordinador": ""
     },
     {
      "n": 12,
@@ -5512,12 +8197,12 @@
      "pasillo": "",
      "altura": "",
      "numero": "",
-     "paletScan": "P12 R 1188 BDJ",
-     "escaneado": "PM1002C074",
+     "paletScan": "",
+     "escaneado": "",
      "coordManual": "",
      "ts": "2026-08-13T09:05:16.362Z",
      "operario": "Carlos Gonzalez",
-     "coordinador": "Omar"
+     "coordinador": ""
     },
     {
      "n": 13,
@@ -5599,12 +8284,12 @@
      "pasillo": "",
      "altura": "",
      "numero": "",
-     "paletScan": "P13 R 1188 BDJ 05/08/2026",
-     "escaneado": "PM1002D084",
+     "paletScan": "",
+     "escaneado": "",
      "coordManual": "",
      "ts": "2026-08-13T09:06:32.956Z",
      "operario": "Carlos Gonzalez",
-     "coordinador": "Omar"
+     "coordinador": ""
     },
     {
      "n": 14,
@@ -5692,12 +8377,12 @@
      "pasillo": "",
      "altura": "",
      "numero": "",
-     "paletScan": "P14 R 1188 BDJ 05/08/2026",
-     "escaneado": "PM1002B084",
+     "paletScan": "",
+     "escaneado": "",
      "coordManual": "",
      "ts": "2026-08-13T09:07:42.822Z",
      "operario": "Carlos Gonzalez",
-     "coordinador": "Omar"
+     "coordinador": ""
     },
     {
      "n": 15,
@@ -5803,12 +8488,12 @@
      "pasillo": "",
      "altura": "",
      "numero": "",
-     "paletScan": "P15 R 1188 BDJ 05/08/2026",
-     "escaneado": "PM1002B100",
+     "paletScan": "",
+     "escaneado": "",
      "coordManual": "",
      "ts": "2026-08-13T09:08:51.192Z",
      "operario": "Carlos Gonzalez",
-     "coordinador": "Omar"
+     "coordinador": ""
     },
     {
      "n": 16,
@@ -5902,12 +8587,12 @@
      "pasillo": "",
      "altura": "",
      "numero": "",
-     "paletScan": "P16 R 1188 BDJ 05/08/2026",
-     "escaneado": "PM1002D098",
+     "paletScan": "",
+     "escaneado": "",
      "coordManual": "",
      "ts": "2026-08-13T09:10:15.414Z",
      "operario": "Carlos Gonzalez",
-     "coordinador": "Omar"
+     "coordinador": ""
     },
     {
      "n": 17,
@@ -5977,12 +8662,12 @@
      "pasillo": "",
      "altura": "",
      "numero": "",
-     "paletScan": "P17 R 1188 BDJ 05/08/2026",
-     "escaneado": "PM1002C088",
+     "paletScan": "",
+     "escaneado": "",
      "coordManual": "",
      "ts": "2026-08-13T09:11:18.662Z",
      "operario": "Carlos Gonzalez",
-     "coordinador": "Omar"
+     "coordinador": ""
     },
     {
      "n": 18,
@@ -6040,12 +8725,12 @@
      "pasillo": "",
      "altura": "",
      "numero": "",
-     "paletScan": "P18 R 1188 BDJ 05/08/2026",
-     "escaneado": "PM1002D086",
+     "paletScan": "",
+     "escaneado": "",
      "coordManual": "",
      "ts": "2026-08-13T09:12:34.707Z",
      "operario": "Carlos Gonzalez",
-     "coordinador": "Omar"
+     "coordinador": ""
     },
     {
      "n": 19,
@@ -6139,12 +8824,12 @@
      "pasillo": "",
      "altura": "",
      "numero": "",
-     "paletScan": "P19 R 1188 BDJ 05/08/2026",
-     "escaneado": "PM1002C086",
+     "paletScan": "",
+     "escaneado": "",
      "coordManual": "",
      "ts": "2026-08-13T09:16:05.365Z",
      "operario": "Carlos Gonzalez",
-     "coordinador": "Omar"
+     "coordinador": ""
     },
     {
      "n": 20,
@@ -6226,12 +8911,12 @@
      "pasillo": "",
      "altura": "",
      "numero": "",
-     "paletScan": "P20 R 1188 BDJ 05/08/2026",
-     "escaneado": "PM1002B088",
+     "paletScan": "",
+     "escaneado": "",
      "coordManual": "",
      "ts": "2026-08-13T09:18:05.669Z",
      "operario": "Carlos Gonzalez",
-     "coordinador": "Omar"
+     "coordinador": ""
     },
     {
      "n": 21,
@@ -6301,12 +8986,12 @@
      "pasillo": "",
      "altura": "",
      "numero": "",
-     "paletScan": "P21 R 1188 BDJ 05/08/2026",
-     "escaneado": "PM1002B082",
+     "paletScan": "",
+     "escaneado": "",
      "coordManual": "",
      "ts": "2026-08-13T09:20:20.000Z",
      "operario": "Carlos Gonzalez",
-     "coordinador": "Omar"
+     "coordinador": ""
     },
     {
      "n": 22,
@@ -6376,12 +9061,12 @@
      "pasillo": "",
      "altura": "",
      "numero": "",
-     "paletScan": "P22 R 1188 BDJ 05/08/2026",
-     "escaneado": "PM1002D082",
+     "paletScan": "",
+     "escaneado": "",
      "coordManual": "",
      "ts": "2026-08-13T09:21:30.632Z",
      "operario": "Carlos Gonzalez",
-     "coordinador": "Omar"
+     "coordinador": ""
     },
     {
      "n": 23,
@@ -6463,12 +9148,12 @@
      "pasillo": "",
      "altura": "",
      "numero": "",
-     "paletScan": "P23 R 1188 BDJ 05/08/2026",
-     "escaneado": "PM1002C080",
+     "paletScan": "",
+     "escaneado": "",
      "coordManual": "",
      "ts": "2026-08-13T09:22:17.195Z",
      "operario": "Carlos Gonzalez",
-     "coordinador": "Omar"
+     "coordinador": ""
     },
     {
      "n": 24,
@@ -6550,12 +9235,12 @@
      "pasillo": "",
      "altura": "",
      "numero": "",
-     "paletScan": "P24 R 1188 BDJ 05/08/2026",
-     "escaneado": "PM1002C082",
+     "paletScan": "",
+     "escaneado": "",
      "coordManual": "",
      "ts": "2026-08-13T09:23:14.819Z",
      "operario": "Carlos Gonzalez",
-     "coordinador": "Omar"
+     "coordinador": ""
     },
     {
      "n": 25,
@@ -6637,12 +9322,12 @@
      "pasillo": "",
      "altura": "",
      "numero": "",
-     "paletScan": "P25 R 1188 BDJ 05/08/2026",
-     "escaneado": "PM1002B080",
+     "paletScan": "",
+     "escaneado": "",
      "coordManual": "",
      "ts": "2026-08-13T09:24:04.562Z",
      "operario": "Carlos Gonzalez",
-     "coordinador": "Omar"
+     "coordinador": ""
     },
     {
      "n": 26,
@@ -6724,12 +9409,12 @@
      "pasillo": "",
      "altura": "",
      "numero": "",
-     "paletScan": "P26 R 1188 BDJ 05/08/2026",
-     "escaneado": "PM1002B078",
+     "paletScan": "",
+     "escaneado": "",
      "coordManual": "",
      "ts": "2026-08-13T09:24:49.034Z",
      "operario": "Carlos Gonzalez",
-     "coordinador": "Omar"
+     "coordinador": ""
     },
     {
      "n": 27,
@@ -6811,12 +9496,12 @@
      "pasillo": "",
      "altura": "",
      "numero": "",
-     "paletScan": "P27 R 1188 BDJ 05/08/2026",
-     "escaneado": "PM1002C078",
+     "paletScan": "",
+     "escaneado": "",
      "coordManual": "",
      "ts": "2026-08-13T09:25:32.420Z",
      "operario": "Carlos Gonzalez",
-     "coordinador": "Omar"
+     "coordinador": ""
     },
     {
      "n": 28,
@@ -6898,12 +9583,12 @@
      "pasillo": "",
      "altura": "",
      "numero": "",
-     "paletScan": "P28 R 1188 BDJ 05/08/2026",
-     "escaneado": "PM1002D076",
+     "paletScan": "",
+     "escaneado": "",
      "coordManual": "",
      "ts": "2026-08-13T09:26:08.597Z",
      "operario": "Carlos Gonzalez",
-     "coordinador": "Omar"
+     "coordinador": ""
     },
     {
      "n": 29,
@@ -6985,12 +9670,12 @@
      "pasillo": "",
      "altura": "",
      "numero": "",
-     "paletScan": "P29 R 1188 BDJ 05/08/2026",
-     "escaneado": "PM1002C076",
+     "paletScan": "",
+     "escaneado": "",
      "coordManual": "",
      "ts": "2026-08-13T09:27:16.442Z",
      "operario": "Carlos Gonzalez",
-     "coordinador": "Omar"
+     "coordinador": ""
     },
     {
      "n": 30,
@@ -7072,12 +9757,12 @@
      "pasillo": "",
      "altura": "",
      "numero": "",
-     "paletScan": "P30 R 1188 BDJ 05/08/2026",
-     "escaneado": "PM1002D078",
+     "paletScan": "",
+     "escaneado": "",
      "coordManual": "",
      "ts": "2026-08-13T09:28:41.781Z",
      "operario": "Carlos Gonzalez",
-     "coordinador": "Omar"
+     "coordinador": ""
     },
     {
      "n": 31,
@@ -7159,12 +9844,12 @@
      "pasillo": "",
      "altura": "",
      "numero": "",
-     "paletScan": "P31 R 1188 BDJ 05/08/2026",
-     "escaneado": "PM1002D080",
+     "paletScan": "",
+     "escaneado": "",
      "coordManual": "",
      "ts": "2026-08-13T09:29:24.279Z",
      "operario": "Carlos Gonzalez",
-     "coordinador": "Omar"
+     "coordinador": ""
     },
     {
      "n": 32,
@@ -7246,12 +9931,12 @@
      "pasillo": "",
      "altura": "",
      "numero": "",
-     "paletScan": "P32 R 1188 BDJ 05/08/2026",
-     "escaneado": "PM1002C098",
+     "paletScan": "",
+     "escaneado": "",
      "coordManual": "",
      "ts": "2026-08-13T09:30:11.886Z",
      "operario": "Carlos Gonzalez",
-     "coordinador": "Omar"
+     "coordinador": ""
     },
     {
      "n": 33,
@@ -7333,12 +10018,12 @@
      "pasillo": "",
      "altura": "",
      "numero": "",
-     "paletScan": "P33 R 1188 BDJ 05/08/2026",
-     "escaneado": "PM1002B086",
+     "paletScan": "",
+     "escaneado": "",
      "coordManual": "",
      "ts": "2026-08-13T09:31:29.814Z",
      "operario": "Carlos Gonzalez",
-     "coordinador": "Omar"
+     "coordinador": ""
     },
     {
      "n": 34,
@@ -7426,12 +10111,12 @@
      "pasillo": "",
      "altura": "",
      "numero": "",
-     "paletScan": "P34 R 1188 BDJ 05/08/2026",
-     "escaneado": "PM1002C084",
+     "paletScan": "",
+     "escaneado": "",
      "coordManual": "",
      "ts": "2026-08-13T09:32:17.259Z",
      "operario": "Carlos Gonzalez",
-     "coordinador": "Omar"
+     "coordinador": ""
     },
     {
      "n": 35,
@@ -7513,12 +10198,12 @@
      "pasillo": "",
      "altura": "",
      "numero": "",
-     "paletScan": "P35 R 1188 BDJ 05/08/2026",
-     "escaneado": "PM1002B098",
+     "paletScan": "",
+     "escaneado": "",
      "coordManual": "",
      "ts": "2026-08-13T09:33:54.922Z",
      "operario": "Carlos Gonzalez",
-     "coordinador": "Omar"
+     "coordinador": ""
     },
     {
      "n": 36,
@@ -7582,12 +10267,12 @@
      "pasillo": "",
      "altura": "",
      "numero": "",
-     "paletScan": "P36 R 11188 BDJ",
-     "escaneado": "PM1002B086",
+     "paletScan": "",
+     "escaneado": "",
      "coordManual": "",
      "ts": "2026-08-13T09:34:35.936Z",
      "operario": "Carlos Gonzalez",
-     "coordinador": "Omar"
+     "coordinador": ""
     },
     {
      "n": 37,
@@ -7627,12 +10312,12 @@
      "pasillo": "",
      "altura": "",
      "numero": "",
-     "paletScan": "P37 R 1188 BDJ 05/08/2026",
-     "escaneado": "PM1002D074",
+     "paletScan": "",
+     "escaneado": "",
      "coordManual": "",
      "ts": "2026-08-13T09:35:15.668Z",
      "operario": "Carlos Gonzalez",
-     "coordinador": "Omar"
+     "coordinador": ""
     },
     {
      "n": 38,
@@ -7678,847 +10363,11 @@
      "pasillo": "",
      "altura": "",
      "numero": "",
-     "paletScan": "P38 R 1188 BDJ 05/08/2026",
-     "escaneado": "PM1002B076",
+     "paletScan": "",
+     "escaneado": "",
      "coordManual": "",
      "ts": "2026-08-13T09:35:48.734Z",
      "operario": "Carlos Gonzalez",
-     "coordinador": "Omar"
-    }
-   ]
-  },
-  {
-   "id": "Cmssnyny7",
-   "codigo": "R 8811 BDG",
-   "fecha": "2026-08-13",
-   "cerrado": false,
-   "creado": "2026-08-14T08:06:56.959Z",
-   "modo": "codigo",
-   "imgSig": "uds",
-   "patron": null,
-   "palets": [
-    {
-     "n": 1,
-     "scans": [],
-     "tono": "",
-     "pasillo": "",
-     "altura": "",
-     "numero": "",
-     "paletScan": "",
-     "escaneado": "",
-     "coordManual": "",
-     "ts": null,
-     "operario": "",
-     "coordinador": ""
-    },
-    {
-     "n": 2,
-     "scans": [],
-     "tono": "",
-     "pasillo": "",
-     "altura": "",
-     "numero": "",
-     "paletScan": "",
-     "escaneado": "",
-     "coordManual": "",
-     "ts": null,
-     "operario": "",
-     "coordinador": ""
-    },
-    {
-     "n": 3,
-     "scans": [],
-     "tono": "",
-     "pasillo": "",
-     "altura": "",
-     "numero": "",
-     "paletScan": "",
-     "escaneado": "",
-     "coordManual": "",
-     "ts": null,
-     "operario": "",
-     "coordinador": ""
-    },
-    {
-     "n": 4,
-     "scans": [],
-     "tono": "",
-     "pasillo": "",
-     "altura": "",
-     "numero": "",
-     "paletScan": "",
-     "escaneado": "",
-     "coordManual": "",
-     "ts": null,
-     "operario": "",
-     "coordinador": ""
-    },
-    {
-     "n": 5,
-     "scans": [],
-     "tono": "",
-     "pasillo": "",
-     "altura": "",
-     "numero": "",
-     "paletScan": "",
-     "escaneado": "",
-     "coordManual": "",
-     "ts": null,
-     "operario": "",
-     "coordinador": ""
-    },
-    {
-     "n": 6,
-     "scans": [],
-     "tono": "",
-     "pasillo": "",
-     "altura": "",
-     "numero": "",
-     "paletScan": "",
-     "escaneado": "",
-     "coordManual": "",
-     "ts": null,
-     "operario": "",
-     "coordinador": ""
-    },
-    {
-     "n": 7,
-     "scans": [],
-     "tono": "",
-     "pasillo": "",
-     "altura": "",
-     "numero": "",
-     "paletScan": "",
-     "escaneado": "",
-     "coordManual": "",
-     "ts": null,
-     "operario": "",
-     "coordinador": ""
-    },
-    {
-     "n": 8,
-     "scans": [],
-     "tono": "",
-     "pasillo": "",
-     "altura": "",
-     "numero": "",
-     "paletScan": "",
-     "escaneado": "",
-     "coordManual": "",
-     "ts": null,
-     "operario": "",
-     "coordinador": ""
-    },
-    {
-     "n": 9,
-     "scans": [],
-     "tono": "",
-     "pasillo": "",
-     "altura": "",
-     "numero": "",
-     "paletScan": "",
-     "escaneado": "",
-     "coordManual": "",
-     "ts": null,
-     "operario": "",
-     "coordinador": ""
-    },
-    {
-     "n": 10,
-     "scans": [],
-     "tono": "",
-     "pasillo": "",
-     "altura": "",
-     "numero": "",
-     "paletScan": "",
-     "escaneado": "",
-     "coordManual": "",
-     "ts": null,
-     "operario": "",
-     "coordinador": ""
-    },
-    {
-     "n": 11,
-     "scans": [],
-     "tono": "",
-     "pasillo": "",
-     "altura": "",
-     "numero": "",
-     "paletScan": "",
-     "escaneado": "",
-     "coordManual": "",
-     "ts": null,
-     "operario": "",
-     "coordinador": ""
-    },
-    {
-     "n": 12,
-     "scans": [],
-     "tono": "",
-     "pasillo": "",
-     "altura": "",
-     "numero": "",
-     "paletScan": "",
-     "escaneado": "",
-     "coordManual": "",
-     "ts": null,
-     "operario": "",
-     "coordinador": ""
-    },
-    {
-     "n": 13,
-     "scans": [],
-     "tono": "",
-     "pasillo": "",
-     "altura": "",
-     "numero": "",
-     "paletScan": "",
-     "escaneado": "",
-     "coordManual": "",
-     "ts": null,
-     "operario": "",
-     "coordinador": ""
-    },
-    {
-     "n": 14,
-     "scans": [],
-     "tono": "",
-     "pasillo": "",
-     "altura": "",
-     "numero": "",
-     "paletScan": "",
-     "escaneado": "",
-     "coordManual": "",
-     "ts": null,
-     "operario": "",
-     "coordinador": ""
-    },
-    {
-     "n": 15,
-     "scans": [],
-     "tono": "",
-     "pasillo": "",
-     "altura": "",
-     "numero": "",
-     "paletScan": "",
-     "escaneado": "",
-     "coordManual": "",
-     "ts": null,
-     "operario": "",
-     "coordinador": ""
-    },
-    {
-     "n": 16,
-     "scans": [],
-     "tono": "",
-     "pasillo": "",
-     "altura": "",
-     "numero": "",
-     "paletScan": "",
-     "escaneado": "",
-     "coordManual": "",
-     "ts": null,
-     "operario": "",
-     "coordinador": ""
-    },
-    {
-     "n": 17,
-     "scans": [],
-     "tono": "",
-     "pasillo": "",
-     "altura": "",
-     "numero": "",
-     "paletScan": "",
-     "escaneado": "",
-     "coordManual": "",
-     "ts": null,
-     "operario": "",
-     "coordinador": ""
-    },
-    {
-     "n": 18,
-     "scans": [],
-     "tono": "",
-     "pasillo": "",
-     "altura": "",
-     "numero": "",
-     "paletScan": "",
-     "escaneado": "",
-     "coordManual": "",
-     "ts": null,
-     "operario": "",
-     "coordinador": ""
-    },
-    {
-     "n": 19,
-     "scans": [],
-     "tono": "",
-     "pasillo": "",
-     "altura": "",
-     "numero": "",
-     "paletScan": "",
-     "escaneado": "",
-     "coordManual": "",
-     "ts": null,
-     "operario": "",
-     "coordinador": ""
-    },
-    {
-     "n": 20,
-     "scans": [],
-     "tono": "",
-     "pasillo": "",
-     "altura": "",
-     "numero": "",
-     "paletScan": "",
-     "escaneado": "",
-     "coordManual": "",
-     "ts": null,
-     "operario": "",
-     "coordinador": ""
-    },
-    {
-     "n": 21,
-     "scans": [],
-     "tono": "",
-     "pasillo": "",
-     "altura": "",
-     "numero": "",
-     "paletScan": "",
-     "escaneado": "",
-     "coordManual": "",
-     "ts": null,
-     "operario": "",
-     "coordinador": ""
-    },
-    {
-     "n": 22,
-     "scans": [],
-     "tono": "",
-     "pasillo": "",
-     "altura": "",
-     "numero": "",
-     "paletScan": "",
-     "escaneado": "",
-     "coordManual": "",
-     "ts": null,
-     "operario": "",
-     "coordinador": ""
-    },
-    {
-     "n": 23,
-     "scans": [],
-     "tono": "",
-     "pasillo": "",
-     "altura": "",
-     "numero": "",
-     "paletScan": "",
-     "escaneado": "",
-     "coordManual": "",
-     "ts": null,
-     "operario": "",
-     "coordinador": ""
-    },
-    {
-     "n": 24,
-     "scans": [],
-     "tono": "",
-     "pasillo": "",
-     "altura": "",
-     "numero": "",
-     "paletScan": "",
-     "escaneado": "",
-     "coordManual": "",
-     "ts": null,
-     "operario": "",
-     "coordinador": ""
-    },
-    {
-     "n": 25,
-     "scans": [],
-     "tono": "",
-     "pasillo": "",
-     "altura": "",
-     "numero": "",
-     "paletScan": "",
-     "escaneado": "",
-     "coordManual": "",
-     "ts": null,
-     "operario": "",
-     "coordinador": ""
-    },
-    {
-     "n": 26,
-     "scans": [],
-     "tono": "",
-     "pasillo": "",
-     "altura": "",
-     "numero": "",
-     "paletScan": "",
-     "escaneado": "",
-     "coordManual": "",
-     "ts": null,
-     "operario": "",
-     "coordinador": ""
-    },
-    {
-     "n": 27,
-     "scans": [],
-     "tono": "",
-     "pasillo": "",
-     "altura": "",
-     "numero": "",
-     "paletScan": "",
-     "escaneado": "",
-     "coordManual": "",
-     "ts": null,
-     "operario": "",
-     "coordinador": ""
-    },
-    {
-     "n": 28,
-     "scans": [],
-     "tono": "",
-     "pasillo": "",
-     "altura": "",
-     "numero": "",
-     "paletScan": "",
-     "escaneado": "",
-     "coordManual": "",
-     "ts": null,
-     "operario": "",
-     "coordinador": ""
-    }
-   ]
-  },
-  {
-   "id": "Cmssmtujs",
-   "codigo": "R 9226 BBX",
-   "fecha": "2026-08-13",
-   "cerrado": false,
-   "creado": "2026-08-14T07:35:12.616Z",
-   "modo": "codigo",
-   "imgSig": "uds",
-   "patron": null,
-   "palets": [
-    {
-     "n": 1,
-     "scans": [],
-     "tono": "",
-     "pasillo": "",
-     "altura": "",
-     "numero": "",
-     "paletScan": "",
-     "escaneado": "",
-     "coordManual": "",
-     "ts": null,
-     "operario": "",
-     "coordinador": ""
-    },
-    {
-     "n": 2,
-     "scans": [],
-     "tono": "",
-     "pasillo": "",
-     "altura": "",
-     "numero": "",
-     "paletScan": "",
-     "escaneado": "",
-     "coordManual": "",
-     "ts": null,
-     "operario": "",
-     "coordinador": ""
-    },
-    {
-     "n": 3,
-     "scans": [],
-     "tono": "",
-     "pasillo": "",
-     "altura": "",
-     "numero": "",
-     "paletScan": "",
-     "escaneado": "",
-     "coordManual": "",
-     "ts": null,
-     "operario": "",
-     "coordinador": ""
-    },
-    {
-     "n": 4,
-     "scans": [],
-     "tono": "",
-     "pasillo": "",
-     "altura": "",
-     "numero": "",
-     "paletScan": "",
-     "escaneado": "",
-     "coordManual": "",
-     "ts": null,
-     "operario": "",
-     "coordinador": ""
-    },
-    {
-     "n": 5,
-     "scans": [],
-     "tono": "",
-     "pasillo": "",
-     "altura": "",
-     "numero": "",
-     "paletScan": "",
-     "escaneado": "",
-     "coordManual": "",
-     "ts": null,
-     "operario": "",
-     "coordinador": ""
-    },
-    {
-     "n": 6,
-     "scans": [],
-     "tono": "",
-     "pasillo": "",
-     "altura": "",
-     "numero": "",
-     "paletScan": "",
-     "escaneado": "",
-     "coordManual": "",
-     "ts": null,
-     "operario": "",
-     "coordinador": ""
-    },
-    {
-     "n": 7,
-     "scans": [],
-     "tono": "",
-     "pasillo": "",
-     "altura": "",
-     "numero": "",
-     "paletScan": "",
-     "escaneado": "",
-     "coordManual": "",
-     "ts": null,
-     "operario": "",
-     "coordinador": ""
-    },
-    {
-     "n": 8,
-     "scans": [],
-     "tono": "",
-     "pasillo": "",
-     "altura": "",
-     "numero": "",
-     "paletScan": "",
-     "escaneado": "",
-     "coordManual": "",
-     "ts": null,
-     "operario": "",
-     "coordinador": ""
-    },
-    {
-     "n": 9,
-     "scans": [],
-     "tono": "",
-     "pasillo": "",
-     "altura": "",
-     "numero": "",
-     "paletScan": "",
-     "escaneado": "",
-     "coordManual": "",
-     "ts": null,
-     "operario": "",
-     "coordinador": ""
-    },
-    {
-     "n": 10,
-     "scans": [],
-     "tono": "",
-     "pasillo": "",
-     "altura": "",
-     "numero": "",
-     "paletScan": "",
-     "escaneado": "",
-     "coordManual": "",
-     "ts": null,
-     "operario": "",
-     "coordinador": ""
-    },
-    {
-     "n": 11,
-     "scans": [],
-     "tono": "",
-     "pasillo": "",
-     "altura": "",
-     "numero": "",
-     "paletScan": "",
-     "escaneado": "",
-     "coordManual": "",
-     "ts": null,
-     "operario": "",
-     "coordinador": ""
-    },
-    {
-     "n": 12,
-     "scans": [],
-     "tono": "",
-     "pasillo": "",
-     "altura": "",
-     "numero": "",
-     "paletScan": "",
-     "escaneado": "",
-     "coordManual": "",
-     "ts": null,
-     "operario": "",
-     "coordinador": ""
-    },
-    {
-     "n": 13,
-     "scans": [],
-     "tono": "",
-     "pasillo": "",
-     "altura": "",
-     "numero": "",
-     "paletScan": "",
-     "escaneado": "",
-     "coordManual": "",
-     "ts": null,
-     "operario": "",
-     "coordinador": ""
-    },
-    {
-     "n": 14,
-     "scans": [],
-     "tono": "",
-     "pasillo": "",
-     "altura": "",
-     "numero": "",
-     "paletScan": "",
-     "escaneado": "",
-     "coordManual": "",
-     "ts": null,
-     "operario": "",
-     "coordinador": ""
-    },
-    {
-     "n": 15,
-     "scans": [],
-     "tono": "",
-     "pasillo": "",
-     "altura": "",
-     "numero": "",
-     "paletScan": "",
-     "escaneado": "",
-     "coordManual": "",
-     "ts": null,
-     "operario": "",
-     "coordinador": ""
-    },
-    {
-     "n": 16,
-     "scans": [],
-     "tono": "",
-     "pasillo": "",
-     "altura": "",
-     "numero": "",
-     "paletScan": "",
-     "escaneado": "",
-     "coordManual": "",
-     "ts": null,
-     "operario": "",
-     "coordinador": ""
-    },
-    {
-     "n": 17,
-     "scans": [],
-     "tono": "",
-     "pasillo": "",
-     "altura": "",
-     "numero": "",
-     "paletScan": "",
-     "escaneado": "",
-     "coordManual": "",
-     "ts": null,
-     "operario": "",
-     "coordinador": ""
-    },
-    {
-     "n": 18,
-     "scans": [],
-     "tono": "",
-     "pasillo": "",
-     "altura": "",
-     "numero": "",
-     "paletScan": "",
-     "escaneado": "",
-     "coordManual": "",
-     "ts": null,
-     "operario": "",
-     "coordinador": ""
-    },
-    {
-     "n": 19,
-     "scans": [],
-     "tono": "",
-     "pasillo": "",
-     "altura": "",
-     "numero": "",
-     "paletScan": "",
-     "escaneado": "",
-     "coordManual": "",
-     "ts": null,
-     "operario": "",
-     "coordinador": ""
-    },
-    {
-     "n": 20,
-     "scans": [],
-     "tono": "",
-     "pasillo": "",
-     "altura": "",
-     "numero": "",
-     "paletScan": "",
-     "escaneado": "",
-     "coordManual": "",
-     "ts": null,
-     "operario": "",
-     "coordinador": ""
-    },
-    {
-     "n": 21,
-     "scans": [],
-     "tono": "",
-     "pasillo": "",
-     "altura": "",
-     "numero": "",
-     "paletScan": "",
-     "escaneado": "",
-     "coordManual": "",
-     "ts": null,
-     "operario": "",
-     "coordinador": ""
-    },
-    {
-     "n": 22,
-     "scans": [],
-     "tono": "",
-     "pasillo": "",
-     "altura": "",
-     "numero": "",
-     "paletScan": "",
-     "escaneado": "",
-     "coordManual": "",
-     "ts": null,
-     "operario": "",
-     "coordinador": ""
-    },
-    {
-     "n": 23,
-     "scans": [],
-     "tono": "",
-     "pasillo": "",
-     "altura": "",
-     "numero": "",
-     "paletScan": "",
-     "escaneado": "",
-     "coordManual": "",
-     "ts": null,
-     "operario": "",
-     "coordinador": ""
-    },
-    {
-     "n": 24,
-     "scans": [],
-     "tono": "",
-     "pasillo": "",
-     "altura": "",
-     "numero": "",
-     "paletScan": "",
-     "escaneado": "",
-     "coordManual": "",
-     "ts": null,
-     "operario": "",
-     "coordinador": ""
-    },
-    {
-     "n": 25,
-     "scans": [],
-     "tono": "",
-     "pasillo": "",
-     "altura": "",
-     "numero": "",
-     "paletScan": "",
-     "escaneado": "",
-     "coordManual": "",
-     "ts": null,
-     "operario": "",
-     "coordinador": ""
-    },
-    {
-     "n": 26,
-     "scans": [],
-     "tono": "",
-     "pasillo": "",
-     "altura": "",
-     "numero": "",
-     "paletScan": "",
-     "escaneado": "",
-     "coordManual": "",
-     "ts": null,
-     "operario": "",
-     "coordinador": ""
-    },
-    {
-     "n": 27,
-     "scans": [],
-     "tono": "",
-     "pasillo": "",
-     "altura": "",
-     "numero": "",
-     "paletScan": "",
-     "escaneado": "",
-     "coordManual": "",
-     "ts": null,
-     "operario": "",
-     "coordinador": ""
-    },
-    {
-     "n": 28,
-     "scans": [],
-     "tono": "",
-     "pasillo": "",
-     "altura": "",
-     "numero": "",
-     "paletScan": "",
-     "escaneado": "",
-     "coordManual": "",
-     "ts": null,
-     "operario": "",
-     "coordinador": ""
-    },
-    {
-     "n": 29,
-     "scans": [],
-     "tono": "",
-     "pasillo": "",
-     "altura": "",
-     "numero": "",
-     "paletScan": "",
-     "escaneado": "",
-     "coordManual": "",
-     "ts": null,
-     "operario": "",
-     "coordinador": ""
-    },
-    {
-     "n": 30,
-     "scans": [],
-     "tono": "",
-     "pasillo": "",
-     "altura": "",
-     "numero": "",
-     "paletScan": "",
-     "escaneado": "",
-     "coordManual": "",
-     "ts": null,
-     "operario": "",
      "coordinador": ""
     }
    ]
