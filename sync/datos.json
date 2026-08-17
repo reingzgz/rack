@@ -6,7 +6,8 @@
   "sonido": true,
   "largo": 0,
   "operario": "manu",
-  "coordinador": "SIN NOMBRE"
+  "coordinador": "SIN NOMBRE",
+  "ultimaNube": "2026-08-17T07:28:04.250Z"
  },
  "ubic": {
   "R/_�K�KOH.��NB\u0002!�\u0016:��`�)6.ظ��.m��X��%ٖd�2��\u001e\u001e��ծvV���μ3�\u0019�\u0004\u0002\u0000\u0000\u0000\u0000p'��\u000b\u0000\u0000\u0000\u0000��\u001f\u0004\u001c\u0000\u0000\u0000\u0000p-\b8\u0000\u0000\u0000\u0000�v\u0010p\u0000\u0000\u0000\u0000�� �\u0000\u0000\u0000\u0000��A�\u0001\u0000\u0000\u0000\u0000���\u0003\u0000\u0000\u0000\u0000n\u0007\u0001\u0007\u0000\u0000\u0000\u0000�\u000e\u0002\u000e\u0000\u0000\u0000\u0000�\u001d\u0004\u001c\u0000\u0000\u0000\u0000p-��\u0005\u0000\u0000\u0000\u0000:PVV\u001a\u0011\u0011��Rt ??��O": "6>���޽{{�<�",
@@ -5142,15 +5143,16 @@
       }
      ],
      "tono": "C",
-     "pasillo": "",
-     "altura": "",
-     "numero": "",
-     "paletScan": "",
-     "escaneado": "",
+     "pasillo": "1",
+     "altura": "4",
+     "numero": "91",
+     "paletScan": "P1 R 1189 BCX 10/08/2026",
+     "escaneado": "PM1001D091",
      "coordManual": "",
      "ts": "2026-08-13T12:17:52.340Z",
      "operario": "Carlos Gonzalez",
-     "coordinador": ""
+     "coordinador": "SIN NOMBRE",
+     "ubTs": "2026-08-17T07:31:24.885Z"
     },
     {
      "n": 2,
@@ -5211,15 +5213,16 @@
       }
      ],
      "tono": "D",
-     "pasillo": "",
-     "altura": "",
-     "numero": "",
-     "paletScan": "",
-     "escaneado": "",
+     "pasillo": "1",
+     "altura": "2",
+     "numero": "85",
+     "paletScan": "P2 R 1189 BCX 10/08/2026",
+     "escaneado": "PM1001B085",
      "coordManual": "",
      "ts": "2026-08-13T12:17:24.280Z",
      "operario": "Carlos Gonzalez",
-     "coordinador": ""
+     "coordinador": "SIN NOMBRE",
+     "ubTs": "2026-08-17T07:34:33.495Z"
     },
     {
      "n": 3,
@@ -5298,15 +5301,16 @@
       }
      ],
      "tono": "A",
-     "pasillo": "",
-     "altura": "",
-     "numero": "",
-     "paletScan": "",
-     "escaneado": "",
+     "pasillo": "1",
+     "altura": "4",
+     "numero": "65",
+     "paletScan": "P3 R 1189 BCX 10/08/2026",
+     "escaneado": "PM1001D065",
      "coordManual": "",
      "ts": "2026-08-13T12:16:37.883Z",
      "operario": "Carlos Gonzalez",
-     "coordinador": ""
+     "coordinador": "SIN NOMBRE",
+     "ubTs": "2026-08-17T07:35:01.032Z"
     },
     {
      "n": 4,
@@ -5385,15 +5389,16 @@
       }
      ],
      "tono": "A",
-     "pasillo": "",
-     "altura": "",
-     "numero": "",
-     "paletScan": "",
-     "escaneado": "",
+     "pasillo": "1",
+     "altura": "3",
+     "numero": "87",
+     "paletScan": "P4 R 1189 BCX 10/08/2026",
+     "escaneado": "PM1001C087",
      "coordManual": "",
      "ts": "2026-08-13T12:15:23.496Z",
      "operario": "Carlos Gonzalez",
-     "coordinador": ""
+     "coordinador": "SIN NOMBRE",
+     "ubTs": "2026-08-17T07:51:55.419Z"
     },
     {
      "n": 5,
@@ -5472,15 +5477,16 @@
       }
      ],
      "tono": "A",
-     "pasillo": "",
-     "altura": "",
-     "numero": "",
-     "paletScan": "",
-     "escaneado": "",
+     "pasillo": "1",
+     "altura": "2",
+     "numero": "65",
+     "paletScan": "P5 R 1189 BCX 10/08/2026",
+     "escaneado": "PM1001B065",
      "coordManual": "",
      "ts": "2026-08-13T12:14:28.865Z",
      "operario": "Carlos Gonzalez",
-     "coordinador": ""
+     "coordinador": "SIN NOMBRE",
+     "ubTs": "2026-08-17T07:52:27.446Z"
     },
     {
      "n": 6,
@@ -5535,15 +5541,16 @@
       }
      ],
      "tono": "A",
-     "pasillo": "",
-     "altura": "",
-     "numero": "",
-     "paletScan": "",
-     "escaneado": "",
+     "pasillo": "1",
+     "altura": "3",
+     "numero": "67",
+     "paletScan": "P6 R 1189 BCX 10/08/2026",
+     "escaneado": "PM1001C067",
      "coordManual": "",
      "ts": "2026-08-13T12:13:57.928Z",
      "operario": "Carlos Gonzalez",
-     "coordinador": ""
+     "coordinador": "SIN NOMBRE",
+     "ubTs": "2026-08-17T07:52:44.434Z"
     },
     {
      "n": 7,
@@ -5622,15 +5629,16 @@
       }
      ],
      "tono": "A",
-     "pasillo": "",
-     "altura": "",
-     "numero": "",
-     "paletScan": "",
-     "escaneado": "",
+     "pasillo": "1",
+     "altura": "2",
+     "numero": "69",
+     "paletScan": "P7 R 1189 BCX 10/08/2026",
+     "escaneado": "PM1001B069",
      "coordManual": "",
      "ts": "2026-08-13T12:12:27.153Z",
      "operario": "Carlos Gonzalez",
-     "coordinador": ""
+     "coordinador": "SIN NOMBRE",
+     "ubTs": "2026-08-17T07:53:11.479Z"
     },
     {
      "n": 8,
@@ -5709,15 +5717,16 @@
       }
      ],
      "tono": "A",
-     "pasillo": "",
-     "altura": "",
-     "numero": "",
-     "paletScan": "",
-     "escaneado": "",
+     "pasillo": "1",
+     "altura": "2",
+     "numero": "81",
+     "paletScan": "P8 R 1189 BCX 10/08/2026",
+     "escaneado": "PM1001B081",
      "coordManual": "",
      "ts": "2026-08-13T12:12:01.700Z",
      "operario": "Carlos Gonzalez",
-     "coordinador": ""
+     "coordinador": "SIN NOMBRE",
+     "ubTs": "2026-08-17T07:53:21.693Z"
     },
     {
      "n": 9,
@@ -5730,15 +5739,16 @@
       }
      ],
      "tono": "D",
-     "pasillo": "",
-     "altura": "",
-     "numero": "",
-     "paletScan": "",
-     "escaneado": "",
+     "pasillo": "1",
+     "altura": "2",
+     "numero": "87",
+     "paletScan": "P9 R 1189 BCX 10/08/2026",
+     "escaneado": "PM1001B087",
      "coordManual": "",
      "ts": "2026-08-13T12:11:07.072Z",
      "operario": "Carlos Gonzalez",
-     "coordinador": ""
+     "coordinador": "SIN NOMBRE",
+     "ubTs": "2026-08-17T07:53:32.645Z"
     },
     {
      "n": 10,
@@ -5817,15 +5827,16 @@
       }
      ],
      "tono": "A",
-     "pasillo": "",
-     "altura": "",
-     "numero": "",
-     "paletScan": "",
-     "escaneado": "",
+     "pasillo": "1",
+     "altura": "3",
+     "numero": "73",
+     "paletScan": "P10 R 1189 BCX 10/08/2026",
+     "escaneado": "PM1001C073",
      "coordManual": "",
      "ts": "2026-08-13T12:10:51.271Z",
      "operario": "Carlos Gonzalez",
-     "coordinador": ""
+     "coordinador": "SIN NOMBRE",
+     "ubTs": "2026-08-17T07:53:51.284Z"
     },
     {
      "n": 11,
@@ -5862,15 +5873,16 @@
       }
      ],
      "tono": "A",
-     "pasillo": "",
-     "altura": "",
-     "numero": "",
-     "paletScan": "",
-     "escaneado": "",
+     "pasillo": "1",
+     "altura": "2",
+     "numero": "73",
+     "paletScan": "P11 R 1189 BCX 10/08/2026",
+     "escaneado": "PM1001B073",
      "coordManual": "",
      "ts": "2026-08-13T12:09:44.286Z",
      "operario": "Carlos Gonzalez",
-     "coordinador": ""
+     "coordinador": "SIN NOMBRE",
+     "ubTs": "2026-08-17T07:54:26.996Z"
     },
     {
      "n": 12,
@@ -5949,15 +5961,16 @@
       }
      ],
      "tono": "A",
-     "pasillo": "",
-     "altura": "",
-     "numero": "",
-     "paletScan": "",
-     "escaneado": "",
+     "pasillo": "1",
+     "altura": "2",
+     "numero": "63",
+     "paletScan": "P12 R 1189 BCX 10/08/2026",
+     "escaneado": "PM1001B063",
      "coordManual": "",
      "ts": "2026-08-13T12:08:57.987Z",
      "operario": "Carlos Gonzalez",
-     "coordinador": ""
+     "coordinador": "SIN NOMBRE",
+     "ubTs": "2026-08-17T07:54:46.604Z"
     },
     {
      "n": 13,
@@ -6036,15 +6049,16 @@
       }
      ],
      "tono": "C",
-     "pasillo": "",
-     "altura": "",
-     "numero": "",
-     "paletScan": "",
-     "escaneado": "",
+     "pasillo": "1",
+     "altura": "4",
+     "numero": "67",
+     "paletScan": "P13 R 1189 BCX 10/08/2026",
+     "escaneado": "PM1001D067",
      "coordManual": "",
      "ts": "2026-08-13T12:07:28.461Z",
      "operario": "Carlos Gonzalez",
-     "coordinador": ""
+     "coordinador": "SIN NOMBRE",
+     "ubTs": "2026-08-17T07:54:56.065Z"
     },
     {
      "n": 14,
@@ -6111,15 +6125,16 @@
       }
      ],
      "tono": "A",
-     "pasillo": "",
-     "altura": "",
-     "numero": "",
-     "paletScan": "",
-     "escaneado": "",
+     "pasillo": "1",
+     "altura": "3",
+     "numero": "69",
+     "paletScan": "P14 R 1189 BCX 10/08/2026",
+     "escaneado": "PM1001C069",
      "coordManual": "",
      "ts": "2026-08-13T12:06:40.410Z",
      "operario": "Carlos Gonzalez",
-     "coordinador": ""
+     "coordinador": "SIN NOMBRE",
+     "ubTs": "2026-08-17T07:55:03.623Z"
     },
     {
      "n": 15,
@@ -12071,6 +12086,13 @@
        "u": 9,
        "t": "2026-08-14T11:48:38.107Z",
        "anom": ""
+      },
+      {
+       "c": "080733328000100098",
+       "u": 9,
+       "t": "2026-08-17T05:08:35.034Z",
+       "dup": false,
+       "anom": ""
       }
      ],
      "tono": "",
@@ -12080,8 +12102,8 @@
      "paletScan": "",
      "escaneado": "",
      "coordManual": "",
-     "ts": "2026-08-14T11:48:45.042Z",
-     "operario": "Mahonri Uriarte",
+     "ts": "2026-08-17T05:08:35.034Z",
+     "operario": "manu",
      "coordinador": "SIN NOMBRE",
      "ubTs": "2026-08-17T04:43:41.933Z"
     },
