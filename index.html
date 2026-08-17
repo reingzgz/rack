@@ -119,8 +119,12 @@ input[readonly]{background:#f4f6f5;color:var(--steel)}
 .combo .sub{font-size:12.5px;color:var(--mute);margin-bottom:10px}
 .picks{display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:8px}
 .pick{border:1.5px solid var(--line);border-radius:9px;padding:8px;background:#fbfdfc}
+.pick{position:relative}
+.pick .orden{position:absolute;top:6px;right:6px;background:var(--ink);color:#fff;font-family:var(--mono);
+  font-size:11px;font-weight:800;width:20px;height:20px;border-radius:50%;display:flex;align-items:center;justify-content:center}
 .pick .co{font-family:var(--mono);font-weight:800;font-size:16px;word-break:break-all}
 .pick .de{font-size:11.5px;color:var(--mute);margin-top:2px}
+.pick .sitio{font-size:12.5px;font-weight:700;color:var(--amber-d);margin-top:3px}
 .niveles{display:flex;gap:8px;margin-top:12px}
 .niveles button{flex:1;padding:11px;border:1.5px solid var(--line);background:#fff;border-radius:9px;
   font-weight:700;font-size:13.5px;cursor:pointer;color:var(--steel)}
@@ -234,6 +238,12 @@ table input{padding:7px 8px;border-radius:7px;font-size:14px}
 #flash span{font-size:clamp(16px,4.5vw,30px);color:#fff;font-weight:700;margin-top:14px;max-width:900px;white-space:pre-line}
 #flash.ko b{animation:sacude .35s ease}
 @keyframes sacude{0%,100%{transform:translateX(0)}25%{transform:translateX(-12px)}75%{transform:translateX(12px)}}
+.etiquetas{display:flex;gap:6px;flex-wrap:wrap;margin-top:8px}
+.etiquetas button{background:#fff;border:1.5px solid var(--line);border-radius:99px;padding:7px 12px;
+  font-size:13px;cursor:pointer;color:var(--steel);font-family:inherit}
+.etiquetas button:hover{border-color:var(--amber);color:var(--ink)}
+.etiquetas button.on{background:var(--warn-bg);border-color:var(--warn);color:var(--warn);font-weight:700}
+.etiquetas button.limpia{border-color:var(--ko);color:var(--ko)}
 #toast{position:fixed;left:50%;bottom:22px;transform:translateX(-50%) translateY(140%);background:var(--ink);color:#fff;padding:12px 18px;border-radius:10px;font-weight:700;z-index:90;transition:transform .22s;max-width:92vw;text-align:center;font-size:14px}
 #toast.show{transform:translateX(-50%) translateY(0)}
 #toast.ok{background:var(--ok)}#toast.ko{background:var(--ko)}
@@ -407,6 +417,24 @@ details summary{cursor:pointer;font-size:12px;letter-spacing:.1em;text-transform
       <div style="flex:2 1 240px"><label>Copiar en layout</label><input id="r_layout" class="mono" readonly></div>
     </div>
 
+    <div class="row" style="margin-top:12px">
+      <div style="flex:1 1 100%">
+        <label>Anomalías u observaciones del palé</label>
+        <input id="g_obs" placeholder="Escribe aquí lo que haya pasado" autocomplete="off">
+        <div class="etiquetas" id="g_obsTags">
+          <button data-obs="Film roto">Film roto</button>
+          <button data-obs="Bulto mojado">Bulto mojado</button>
+          <button data-obs="Bulto golpeado">Bulto golpeado</button>
+          <button data-obs="Etiqueta ilegible">Etiqueta ilegible</button>
+          <button data-obs="Falta bulto">Falta bulto</button>
+          <button data-obs="Bulto de más">Bulto de más</button>
+          <button data-obs="Palé mal estirado">Mal estirado</button>
+          <button data-obs="Mezcla de artículos">Mezcla de artículos</button>
+          <button class="limpia" data-obs="">Borrar</button>
+        </div>
+      </div>
+    </div>
+
     <div class="actions">
       <button class="btn gh grande" id="g_undo">Quitar el último bulto</button>
       <button class="btn pri grande" id="g_next">Palé terminado</button>
@@ -475,6 +503,7 @@ details summary{cursor:pointer;font-size:12px;letter-spacing:.1em;text-transform
     <div class="actions">
       <button class="btn pri sm" id="h_xlsx">Descargar lo filtrado (Excel)</button>
       <button class="btn gh sm" id="h_copyUb">Copiar ubicaciones</button>
+      <button class="btn gh sm" id="h_obs">Ver sólo con observaciones</button>
       <button class="btn gh sm" id="h_limpia">Limpiar filtros</button>
     </div>
   </div>
@@ -3029,7 +3058,7 @@ function estadoPalet(p){
   return {grabado, ubicado:!!co, okUb};
 }
 const cont = ()=> S.conts.find(c=>c.id===S.sel) || null;
-const nuevoPalet = n => ({n, scans:[], tono:'', pasillo:'', altura:'', numero:'', paletScan:'', escaneado:'', coordManual:'', ts:null, operario:'', coordinador:''});
+const nuevoPalet = n => ({n, scans:[], tono:'', obs:'', pasillo:'', altura:'', numero:'', paletScan:'', escaneado:'', coordManual:'', ts:null, operario:'', coordinador:''});
 const qrTexto = (c,p)=> `P${p.n} ${c.codigo} ${fmtFecha(c.fecha)}`;
 
 /* migración desde el formato antiguo (bultos completos + pico) */
@@ -3432,6 +3461,28 @@ $('#g_clear').addEventListener('click',()=>{
 });
 $('#g_copy').addEventListener('click',()=>copia(layoutDe(PAL||{}),'Layout copiado'));
 $('#g_tono').addEventListener('input',()=>{ if(PAL){ PAL.tono=$('#g_tono').value.trim().toUpperCase(); save(); } });
+$('#g_obs').addEventListener('input',()=>{ if(PAL){ PAL.obs=$('#g_obs').value.trim(); save(); pintaObsTags(); } });
+$('#g_obs').addEventListener('keydown',e=>{ if(e.key==='Enter'){ e.preventDefault(); foco(); } });
+/* Los botones añaden o quitan su texto: en la PDA teclear cuesta. */
+$('#g_obsTags').addEventListener('click',e=>{
+  const b=e.target.closest('button[data-obs]'); if(!b||!PAL) return;
+  const t=b.dataset.obs;
+  if(!t){ PAL.obs=''; }
+  else {
+    const partes=(PAL.obs||'').split(' · ').map(x=>x.trim()).filter(Boolean);
+    const i=partes.indexOf(t);
+    if(i>=0) partes.splice(i,1); else partes.push(t);
+    PAL.obs=partes.join(' · ');
+  }
+  $('#g_obs').value=PAL.obs||'';
+  save(); pintaObsTags(); pintaBultos(); foco();
+});
+function pintaObsTags(){
+  const actuales=((PAL&&PAL.obs)||'').split(' · ').map(x=>x.trim());
+  document.querySelectorAll('#g_obsTags button[data-obs]').forEach(b=>{
+    b.classList.toggle('on', !!b.dataset.obs && actuales.includes(b.dataset.obs));
+  });
+}
 $('#g_tono').addEventListener('keydown',e=>{ if(e.key==='Enter'){ e.preventDefault(); foco(); } });
 function puertaOperario(){
   const hay=!!(S.cfg.operario||'').trim();
@@ -3493,6 +3544,8 @@ function pintaForm(){
   $('#g_cab').className='paso ok';
   $('#g_cab').innerHTML=`<div class="pasoN">2</div><div><b>P${PAL.n} abierto · escanea los bultos</b><i>${esc(c.codigo)} · al terminar, escanea el QR del siguiente palé</i></div>`;
   $('#g_tono').value=PAL.tono||'';
+  $('#g_obs').value=PAL.obs||'';
+  pintaObsTags();
   pintaModo(); pintaBultos(); marcaFoco();
 }
 function pintaBultos(){
@@ -3506,6 +3559,7 @@ function pintaBultos(){
   $('#r_layout').value=layoutDe(PAL);
   const av=[];
   if(PAL.scans.some(x=>x.dup)) av.push('<span class="chip ko">posible doble lectura en rojo</span>');
+  if((PAL.obs||'').trim()) av.push(`<span class="chip warn">observación: ${esc(PAL.obs)}</span>`);
   const na=PAL.scans.filter(x=>x.anom).length;
   if(na) av.push(`<span class="chip warn">${na} bulto${na>1?'s':''} aceptado${na>1?'s':''} con anomalía</span>`);
   $('#g_avisos').innerHTML = av.length?'<div style="margin-top:10px;display:flex;gap:6px;flex-wrap:wrap">'+av.join('')+'</div>':'';
@@ -3526,7 +3580,7 @@ function renderGrab(){
   const c=cont(), L=$('#g_list');
   if(!c){ L.innerHTML='<div class="empty">Selecciona un contenedor.</div>'; return; }
   L.innerHTML = `<table><thead><tr>
-    <th>Palé</th><th>Artículo</th><th>Bultos</th><th>Desglose</th><th>Total uds</th><th>Tono</th><th>Copiar en layout</th><th></th>
+    <th>Palé</th><th>Artículo</th><th>Bultos</th><th>Desglose</th><th>Total uds</th><th>Tono</th><th>Observaciones</th><th>Copiar en layout</th><th></th>
   </tr></thead><tbody>${c.palets.map(p=>{
     const r=res(p), st=estadoPalet(p);
     return `<tr class="${st.grabado?'done':''}">
@@ -3536,6 +3590,7 @@ function renderGrab(){
       <td class="m">${r.n?(r.nC+'×'+r.udsC+(r.picos.length?' +'+r.picos.map(x=>x.u).join('+'):'')):'—'}</td>
       <td class="m"><b>${r.total||'—'}</b></td>
       <td class="m">${esc(p.tono||'—')}</td>
+      <td>${(p.obs||'').trim()?`<span class="chip warn">${esc(p.obs)}</span>`:'—'}</td>
       <td class="m">${esc(layoutDe(p)||'—')}</td>
       <td><button class="btn gh sm" data-p="${p.n}">Abrir</button></td></tr>`;
   }).join('')}</tbody></table>`;
@@ -3552,11 +3607,11 @@ $('#g_pack').addEventListener('click',()=>{
   const filas=[];
   c.palets.forEach(p=> (p.scans||[]).forEach((x,i)=>{
     filas.push([c.codigo, fmtFecha(c.fecha), 'P'+p.n, i+1, x.c, mocacota(x.c), x.u, p.tono, coordDe(p),
-                p.operario||'', x.anom||'', x.t?new Date(x.t).toLocaleString('es-ES'):'']);
+                p.operario||'', x.anom||'', p.obs||'', x.t?new Date(x.t).toLocaleString('es-ES'):'']);
   }));
   if(!filas.length) return toast('Aún no hay bultos escaneados','ko');
   descargaXLSX([
-    {name:'Packing list', header:['Contenedor','Fecha','Palé','Nº bulto','Código bulto','Mocacota','Uds','Tono','Coord','Operario','Anomalía','Hora'], rows:filas},
+    {name:'Packing list', header:['Contenedor','Fecha','Palé','Nº bulto','Código bulto','Mocacota','Uds','Tono','Coord','Operario','Anomalía','Observaciones','Hora'], rows:filas},
     {name:'Check list', header:CAB, rows:filasDe([c])}
   ], `packinglist_${c.codigo}_${c.fecha}.xlsx`);
 });
@@ -3617,12 +3672,38 @@ function moda(a){
   const c={}; a.forEach(x=>c[x]=(c[x]||0)+1);
   return Number(Object.keys(c).sort((x,y)=>c[y]-c[x]||Number(y)-Number(x))[0]);
 }
+const LETRA_ALTURA={1:'A',2:'B',3:'C',4:'D'};
+/* Pasillo, altura y número de un palé. Si no están rellenos a mano, se sacan
+   de la propia etiqueta escaneada, para que también salgan en los palés
+   ubicados antes de que la app los descompusiera sola. */
+function sitioDe(p){
+  let pas=(p.pasillo||'').trim(), alt=(p.altura||'').trim(), num=(p.numero||'').trim();
+  if(!pas || !alt || !num){
+    const d = (typeof descomponeHueco==='function') ? descomponeHueco(coordDe(p)) : null;
+    if(d){ pas=pas||d.pasillo; alt=alt||d.altura; num=num||d.numero; }
+  }
+  return {pas, alt, num, letra: LETRA_ALTURA[Number(alt)]||''};
+}
+function textoSitio(s){
+  if(!s.pas && !s.alt && !s.num) return '';
+  return `Pasillo ${s.pas||'—'} · Altura ${s.alt||'—'}${s.letra?' ('+s.letra+')':''} · Nº ${s.num||'—'}`;
+}
+/* Orden de extracción: se recorre el pasillo entero de menor a mayor número,
+   y dentro de cada hueco se bajan las alturas en orden. Así la carretilla no
+   va y viene. */
+function ordenExtraccion(a,b){
+  const n=v=>{ const x=Number(v); return isNaN(x)?9999:x; };
+  return n(a.pas)-n(b.pas) || n(a.num)-n(b.num) || n(a.alt)-n(b.alt) || String(a.co).localeCompare(String(b.co));
+}
 function paletsUbicados(){
   const out=[];
   S.conts.forEach(c=>c.palets.forEach(p=>{
     const r=res(p); if(!r.n) return;
     const co=coordDe(p); if(!co) return;
-    out.push({c, p, co, uds:r.total, moca:r.moca, tono:p.tono||'', et:`P${p.n} · ${c.codigo}`});
+    const s=sitioDe(p);
+    out.push({c, p, co, uds:r.total, moca:r.moca, tono:p.tono||'', et:`P${p.n} · ${c.codigo}`,
+              pale:'P'+p.n, cam:c.codigo,
+              pas:s.pas, alt:s.alt, num:s.num, letra:s.letra, sitio:textoSitio(s)});
   }));
   return out;
 }
@@ -3691,22 +3772,37 @@ function buscarCombis(){
       <h3>${esc(s.titulo)}</h3>
       <div class="tot">${s.suma} uds</div>
       <div class="sub">${s.palets.length} palé${s.palets.length>1?'s':''} · ${nota}</div>
-      <div class="picks">${s.palets.map(pk).join('')}</div>
-      <div class="actions"><button class="btn gh sm" data-cp="${esc(s.palets.map(x=>`${x.co}\t${x.et}\t${x.uds}`).join('\n'))}">Copiar</button></div>
+      <div class="picks">${s.palets.slice().sort(ordenExtraccion).map((x,i)=>pk(x,i)).join('')}</div>
+      <div class="actions"><button class="btn gh sm" data-cp="${esc(filasCopia(s.palets))}">Copiar con cabeceras</button></div>
     </div>`;
   }).join('');
   O.innerHTML = cab + `<div class="card"><h2>Combinaciones</h2>${cards}</div>` + tarjetaLista(items,'Todos los palés de este artículo');
 }
-function pk(x){
-  return `<div class="pick"><div class="co">${esc(x.co)}</div>
+/* Lo que se lleva al portapapeles: cabeceras y una fila por palé, ya
+   ordenado para recorrer el almacén de una pasada. Se pega en Excel tal cual. */
+const CAB_COPIA=['Orden','Pasillo','Altura','Nivel','Nº','Ubicación','Palé','Camión','Artículo','Tono','Uds'];
+function filasCopia(lista){
+  const orden=lista.slice().sort(ordenExtraccion);
+  const fs=orden.map((x,i)=>[i+1, x.pas||'', x.alt||'', x.letra||'', x.num||'', x.co, x.pale||x.et, x.cam||'',
+                             x.moca||'', x.tono||'', x.uds].join('\t'));
+  const total=orden.reduce((a,x)=>a+x.uds,0);
+  return [CAB_COPIA.join('\t'), ...fs, ['','','','','','','','','','TOTAL',total].join('\t')].join('\n');
+}
+function pk(x, i){
+  return `<div class="pick">${i!==undefined?`<span class="orden">${i+1}</span>`:''}
+    <div class="co">${esc(x.co)}</div>
+    ${x.sitio?`<div class="sitio">${esc(x.sitio)}</div>`:'<div class="sitio">sin desglosar</div>'}
     <div class="de">${esc(x.et)} · <b>${x.uds}</b> uds${x.tono?' · tono '+esc(x.tono):''}</div></div>`;
 }
 function tarjetaLista(items,tit){
-  return `<div class="card"><h2>${esc(tit)}</h2><div class="picks">${items.sort((a,b)=>b.uds-a.uds).map(pk).join('')}</div></div>`;
+  const orden=items.slice().sort(ordenExtraccion);
+  return `<div class="card"><h2>${esc(tit)}</h2>
+    <div class="actions" style="margin:0 0 10px"><button class="btn gh sm" data-cp="${esc(filasCopia(items))}">Copiar con cabeceras</button></div>
+    <div class="picks">${orden.map((x,i)=>pk(x,i)).join('')}</div></div>`;
 }
 $('#h_out').addEventListener('click',e=>{
   const b=e.target.closest('button[data-cp]'); if(!b) return;
-  copia(b.dataset.cp,'Combinación copiada');
+  copia(b.dataset.cp,'Copiado con cabeceras · pégalo en Excel');
 });
 
 /* ---------- registro histórico a tres niveles ---------- */
@@ -3718,7 +3814,15 @@ $('#h_niv').addEventListener('click',e=>{
   renderTablaHist();
 });
 ['#h_q','#h_cont','#h_des','#h_has'].forEach(s=>$(s).addEventListener('input',renderTablaHist));
+let SOLO_OBS=false;
+$('#h_obs').addEventListener('click',()=>{
+  SOLO_OBS=!SOLO_OBS;
+  $('#h_obs').textContent = SOLO_OBS ? 'Ver todos' : 'Ver sólo con observaciones';
+  $('#h_obs').classList.toggle('pri', SOLO_OBS);
+  renderTablaHist();
+});
 $('#h_limpia').addEventListener('click',()=>{
+  SOLO_OBS=false; $('#h_obs').textContent='Ver sólo con observaciones'; $('#h_obs').classList.remove('pri');
   $('#h_q').value=''; $('#h_cont').value='*'; $('#h_des').value=''; $('#h_has').value='';
   renderTablaHist();
 });
@@ -3739,10 +3843,11 @@ function filtroBultos(){
     if(!enRango(c)) return;
     c.palets.forEach(p=>{
       const co=coordDe(p), r=res(p);
+      if(SOLO_OBS && !(p.obs||'').trim()) return;
       (p.scans||[]).forEach((x,i)=>{
         if(q){
           const t=[x.c, mocacota(x.c), p.tono, co, p.escaneado, c.codigo, 'P'+p.n,
-                   p.operario, p.coordinador, x.anom, layoutDe(p), String(x.u)].join(' ').toUpperCase();
+                   p.operario, p.coordinador, x.anom, p.obs, layoutDe(p), String(x.u)].join(' ').toUpperCase();
           if(!t.includes(q)) return;
         }
         out.push({c,p,x,i,co,r});
@@ -3760,8 +3865,9 @@ function filtroPalets(){
     c.palets.forEach(p=>{
       const r=res(p), co=coordDe(p);
       if(!r.n && !co) return;
+      if(SOLO_OBS && !(p.obs||'').trim()) return;
       if(q){
-        const t=[r.cod,r.moca,p.tono,co,p.escaneado,c.codigo,'P'+p.n,p.operario,p.coordinador,
+        const t=[r.cod,r.moca,p.tono,co,p.escaneado,c.codigo,'P'+p.n,p.operario,p.coordinador,p.obs,
                  layoutDe(p),String(r.total)].join(' ').toUpperCase();
         const enBultos=(p.scans||[]).some(x=>x.c.toUpperCase().includes(q));
         if(!t.includes(q) && !enBultos) return;
@@ -3781,13 +3887,16 @@ function renderTablaHist(){
       ['Palés',new Set(rows.map(z=>z.c.id+'|'+z.p.n)).size],['Camiones',new Set(rows.map(z=>z.c.id)).size]]);
     if(!rows.length) return T.innerHTML='<div class="empty">Sin resultados.</div>';
     T.innerHTML=`<table><thead><tr><th>Camión</th><th>Fecha</th><th>Palé</th><th>Nº</th><th>Código bulto</th>
-      <th>Uds</th><th>Artículo</th><th>Tono</th><th>Ubicación</th><th>Operario</th><th>Anomalía</th><th>Hora</th></tr></thead><tbody>${
+      <th>Uds</th><th>Artículo</th><th>Tono</th><th>Ubicación</th><th>Pas/Alt/Nº</th><th>Operario</th><th>Anomalía</th><th>Hora</th></tr></thead><tbody>${
       rows.slice(0,600).map(({c,p,x,i,co})=>`<tr>
         <td class="m">${esc(c.codigo)}</td><td>${fmtFecha(c.fecha)}</td><td class="m"><b>P${p.n}</b></td>
         <td class="m">${i+1}</td><td class="m">${esc(x.c)}</td><td class="m"><b>${x.u}</b></td>
         <td class="m">${esc(mocacota(x.c))}</td><td class="m">${esc(p.tono||'—')}</td>
-        <td class="m">${esc(co||'—')}</td><td>${esc(p.operario||'—')}</td>
+        <td class="m">${esc(co||'—')}</td>
+        <td class="m">${(()=>{const s=sitioDe(p);return s.pas||s.num?`${s.pas||'—'} / ${s.alt||'—'} / ${s.num||'—'}`:'—';})()}</td>
+        <td>${esc(p.operario||'—')}</td>
         <td>${x.anom?`<span class="chip warn">${esc(x.anom)}</span>`:'—'}</td>
+        <td>${(p.obs||'').trim()?esc(p.obs):'—'}</td>
         <td>${x.t?new Date(x.t).toLocaleString('es-ES'):'—'}</td></tr>`).join('')}</tbody></table>
       ${rows.length>600?`<p class="hint" style="margin-top:8px">Se muestran 600 de ${rows.length}. Descarga el Excel para verlos todos.</p>`:''}`;
     return;
@@ -3822,14 +3931,16 @@ function renderTablaHist(){
     ['Total uds',rows.reduce((a,z)=>a+z.r.total,0)],['Ubicados',rows.filter(z=>z.co).length]]);
   if(!rows.length) return T.innerHTML='<div class="empty">Sin resultados.</div>';
   T.innerHTML=`<table><thead><tr><th>Camión</th><th>Fecha</th><th>Palé</th><th>Artículo</th><th>Bultos</th>
-    <th>Total uds</th><th>Tono</th><th>Ubicación</th><th>Operario</th><th>Check</th></tr></thead><tbody>${
+    <th>Total uds</th><th>Tono</th><th>Ubicación</th><th>Pas/Alt/Nº</th><th>Operario</th><th>Check</th></tr></thead><tbody>${
     rows.map(({c,p,r,co})=>{
       const st=estadoPalet(p);
       const chip=chipMapa(p);
       return `<tr><td class="m">${esc(c.codigo)}</td><td>${fmtFecha(c.fecha)}</td><td class="m"><b>P${p.n}</b></td>
         <td class="m">${esc(r.moca||'—')}</td><td class="m">${r.n||'—'}</td><td class="m"><b>${r.total||'—'}</b></td>
         <td class="m">${esc(p.tono||'—')}</td><td class="m"><b>${esc(co||'—')}</b></td>
-        <td>${esc(p.operario||'—')}</td><td>${chip}</td></tr>`;
+        <td class="m">${(()=>{const s=sitioDe(p);return s.pas||s.num?`${s.pas||'—'} / ${s.alt||'—'}${s.letra?' ('+s.letra+')':''} / ${s.num||'—'}`:'—';})()}</td>
+        <td>${esc(p.operario||'—')}</td>
+        <td>${(p.obs||'').trim()?`<span class="chip warn">${esc(p.obs)}</span>`:'—'}</td><td>${chip}</td></tr>`;
     }).join('')}</tbody></table>`;
 }
 function tarjetasSum(pares){
@@ -3845,9 +3956,9 @@ $('#h_xlsx').addEventListener('click',()=>{
   if(NIVEL==='bulto'){
     const rows=filtroBultos();
     if(!rows.length) return toast('No hay resultados','ko');
-    descargaXLSX([{name:'Bultos', header:['Camión','Fecha','Palé','Nº bulto','Código bulto','Uds','Artículo','Tono','Ubicación','Operario','Coordinador','Anomalía','Hora'],
+    descargaXLSX([{name:'Bultos', header:['Camión','Fecha','Palé','Nº bulto','Código bulto','Uds','Artículo','Tono','Ubicación','Operario','Coordinador','Anomalía','Observaciones','Hora'],
       rows:rows.map(({c,p,x,i,co})=>[c.codigo,fmtFecha(c.fecha),'P'+p.n,i+1,x.c,x.u,mocacota(x.c),p.tono,co,
-        p.operario||'',p.coordinador||'',x.anom||'',x.t?new Date(x.t).toLocaleString('es-ES'):''])}], nom);
+        p.operario||'',p.coordinador||'',x.anom||'',p.obs||'',x.t?new Date(x.t).toLocaleString('es-ES'):''])}], nom);
     return;
   }
   if(NIVEL==='cont'){
@@ -4141,7 +4252,7 @@ $('#ub_clear').addEventListener('click',()=>{ if(confirm('¿Vaciar el maestro?')
 /* ================= exportación ================= */
 const CAB=['Contenedor','Fecha descarga','Palé','Codificación QR','Artículo (mocacota)','Código bulto',
            'Bultos','Uds x bulto','Picos','Uds en picos','Total uds','Tono','Copiar en layout',
-           'Pasillo','Altura','Número','Palé escaneado','Ubicación rack escaneada','Hueco del maestro','Check','Operario','Coordinador','Grabado'];
+           'Pasillo','Altura','Número','Palé escaneado','Ubicación rack escaneada','Hueco del maestro','Check','Operario','Coordinador','Observaciones','Grabado'];
 const num=v=>(v!==''&&v!==null&&v!==undefined&&!isNaN(v))?Number(v):v;
 /* Mismo criterio que el check del mapa, en texto para el Excel. */
 function textoCheck(p){
@@ -4161,7 +4272,7 @@ function fila(c,p){
           r.total||'', p.tono, layoutDe(p),
           num(p.pasillo), num(p.altura), num(p.numero), p.paletScan||'', p.escaneado||'', ubicMaestro(p),
           textoCheck(p),
-          p.operario||'', p.coordinador||'',
+          p.operario||'', p.coordinador||'', p.obs||'',
           p.ts?new Date(p.ts).toLocaleString('es-ES'):''];
 }
 const filasDe = cs => cs.flatMap(c=>c.palets.map(p=>fila(c,p)));
@@ -4170,8 +4281,8 @@ function hojas(cs){
   const pack=[];
   cs.forEach(c=>c.palets.forEach(p=>(p.scans||[]).forEach((x,i)=>
     pack.push([c.codigo, fmtFecha(c.fecha), 'P'+p.n, i+1, x.c, mocacota(x.c), x.u, p.tono, coordDe(p),
-               p.operario||'', x.anom||'', x.t?new Date(x.t).toLocaleString('es-ES'):'']))));
-  if(pack.length) h.push({name:'Packing list', header:['Contenedor','Fecha','Palé','Nº bulto','Código bulto','Mocacota','Uds','Tono','Coord','Operario','Anomalía','Hora'], rows:pack});
+               p.operario||'', x.anom||'', p.obs||'', x.t?new Date(x.t).toLocaleString('es-ES'):'']))));
+  if(pack.length) h.push({name:'Packing list', header:['Contenedor','Fecha','Palé','Nº bulto','Código bulto','Mocacota','Uds','Tono','Coord','Operario','Anomalía','Observaciones','Hora'], rows:pack});
   h.push({name:'Resumen', header:['Contenedor','Fecha','Palés','Grabados','Ubicados OK','Bultos','Total uds','Estado'],
     rows:cs.map(c=>[c.codigo, fmtFecha(c.fecha), c.palets.length,
       c.palets.filter(p=>estadoPalet(p).grabado).length,
@@ -4246,14 +4357,33 @@ $('#sy_savecfg').addEventListener('click', async ()=>{
 });
 const SY_PATH = 'sync/datos.json';
 function syUrl(){ return `https://api.github.com/repos/${SY_CFG.owner}/${SY_CFG.repo}/contents/${SY_PATH}?ref=${encodeURIComponent(SY_CFG.branch)}`; }
-async function syFetchRemoto(){
-  const r = await fetch(syUrl(), {headers:{'Authorization':`Bearer ${SY_CFG.token}`,'Accept':'application/vnd.github+json'}});
-  if(r.status===404) return {sha:null, datos:null};
-  if(!r.ok) throw new Error('No se pudo leer la nube ('+r.status+')');
-  const j = await r.json();
-  const texto = decodeURIComponent(escape(atob(j.content.replace(/\n/g,''))));
-  return {sha:j.sha, datos:JSON.parse(texto)};
+let SY_SHA = null;   // se recuerda entre operaciones: evita descargas inútiles
+
+/* Sólo el identificador del archivo, sin bajarlo. Se pide el listado de la
+   carpeta, que pesa unos cientos de bytes en vez de cientos de kilobytes. */
+async function syShaRemoto(){
+  const dir = SY_PATH.split('/').slice(0,-1).join('/');
+  const nombre = SY_PATH.split('/').pop();
+  const u = `https://api.github.com/repos/${SY_CFG.owner}/${SY_CFG.repo}/contents/${dir}?ref=${encodeURIComponent(SY_CFG.branch)}`;
+  const r = await fetch(u, {headers:{'Authorization':`Bearer ${SY_CFG.token}`,'Accept':'application/vnd.github+json'}});
+  if(r.status===404) return null;
+  if(!r.ok) throw new Error('No se pudo consultar la nube ('+r.status+')');
+  const lista = await r.json();
+  const f = Array.isArray(lista) ? lista.find(x=>x.name===nombre) : null;
+  return f ? f.sha : null;
 }
+/* Descarga el contenido en crudo: sin base64 de por medio, así que llega
+   más ligero y no hay que descodificarlo a mano. */
+async function syFetchRemoto(){
+  const r = await fetch(syUrl(), {headers:{'Authorization':`Bearer ${SY_CFG.token}`,'Accept':'application/vnd.github.raw'}});
+  if(r.status===404){ SY_SHA=null; return {sha:null, datos:null}; }
+  if(!r.ok) throw new Error('No se pudo leer la nube ('+r.status+')');
+  const texto = await r.text();
+  let datos=null;
+  try{ datos=JSON.parse(texto); }catch(e){ throw new Error('El archivo de la nube no es válido'); }
+  return {sha:SY_SHA, datos};
+}
+const kb = n => (n/1024).toFixed(0)+' KB';
 function syClaveScan(x){ return x.c+'|'+x.u+'|'+(x.t||''); }
 function syMergePalet(loc, rem){
   if(!loc) return rem;
@@ -4299,36 +4429,54 @@ function syMergeConts(locConts, remConts){
 }
 $('#sy_push').addEventListener('click', async ()=>{
   if(!SY_CFG.owner || !SY_CFG.repo || !SY_CFG.token) return toast('Rellena y guarda antes la conexión','ko');
-  $('#sy_info').textContent = 'Subiendo…';
+  const t0=Date.now();
+  nubeOcupada(true); pintaNube('Subiendo…','pend');
   try{
-    const {sha} = await syFetchRemoto();
-    const cuerpo = JSON.stringify({cfg:S.cfg, ubic:S.ubic, conts:S.conts}, null, 1);
+    // JSON compacto: sin sangría ocupa cerca de un 40% menos
+    const cuerpo = JSON.stringify({cfg:S.cfg, ubic:S.ubic, conts:S.conts});
     const b64 = btoa(unescape(encodeURIComponent(cuerpo)));
-    const r = await fetch(`https://api.github.com/repos/${SY_CFG.owner}/${SY_CFG.repo}/contents/${SY_PATH}`, {
+    $('#sy_info').textContent = `Subiendo ${kb(b64.length)}…`;
+    pintaNube(`Subiendo ${kb(b64.length)}…`,'pend');
+
+    if(SY_SHA===null) SY_SHA = await syShaRemoto();   // sólo la primera vez
+    const enviar = async sha => fetch(`https://api.github.com/repos/${SY_CFG.owner}/${SY_CFG.repo}/contents/${SY_PATH}`, {
       method:'PUT',
       headers:{'Authorization':`Bearer ${SY_CFG.token}`,'Accept':'application/vnd.github+json','Content-Type':'application/json'},
       body: JSON.stringify({message:'Sincronización palés '+new Date().toISOString(), content:b64, branch:SY_CFG.branch, sha:sha||undefined})
     });
+    let r = await enviar(SY_SHA);
+    if(r.status===409 || r.status===422){          // otro equipo subió entretanto
+      SY_SHA = await syShaRemoto();
+      r = await enviar(SY_SHA);
+    }
     if(!r.ok) throw new Error('GitHub rechazó la subida ('+r.status+')');
+    const j = await r.json().catch(()=>null);
+    SY_SHA = (j && j.content && j.content.sha) || null;   // así la próxima no consulta nada
+
     const nub=S.conts.reduce((a,c)=>a+c.palets.filter(p=>(p.escaneado||'').trim()).length,0);
     const nb=S.conts.reduce((a,c)=>a+c.palets.reduce((z,p)=>z+(p.scans||[]).length,0),0);
-    $('#sy_info').innerHTML = `Subido · ${new Date().toLocaleString('es-ES')}<br>`+
-      `<b>${S.conts.length} camiones · ${nb} bultos · ${nub} palés ubicados</b>`+
+    const seg=((Date.now()-t0)/1000).toFixed(1);
+    $('#sy_info').innerHTML = `Subido en ${seg} s · ${new Date().toLocaleString('es-ES')}<br>`+
+      `<b>${S.conts.length} camiones · ${nb} bultos · ${nub} palés ubicados</b> · ${kb(b64.length)}`+
       (nub===0?' <span style="color:var(--ko)">— ojo: no has subido ninguna ubicación</span>':'');
     S.cfg.ultimaNube=new Date().toISOString();
     save();
-    SIN_SUBIR=false;            // save() lo pone a true; aquí ya está todo en la nube
+    SIN_SUBIR=false;
     pintaNube();
-    toast('Datos subidos a la nube','ok');
-  }catch(err){ $('#sy_info').textContent='Error al subir: '+err.message; toast('No se pudo subir','ko'); }
+    toast(`Subido en ${seg} s`,'ok');
+  }catch(err){
+    $('#sy_info').textContent='Error al subir: '+err.message;
+    pintaNube(); toast('No se pudo subir','ko');
+  }finally{ nubeOcupada(false); }
 });
 $('#sy_pull').addEventListener('click', async ()=>{
   if(!SY_CFG.owner || !SY_CFG.repo || !SY_CFG.token) return toast('Rellena y guarda antes la conexión','ko');
+  const t0=Date.now();
+  nubeOcupada(true); pintaNube('Trayendo…','pend');
   $('#sy_info').textContent = 'Trayendo…';
   try{
     const {datos} = await syFetchRemoto();
-    if(!datos){ $('#sy_info').textContent='Todavía no hay nada subido a la nube.'; return; }
-    if(!confirm('Se van a combinar los datos de la nube con los de este dispositivo (no se borra nada local). ¿Seguir?')) { $('#sy_info').textContent=''; return; }
+    if(!datos){ $('#sy_info').textContent='Todavía no hay nada subido a la nube.'; pintaNube(); return; }
     const antesUb=S.conts.reduce((a,c)=>a+c.palets.filter(p=>(p.escaneado||'').trim()).length,0);
     const antesB=S.conts.reduce((a,c)=>a+c.palets.reduce((z,p)=>z+(p.scans||[]).length,0),0);
     const remUb=(datos.conts||[]).reduce((a,c)=>a+c.palets.filter(p=>(p.escaneado||'').trim()).length,0);
@@ -4338,13 +4486,15 @@ $('#sy_pull').addEventListener('click', async ()=>{
     save(); render();
     const ahoraUb=S.conts.reduce((a,c)=>a+c.palets.filter(p=>(p.escaneado||'').trim()).length,0);
     const ahoraB=S.conts.reduce((a,c)=>a+c.palets.reduce((z,p)=>z+(p.scans||[]).length,0),0);
-    $('#sy_info').innerHTML = `Traído y combinado · ${new Date().toLocaleString('es-ES')}<br>`+
+    const seg=((Date.now()-t0)/1000).toFixed(1);
+    $('#sy_info').innerHTML = `Traído en ${seg} s · ${new Date().toLocaleString('es-ES')}<br>`+
       `Ubicados: ${antesUb} → <b>${ahoraUb}</b> · bultos: ${antesB} → <b>${ahoraB}</b><br>`+
       (remUb===0 ? '<span style="color:var(--ko)">En la nube no hay ninguna ubicación: quien ubica no ha subido después de ubicar.</span>'
                  : `En la nube había ${remUb} palés ubicados.`);
     S.cfg.ultimaNube=new Date().toISOString(); save(); pintaNube();
-    toast('Datos combinados','ok');
-  }catch(err){ $('#sy_info').textContent='Error al traer: '+err.message; toast('No se pudo traer','ko'); }
+    toast(`Traído en ${seg} s · ${ahoraB-antesB} bultos nuevos`,'ok');
+  }catch(err){ $('#sy_info').textContent='Error al traer: '+err.message; pintaNube(); toast('No se pudo traer','ko'); }
+  finally{ nubeOcupada(false); }
 });
 syCargaCfg();
 
