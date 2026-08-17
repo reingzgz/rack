@@ -12077,13 +12077,13 @@
      "pasillo": "",
      "altura": "",
      "numero": "",
-     "paletScan": "P1 R 9226 BBX 12/08/2026",
-     "escaneado": "SSSVVV",
+     "paletScan": "",
+     "escaneado": "",
      "coordManual": "",
      "ts": "2026-08-14T11:48:45.042Z",
      "operario": "Mahonri Uriarte",
      "coordinador": "SIN NOMBRE",
-     "ubTs": "2026-08-17T04:38:43.633Z"
+     "ubTs": "2026-08-17T04:43:41.933Z"
     },
     {
      "n": 2,
@@ -12146,7 +12146,8 @@
      "coordManual": "",
      "ts": "2026-08-14T11:49:32.742Z",
      "operario": "Mahonri Uriarte",
-     "coordinador": ""
+     "coordinador": "SIN NOMBRE",
+     "ubTs": "2026-08-17T04:43:40.982Z"
     },
     {
      "n": 3,
