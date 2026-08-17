@@ -1,6 +1,6 @@
 /* Control de palés — funcionamiento sin cobertura.
    Sube VERSION al publicar cambios y las PDAs se actualizan solas. */
-const VERSION = 'palets-v10';
+const VERSION = 'palets-v12';
 const ARCHIVOS = ['./', './index.html', './manifest.json', './icon.svg'];
 
 self.addEventListener('install', e => {

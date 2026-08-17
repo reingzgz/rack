@@ -291,7 +291,8 @@ details summary{cursor:pointer;font-size:12px;letter-spacing:.1em;text-transform
     <button data-v="qr">Etiquetas QR</button>
     <button data-v="grab">Grabar palé</button>
     <button data-v="hist">Buscar / Histórico</button>
-    <button data-v="mapa">Mapa</button>
+    <button data-v="mapa">Añadir ubicación</button>
+    <button data-v="extraer">Extraer ubicación</button>
     <button data-v="datos">Datos</button>
   </nav>
   <div class="nube" id="nubeBar">
@@ -559,6 +560,56 @@ details summary{cursor:pointer;font-size:12px;letter-spacing:.1em;text-transform
   <div class="card hide" id="m_tablaCard"><div id="mapaTabla" class="tw"></div></div>
 </section>
 
+<!-- ============ EXTRAER UBICACIÓN ============ -->
+<section id="v-extraer" class="hide">
+  <div class="card" id="ex_gate">
+    <h2>¿Quién está extrayendo?</h2>
+    <label for="ex_coord">Nombre del operario</label>
+    <input id="ex_coord" placeholder="Escribe tu nombre" autocomplete="off" autocapitalize="words" style="font-size:19px;padding:15px">
+    <div class="actions"><button class="btn pri grande" id="ex_start">Empezar</button></div>
+    <p class="hint" style="margin-top:10px">Hace falta para saber quién ha extraído cada palé.</p>
+  </div>
+
+  <div class="card hide" id="ex_card">
+    <div class="quien">
+      <label>Operario</label>
+      <b id="ex_coordShow" class="mono"></b>
+      <button class="btn gh sm" id="ex_coordChg">Cambiar</button>
+    </div>
+    <h2>Extraer ubicación</h2>
+    <p class="hint">Proceso contrario a Añadir ubicación: escanea el palé y luego el hueco donde está guardado.
+      Si coinciden, el palé <b>se borra del sistema</b> y el hueco queda libre para otro. Queda un registro
+      en Datos por si hace falta consultarlo o deshacerlo.</p>
+  </div>
+
+  <div class="card hide" id="ex_scanCard">
+    <div id="ex_paso" class="paso">
+      <div class="pasoN">1</div>
+      <div><b>Escanea el QR del palé</b><i>El que vas a sacar del rack</i></div>
+    </div>
+    <div class="scanbox">
+      <div class="scanrow">
+        <input id="ex_scan" class="mono" placeholder="Dispara el lector aquí" autocomplete="off" autocapitalize="characters">
+        <button class="camBtn hide" data-cam="ex_scan">&#9723;</button>
+      </div>
+      <div id="ex_foco" class="foco">Listo para escanear</div>
+    </div>
+    <div id="ex_eco" class="eco"></div>
+    <div id="ex_ultimo" class="ultimo">Todavía no has extraído ningún palé</div>
+    <div class="actions">
+      <button class="btn gh" id="ex_cancel">Empezar de nuevo</button>
+      <button class="btn gh sm" id="ex_deshacer" disabled>Deshacer última extracción</button>
+      <button class="btn gh sm" id="ex_sonido">Sonido: activado</button>
+    </div>
+  </div>
+
+  <div class="card hide" id="ex_tablaCard">
+    <h2>Ubicados en este camión</h2>
+    <p class="hint" style="margin-bottom:10px">Pendientes de extraer. Al confirmarse la extracción, la fila desaparece de aquí.</p>
+    <div id="extraerTabla" class="tw"></div>
+  </div>
+</section>
+
 <!-- ============ DATOS ============ -->
 <section id="v-datos" class="hide">
   <div class="card">
@@ -603,6 +654,16 @@ details summary{cursor:pointer;font-size:12px;letter-spacing:.1em;text-transform
   </div>
 
   <div class="card">
+    <h2>Palés extraídos</h2>
+    <p class="hint">Registro de lo borrado desde Extraer ubicación: por si hace falta comprobar quién sacó qué
+      palé y cuándo. Los últimos 50, más recientes primero.</p>
+    <div id="ex_log" class="tw" style="margin-top:10px"></div>
+    <div class="actions" style="margin-top:10px">
+      <button class="btn gh dgr" id="ex_logClear">Vaciar registro</button>
+    </div>
+  </div>
+
+  <div class="card">
     <h2>Sincronización online</h2>
     <p class="hint">Guarda una copia de los datos de este dispositivo en el propio repositorio de GitHub donde está publicada la app (en un archivo <code>sync/datos.json</code>), para poder traerla a otra PDA. No hace falta contratar ningún servidor: se usa tu cuenta de GitHub. Cada PDA decide cuándo subir y cuándo traer; no es automático ni en tiempo real.</p>
     <div class="row">
@@ -624,11 +685,19 @@ details summary{cursor:pointer;font-size:12px;letter-spacing:.1em;text-transform
 
   <div class="card">
     <h2>Versión</h2>
-    <p style="font-family:var(--mono);font-size:26px;font-weight:800;margin:0">v10</p>
+    <p style="font-family:var(--mono);font-size:26px;font-weight:800;margin:0">v12</p>
     <p class="hint" style="margin:4px 0 0">Publicada el 17/08/2026. Si una PDA muestra otro número, tiene una copia antigua:
       usa el botón <b>Buscar actualización</b> de más arriba.</p>
+    <details style="margin-top:10px" open>
+      <summary style="cursor:pointer;font-size:12px;letter-spacing:.1em;text-transform:uppercase;color:var(--mute);font-weight:800">Qué cambia respecto a la v10</summary>
+      <ul class="hint" style="margin:10px 0 0;padding-left:18px;line-height:1.7">
+        <li>Nueva pestaña <b>Extraer ubicación</b>: escaneas palé y hueco y, si coinciden, el palé se borra del sistema y el hueco queda libre. Queda registrado en Datos por si hace falta consultarlo o deshacerlo.</li>
+        <li>La pestaña Mapa pasa a llamarse <b>Añadir ubicación</b>, para distinguirla de Extraer.</li>
+        <li>Subir/Traer de la nube ya no se quedan colgados con mala cobertura: se cancelan solos a los 20 s.</li>
+      </ul>
+    </details>
     <details style="margin-top:10px">
-      <summary style="cursor:pointer;font-size:12px;letter-spacing:.1em;text-transform:uppercase;color:var(--mute);font-weight:800">Qué cambia respecto a la v8</summary>
+      <summary style="cursor:pointer;font-size:12px;letter-spacing:.1em;text-transform:uppercase;color:var(--mute);font-weight:800">Qué cambiaba respecto a la v8</summary>
       <ul class="hint" style="margin:10px 0 0;padding-left:18px;line-height:1.7">
         <li>Ubicar en Mapa escaneando palé y hueco, sin buscar la línea.</li>
         <li>Arreglada la sincronización: las ubicaciones ya viajan a la nube.</li>
@@ -3006,7 +3075,7 @@ const Store = (()=>{
 })();
 
 const DEF = {pos:3, len:2, moca:12, sonido:true, largo:0, operario:'', coordinador:''};
-let S = {cfg:{...DEF}, ubic:{}, conts:[], sel:null};
+let S = {cfg:{...DEF}, ubic:{}, conts:[], sel:null, extraidos:[]};
 let VIEW='cont', PAL=null, tSave=null;
 
 const $  = s=>document.querySelector(s);
@@ -3028,6 +3097,7 @@ let SIN_SUBIR=false;
 function save(){ SIN_SUBIR=true; pintaNube(); clearTimeout(tSave); tSave=setTimeout(async()=>{
   await Store.set('palets_cfg',{cfg:S.cfg,ubic:S.ubic,sel:S.sel});
   await Store.set('palets_conts',S.conts);
+  await Store.set('palets_extraidos',S.extraidos);
 },180); }
 
 /* ================= cálculo ================= */
@@ -3091,6 +3161,7 @@ async function load(){
   const c = await Store.get('palets_cfg');
   if(c){ S.cfg=Object.assign({...DEF},c.cfg||{}); S.ubic=c.ubic||{}; S.sel=c.sel||null; }
   S.conts = (await Store.get('palets_conts')) || [];
+  S.extraidos = (await Store.get('palets_extraidos')) || [];
   migra();
   if(S.sel && !S.conts.some(x=>x.id===S.sel)) S.sel=null;
   if(!S.sel && S.conts.length) S.sel=S.conts[0].id;
@@ -3137,10 +3208,11 @@ $('#nav').addEventListener('click', e=>{
   if(VIEW==='grab') setTimeout(foco,60);
   if(VIEW==='hist') setTimeout(()=>$('#h_art').focus(),60);
   if(VIEW==='mapa') setTimeout(()=>{ mpPaso(); mpFoco(); },60);
+  if(VIEW==='extraer') setTimeout(()=>{ exPaso(); exFoco(); },60);
 });
 function render(){
   renderSelector();
-  ({cont:renderConts, qr:renderQrPanel, grab:renderGrab, hist:renderHist, mapa:renderMapa, datos:renderDatos}[VIEW]||(()=>{}))();
+  ({cont:renderConts, qr:renderQrPanel, grab:renderGrab, hist:renderHist, mapa:renderMapa, extraer:renderExtraer, datos:renderDatos}[VIEW]||(()=>{}))();
 }
 function renderSelector(){
   const s=$('#selCont');
@@ -4201,6 +4273,193 @@ $('#m_copyTabla').addEventListener('click',()=>{
 });
 $('#m_xlsx').addEventListener('click',()=>{ const c=cont(); if(c) descargaXLSX(hojas([c]),`palets_${c.codigo}_${c.fecha}.xlsx`); });
 
+/* ================= extraer ubicación =================
+   Proceso contrario a Añadir ubicación: se escanea el palé y el hueco
+   donde está guardado; si coinciden, el palé se borra del sistema y el
+   hueco queda libre. Queda un registro en S.extraidos por si hace falta
+   consultarlo o deshacer la última extracción. */
+let EX={p:null, txt:''}, EX_N=0, EX_LAST=null;
+
+function puertaExtraer(){
+  const hay=!!(S.cfg.coordinador||'').trim();
+  $('#ex_gate').classList.toggle('hide',hay);
+  $('#ex_card').classList.toggle('hide',!hay);
+  $('#ex_scanCard').classList.toggle('hide',!hay);
+  $('#ex_tablaCard').classList.toggle('hide',!hay);
+  $('#ex_coordShow').textContent=S.cfg.coordinador||'';
+  if(!hay) setTimeout(()=>$('#ex_coord').focus(),60);
+}
+function entraExtraer(){
+  const v=$('#ex_coord').value.trim();
+  if(v.length<2){ toast('Escribe tu nombre para empezar','ko'); $('#ex_coord').focus(); return; }
+  S.cfg.coordinador=v; save();
+  puertaExtraer(); renderExtraer();
+  toast('Hola, '+v,'ok');
+}
+$('#ex_start').addEventListener('click',entraExtraer);
+$('#ex_coord').addEventListener('keydown',e=>{ if(e.key==='Enter'){ e.preventDefault(); entraExtraer(); } });
+$('#ex_coordChg').addEventListener('click',()=>{
+  $('#ex_coord').value=S.cfg.coordinador||'';
+  S.cfg.coordinador=''; save(); puertaExtraer();
+});
+
+function exEco(clase, grande, chico){
+  flash(clase==='good'?'ok':'ko', grande, chico);
+  const e=$('#ex_eco');
+  e.className='eco on '+clase;
+  e.innerHTML=`<span class="big">${esc(grande)}</span><span class="sm">${esc(chico)}</span>`;
+  clearTimeout(e._h); e._h=setTimeout(()=>{ e.className='eco'; }, 4000);
+}
+function exPaso(){
+  const cab=$('#ex_paso');
+  if(!cab) return;
+  if(EX.p){
+    cab.className='paso ok';
+    cab.innerHTML=`<div class="pasoN">2</div><div><b>P${EX.p.n} cogido · escanea el hueco</b>`+
+      `<i>Tiene que ser ${esc(EX.p.escaneado||'sin hueco asignado')}</i></div>`;
+    $('#ex_scan').placeholder='Escanea la etiqueta del rack';
+  }else{
+    cab.className='paso';
+    cab.innerHTML='<div class="pasoN">1</div><div><b>Escanea el QR del palé</b><i>El que vas a sacar del rack</i></div>';
+    $('#ex_scan').placeholder='Dispara el lector aquí';
+  }
+  exMarcaFoco();
+}
+function exMarcaFoco(){
+  const f=$('#ex_foco'); if(!f) return;
+  const activo=document.activeElement===$('#ex_scan');
+  f.className='foco'+(activo?'':' off');
+  f.textContent = activo ? (EX.p?'Listo · escanea el hueco':'Listo · escanea el palé')
+                         : 'Toca el recuadro para seguir escaneando';
+}
+function exFoco(){
+  if(VIEW!=='extraer') return;
+  if(!(S.cfg.coordinador||'').trim()) return;
+  const cw=$('#camWrap'); if(cw && cw.classList.contains('on')) return;
+  const a=document.activeElement;
+  if(a && a!==document.body && /^(INPUT|TEXTAREA|SELECT)$/.test(a.tagName) && a.id!=='ex_scan') return;
+  const el=$('#ex_scan'); if(!el) return;
+  if(document.activeElement!==el) el.focus();
+  exMarcaFoco();
+}
+/* Compara lo escaneado en el hueco con la ubicación guardada del palé,
+   admitiendo formatos distintos igual que el check de Añadir ubicación. */
+function huecoCoincide(p, txt){
+  const a=(p.escaneado||'').trim().toUpperCase(), b=String(txt||'').trim().toUpperCase();
+  if(!a) return false;
+  if(a===b) return true;
+  const da=descomponeHueco(a), db=descomponeHueco(b);
+  return !!(da && db && da.pasillo===db.pasillo && da.altura===db.altura && da.numero===db.numero);
+}
+function exProcesa(){
+  const el=$('#ex_scan'), txt=el.value.trim().toUpperCase();
+  el.value='';
+  if(!txt) return;
+  const c=cont();
+  if(!c){ beep(false); exEco('bad','Sin camión','Selecciona antes un camión arriba'); return; }
+
+  /* ---- toca el palé ---- */
+  if(!EX.p){
+    if(!esQrPalet(txt)){
+      beep(false); exEco('bad','Eso no es un palé','Escanea primero el QR del palé'); exFoco(); return;
+    }
+    const p=buscaPalet(txt);
+    if(!p){ beep(false); exEco('bad','Palé no encontrado','Ese QR no es de este camión'); exFoco(); return; }
+    if(!(p.escaneado||'').trim()){
+      beep(false); exEco('bad','P'+p.n+' sin ubicación','No tiene hueco asignado, nada que extraer'); exFoco(); return;
+    }
+    EX.p=p; EX.txt=txt;
+    beep(true);
+    exEco('good','P'+p.n, `Está en ${p.escaneado} · ahora escanea el hueco`);
+    exPaso(); exFoco(); return;
+  }
+
+  /* ---- toca el hueco ---- */
+  if(esQrPalet(txt)){
+    const otro=buscaPalet(txt);
+    if(otro && otro!==EX.p){
+      if(!(otro.escaneado||'').trim()){
+        beep(false); exEco('bad','P'+otro.n+' sin ubicación','No tiene hueco asignado, nada que extraer'); exFoco(); return;
+      }
+      EX.p=otro; EX.txt=txt; beep(false);
+      exEco('bad','Cambiado a P'+otro.n,'No habías escaneado el hueco del anterior');
+      exPaso(); exFoco(); return;
+    }
+    beep(false); exEco('bad','Falta el hueco',`Sigue P${EX.p.n}. Escanea la etiqueta del rack`);
+    exFoco(); return;
+  }
+
+  const p=EX.p;
+  if(!huecoCoincide(p, txt)){
+    beep(false);
+    exEco('bad','No coincide',`P${p.n} está en ${p.escaneado}, no en ${txt}`);
+    exFoco(); return;
+  }
+
+  if(!confirm(`¿Extraer P${p.n} de ${p.escaneado}?\nSe borra del sistema y el hueco queda libre.`)){
+    exEco('bad','Cancelado','Sigue en el paso 2 si quieres volver a intentarlo');
+    exFoco(); return;
+  }
+
+  const r=res(p);
+  EX_LAST = {contId:c.id, snapshot:JSON.parse(JSON.stringify(p))};
+  c.palets = c.palets.filter(x=>x.n!==p.n);
+  S.extraidos.push({
+    contId:c.id, contCodigo:c.codigo, n:p.n, hueco:p.escaneado,
+    articulo:r.moca||'', total:r.total||0,
+    operario:S.cfg.coordinador||'', ts:new Date().toISOString()
+  });
+  save();
+  EX_N++;
+  beep(true); if(navigator.vibrate) navigator.vibrate([45,60,45]);
+  exEco('good','P'+p.n+' extraído', `Borrado del sistema · hueco ${txt} libre`);
+  $('#ex_ultimo').innerHTML=`Llevas <b>${EX_N}</b> extraídos en esta sesión · último: <b>P${p.n}</b> de <b>${esc(txt)}</b>`
+    + ` · <span style="color:var(--ko)">acuérdate de subir a la nube</span>`;
+  $('#ex_deshacer').disabled=false;
+  EX={p:null, txt:''};
+  renderExtraer(); exPaso(); exFoco();
+}
+$('#ex_scan').addEventListener('keydown',e=>{ if(e.key==='Enter'){ e.preventDefault(); exProcesa(); } });
+$('#ex_scan').addEventListener('change', exProcesa);
+$('#ex_scan').addEventListener('focus', exMarcaFoco);
+$('#ex_scan').addEventListener('blur', ()=>setTimeout(()=>{ exFoco(); exMarcaFoco(); },120));
+setInterval(()=>{ if(VIEW==='extraer') exFoco(); }, 700);
+$('#ex_scanCard').addEventListener('click',e=>{ if(!e.target.closest('button')) exFoco(); });
+$('#ex_cancel').addEventListener('click',()=>{ EX={p:null,txt:''}; exEco('good','Listo','Escanea el QR de un palé'); exPaso(); exFoco(); });
+$('#ex_deshacer').addEventListener('click',()=>{
+  if(!EX_LAST) return;
+  const c=S.conts.find(x=>x.id===EX_LAST.contId);
+  if(!c){ toast('Ese camión ya no existe','ko'); return; }
+  const ultimo=S.extraidos[S.extraidos.length-1];
+  if(ultimo && ultimo.contId===EX_LAST.contId && ultimo.n===EX_LAST.snapshot.n) S.extraidos.pop();
+  c.palets.push(EX_LAST.snapshot);
+  c.palets.sort((a,b)=>a.n-b.n);
+  save(); EX_LAST=null; $('#ex_deshacer').disabled=true;
+  toast('Extracción deshecha','ok'); renderExtraer(); renderDatos();
+});
+$('#ex_sonido').addEventListener('click',()=>{
+  S.cfg.sonido=!S.cfg.sonido; save();
+  $('#ex_sonido').textContent='Sonido: '+(S.cfg.sonido?'activado':'apagado');
+  if(S.cfg.sonido) beep(true);
+});
+
+function renderExtraer(){
+  puertaExtraer();
+  if(!(S.cfg.coordinador||'').trim()) return;
+  const c=cont(), T=$('#extraerTabla');
+  if(!c){ T.innerHTML='<div class="empty">Selecciona un contenedor.</div>'; return; }
+  const ub = c.palets.filter(p=>(p.escaneado||'').trim());
+  if(!ub.length){ T.innerHTML='<div class="empty">No hay palés ubicados en este camión.</div>'; return; }
+  T.innerHTML=`<table><thead><tr>
+    <th>Palé</th><th>Artículo</th><th>Total uds</th><th>Pasillo</th><th>Altura</th><th>Número</th><th>Hueco</th>
+  </tr></thead><tbody>${ub.map(p=>{
+    const r=res(p), s=sitioDe(p);
+    return `<tr><td class="m"><b>P${p.n}</b></td><td class="m">${esc(r.moca||'—')}</td>
+      <td class="m"><b>${r.total||'—'}</b></td><td>${esc(s.pas||'—')}</td><td>${esc(s.alt||'—')}</td>
+      <td>${esc(s.num||'—')}</td><td class="m">${esc(p.escaneado||'—')}</td></tr>`;
+  }).join('')}</tbody></table>`;
+}
+
 /* ================= datos ================= */
 function renderDatos(){
   $('#s_pos').value=S.cfg.pos; $('#s_len').value=S.cfg.len; $('#s_moca').value=S.cfg.moca; $('#s_largo').value=patronTxt(cont());
@@ -4211,7 +4470,24 @@ function renderDatos(){
   const tp=S.conts.reduce((a,c)=>a+c.palets.length,0);
   const tb=S.conts.reduce((a,c)=>a+c.palets.reduce((b,p)=>b+(p.scans||[]).length,0),0);
   $('#d_info').textContent=`${S.conts.length} contenedores · ${tp} palés · ${tb} bultos escaneados.`;
+  renderLogExtraidos();
 }
+function renderLogExtraidos(){
+  const T=$('#ex_log'); if(!T) return;
+  if(!S.extraidos.length){ T.innerHTML='<div class="empty">Todavía no se ha extraído ningún palé.</div>'; return; }
+  const lista=[...S.extraidos].sort((a,b)=>(b.ts||'').localeCompare(a.ts||'')).slice(0,50);
+  T.innerHTML=`<table><thead><tr>
+    <th>Camión</th><th>Palé</th><th>Artículo</th><th>Total uds</th><th>Hueco</th><th>Operario</th><th>Cuándo</th>
+  </tr></thead><tbody>${lista.map(x=>`<tr>
+    <td class="m">${esc(x.contCodigo)}</td><td class="m"><b>P${x.n}</b></td><td class="m">${esc(x.articulo||'—')}</td>
+    <td class="m">${x.total||'—'}</td><td class="m">${esc(x.hueco||'—')}</td><td>${esc(x.operario||'—')}</td>
+    <td>${x.ts?new Date(x.ts).toLocaleString('es-ES'):'—'}</td></tr>`).join('')}</tbody></table>`;
+}
+$('#ex_logClear').addEventListener('click',()=>{
+  if(!S.extraidos.length) return;
+  if(!confirm(`¿Vaciar el registro de ${S.extraidos.length} palés extraídos? Esto no afecta a los palés en sí, sólo borra el historial de extracciones.`)) return;
+  S.extraidos=[]; save(); renderLogExtraidos(); toast('Registro vaciado','ok');
+});
 $('#s_test').addEventListener('input',e=>{
   const v=e.target.value.trim().toUpperCase();
   $('#s_testout').innerHTML = v?`uds <b>${udsDeCodigo(v) ?? '—'}</b> · mocacota <b>${esc(mocacota(v))}</b>`:'';
@@ -4332,7 +4608,7 @@ $('#d_restore').addEventListener('change',e=>{
   r.onload=()=>{ try{
     const d=JSON.parse(r.result); if(!d.conts) throw 0;
     if(!confirm('Esto sustituye los datos del dispositivo. ¿Seguir?')) return;
-    S={cfg:Object.assign({...DEF},d.cfg||{}), ubic:d.ubic||{}, conts:d.conts, sel:d.sel||null};
+    S={cfg:Object.assign({...DEF},d.cfg||{}), ubic:d.ubic||{}, conts:d.conts, sel:d.sel||null, extraidos:d.extraidos||[]};
     migra(); if(!S.sel&&S.conts.length) S.sel=S.conts[0].id;
     save(); render(); toast('Respaldo restaurado','ok');
   }catch(err){ toast('Archivo no válido','ko'); } };
@@ -4368,6 +4644,19 @@ $('#sy_savecfg').addEventListener('click', async ()=>{
   $('#sy_info').textContent = `Conectado a ${SY_CFG.owner}/${SY_CFG.repo} (${SY_CFG.branch}).`;
   toast('Datos de conexión guardados','ok');
 });
+/* Con mala cobertura, fetch() puede quedarse esperando para siempre y la
+   barra de arriba se queda clavada en "Subiendo…"/"Trayendo…". Con esto,
+   si no hay respuesta en 20 s, se cancela y se avisa en vez de colgarse. */
+async function fetchConLimite(url, opts, ms=20000){
+  const ctrl = new AbortController();
+  const aviso = setTimeout(()=>ctrl.abort(), ms);
+  try{
+    return await fetch(url, {...opts, signal: ctrl.signal});
+  }catch(err){
+    if(err.name==='AbortError') throw new Error('Sin respuesta tras '+(ms/1000)+' s (mala cobertura). Prueba de nuevo.');
+    throw new Error('Sin conexión con GitHub. Comprueba la cobertura.');
+  }finally{ clearTimeout(aviso); }
+}
 const SY_PATH = 'sync/datos.json';
 function syUrl(){ return `https://api.github.com/repos/${SY_CFG.owner}/${SY_CFG.repo}/contents/${SY_PATH}?ref=${encodeURIComponent(SY_CFG.branch)}`; }
 let SY_SHA = null;   // se recuerda entre operaciones: evita descargas inútiles
@@ -4378,7 +4667,7 @@ async function syShaRemoto(){
   const dir = SY_PATH.split('/').slice(0,-1).join('/');
   const nombre = SY_PATH.split('/').pop();
   const u = `https://api.github.com/repos/${SY_CFG.owner}/${SY_CFG.repo}/contents/${dir}?ref=${encodeURIComponent(SY_CFG.branch)}`;
-  const r = await fetch(u, {headers:{'Authorization':`Bearer ${SY_CFG.token}`,'Accept':'application/vnd.github+json'}});
+  const r = await fetchConLimite(u, {headers:{'Authorization':`Bearer ${SY_CFG.token}`,'Accept':'application/vnd.github+json'}});
   if(r.status===404) return null;
   if(!r.ok) throw new Error('No se pudo consultar la nube ('+r.status+')');
   const lista = await r.json();
@@ -4388,7 +4677,7 @@ async function syShaRemoto(){
 /* Descarga el contenido en crudo: sin base64 de por medio, así que llega
    más ligero y no hay que descodificarlo a mano. */
 async function syFetchRemoto(){
-  const r = await fetch(syUrl(), {headers:{'Authorization':`Bearer ${SY_CFG.token}`,'Accept':'application/vnd.github.raw'}});
+  const r = await fetchConLimite(syUrl(), {headers:{'Authorization':`Bearer ${SY_CFG.token}`,'Accept':'application/vnd.github.raw'}});
   if(r.status===404){ SY_SHA=null; return {sha:null, datos:null}; }
   if(!r.ok) throw new Error('No se pudo leer la nube ('+r.status+')');
   const texto = await textoDeRespuesta(r);
@@ -4471,13 +4760,13 @@ $('#sy_push').addEventListener('click', async ()=>{
   nubeOcupada(true); pintaNube('Subiendo…','pend');
   try{
     // JSON compacto: sin sangría ocupa cerca de un 40% menos
-    const cuerpo = JSON.stringify({cfg:S.cfg, ubic:S.ubic, conts:S.conts});
+    const cuerpo = JSON.stringify({cfg:S.cfg, ubic:S.ubic, conts:S.conts, extraidos:S.extraidos});
     const {b64, comprimido} = await gzipB64(cuerpo);
     $('#sy_info').textContent = `Subiendo ${kb(b64.length)}…`;
     pintaNube(`Subiendo ${kb(b64.length)}…`,'pend');
 
     if(SY_SHA===null) SY_SHA = await syShaRemoto();   // sólo la primera vez
-    const enviar = async sha => fetch(`https://api.github.com/repos/${SY_CFG.owner}/${SY_CFG.repo}/contents/${SY_PATH}`, {
+    const enviar = async sha => fetchConLimite(`https://api.github.com/repos/${SY_CFG.owner}/${SY_CFG.repo}/contents/${SY_PATH}`, {
       method:'PUT',
       headers:{'Authorization':`Bearer ${SY_CFG.token}`,'Accept':'application/vnd.github+json','Content-Type':'application/json'},
       body: JSON.stringify({message:'Sincronización palés '+new Date().toISOString(), content:b64, branch:SY_CFG.branch, sha:sha||undefined})
@@ -4521,6 +4810,10 @@ $('#sy_pull').addEventListener('click', async ()=>{
     const remUb=(datos.conts||[]).reduce((a,c)=>a+c.palets.filter(p=>(p.escaneado||'').trim()).length,0);
     S.ubic = {...(datos.ubic||{}), ...S.ubic};
     S.conts = syMergeConts(S.conts, datos.conts||[]);
+    if((datos.extraidos||[]).length){
+      const vistos = new Set(S.extraidos.map(x=>x.contId+'|'+x.n+'|'+x.ts));
+      (datos.extraidos||[]).forEach(x=>{ const k=x.contId+'|'+x.n+'|'+x.ts; if(!vistos.has(k)){ vistos.add(k); S.extraidos.push(x); } });
+    }
     if(!S.sel && S.conts.length) S.sel = S.conts[0].id;
     save(); render();
     const ahoraUb=S.conts.reduce((a,c)=>a+c.palets.filter(p=>(p.escaneado||'').trim()).length,0);
