@@ -234,10 +234,6 @@ table input{padding:7px 8px;border-radius:7px;font-size:14px}
 #flash span{font-size:clamp(16px,4.5vw,30px);color:#fff;font-weight:700;margin-top:14px;max-width:900px;white-space:pre-line}
 #flash.ko b{animation:sacude .35s ease}
 @keyframes sacude{0%,100%{transform:translateX(0)}25%{transform:translateX(-12px)}75%{transform:translateX(12px)}}
-.nubebar{display:flex;gap:8px;align-items:center;flex-wrap:wrap;background:#fff;border:1px solid var(--line);
-  border-radius:12px;padding:9px 12px;margin-bottom:12px}
-.nubebar .nubeinfo{font-size:11.5px;color:var(--mute);flex:1;min-width:140px;line-height:1.4}
-.nubebar .nubeinfo b{color:var(--ink)}
 #toast{position:fixed;left:50%;bottom:22px;transform:translateX(-50%) translateY(140%);background:var(--ink);color:#fff;padding:12px 18px;border-radius:10px;font-weight:700;z-index:90;transition:transform .22s;max-width:92vw;text-align:center;font-size:14px}
 #toast.show{transform:translateX(-50%) translateY(0)}
 #toast.ok{background:var(--ok)}#toast.ko{background:var(--ko)}
@@ -527,7 +523,6 @@ details summary{cursor:pointer;font-size:12px;letter-spacing:.1em;text-transform
     <div id="mp_ultimo" class="ultimo">Todavía no has ubicado ningún palé</div>
     <div class="actions">
       <button class="btn gh" id="mp_cancel">Empezar de nuevo</button>
-      <button class="btn pri" id="mp_subir">Subir a la nube</button>
       <button class="btn gh sm" id="mp_sonido">Sonido: activado</button>
     </div>
   </div>
@@ -4011,7 +4006,6 @@ $('#mp_scan').addEventListener('blur', ()=>setTimeout(()=>{ mpFoco(); mpMarcaFoc
 setInterval(()=>{ if(VIEW==='mapa') mpFoco(); }, 700);
 $('#m_scanCard').addEventListener('click',e=>{ if(!e.target.closest('button')) mpFoco(); });
 $('#mp_cancel').addEventListener('click',()=>{ MP={p:null,txt:''}; mpEco('good','Listo','Escanea el QR de un palé'); mpPaso(); mpFoco(); });
-$('#mp_subir').addEventListener('click',()=>{ $('#sy_push').click(); toast('Subiendo a la nube…','ok'); });
 $('#mp_sonido').addEventListener('click',()=>{
   S.cfg.sonido=!S.cfg.sonido; save();
   $('#mp_sonido').textContent='Sonido: '+(S.cfg.sonido?'activado':'apagado');
@@ -4321,7 +4315,10 @@ $('#sy_push').addEventListener('click', async ()=>{
     $('#sy_info').innerHTML = `Subido · ${new Date().toLocaleString('es-ES')}<br>`+
       `<b>${S.conts.length} camiones · ${nb} bultos · ${nub} palés ubicados</b>`+
       (nub===0?' <span style="color:var(--ko)">— ojo: no has subido ninguna ubicación</span>':'');
-    S.cfg.ultimaNube=new Date().toISOString(); save(); pintaNubeInfo();
+    S.cfg.ultimaNube=new Date().toISOString();
+    save();
+    SIN_SUBIR=false;            // save() lo pone a true; aquí ya está todo en la nube
+    pintaNube();
     toast('Datos subidos a la nube','ok');
   }catch(err){ $('#sy_info').textContent='Error al subir: '+err.message; toast('No se pudo subir','ko'); }
 });
@@ -4345,7 +4342,7 @@ $('#sy_pull').addEventListener('click', async ()=>{
       `Ubicados: ${antesUb} → <b>${ahoraUb}</b> · bultos: ${antesB} → <b>${ahoraB}</b><br>`+
       (remUb===0 ? '<span style="color:var(--ko)">En la nube no hay ninguna ubicación: quien ubica no ha subido después de ubicar.</span>'
                  : `En la nube había ${remUb} palés ubicados.`);
-    S.cfg.ultimaNube=new Date().toISOString(); save(); pintaNubeInfo();
+    S.cfg.ultimaNube=new Date().toISOString(); save(); pintaNube();
     toast('Datos combinados','ok');
   }catch(err){ $('#sy_info').textContent='Error al traer: '+err.message; toast('No se pudo traer','ko'); }
 });
@@ -4589,39 +4586,10 @@ function copia(txt,msg){
   if(navigator.clipboard&&window.isSecureContext) navigator.clipboard.writeText(txt).then(ok).catch(fb); else fb();
 }
 
-/* ================= barra de nube en cada pestaña ================= */
-function ponBarrasNube(){
-  ['cont','grab','hist','mapa','datos'].forEach(v=>{
-    const sec=document.getElementById('v-'+v);
-    if(!sec || sec.querySelector('.nubebar')) return;
-    const d=document.createElement('div');
-    d.className='nubebar';
-    d.innerHTML=`<button class="btn gh sm" data-nube="push">Subir a la nube</button>
-      <button class="btn gh sm" data-nube="pull">Traer de la nube</button>
-      <span class="nubeinfo"></span>`;
-    sec.insertBefore(d, sec.firstChild);
-  });
-  pintaNubeInfo();
-}
-function pintaNubeInfo(){
-  const ub=S.conts.reduce((a,c)=>a+c.palets.filter(p=>(p.escaneado||'').trim()).length,0);
-  const nb=S.conts.reduce((a,c)=>a+c.palets.reduce((z,p)=>z+(p.scans||[]).length,0),0);
-  const t=S.cfg.ultimaNube ? new Date(S.cfg.ultimaNube) : null;
-  const txt = t ? `Última vez con la nube: ${t.toLocaleString('es-ES')}` : 'Todavía no has usado la nube en este dispositivo';
-  document.querySelectorAll('.nubeinfo').forEach(e=>{
-    e.innerHTML = `${txt} · <b>${S.conts.length}</b> camiones · <b>${nb}</b> bultos · <b>${ub}</b> ubicados`;
-  });
-}
-document.addEventListener('click',e=>{
-  const b=e.target.closest('[data-nube]');
-  if(!b) return;
-  $(b.dataset.nube==='push' ? '#sy_push' : '#sy_pull').click();
-});
-
 /* ================= arranque ================= */
 (async function(){
   $('#nc_fec').value=new Date().toISOString().slice(0,10);
-  await load(); aplicaFormato(); render(); ponBarrasNube();
+  await load(); aplicaFormato(); render();
   $('#g_sonido').textContent='Sonido: '+(S.cfg.sonido?'activado':'apagado');
   $('#mp_sonido').textContent='Sonido: '+(S.cfg.sonido?'activado':'apagado');
   $('#g_oper').value=S.cfg.operario||''; $('#m_coord').value=S.cfg.coordinador||'';
