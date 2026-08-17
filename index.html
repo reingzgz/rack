@@ -624,9 +624,22 @@ details summary{cursor:pointer;font-size:12px;letter-spacing:.1em;text-transform
 
   <div class="card">
     <h2>Versión</h2>
-    <p class="hint">Si una PDA se comporta distinto a otra, compara este número. Si no coincide, esa PDA tiene una copia antigua guardada: ciérrala del todo y vuelve a abrirla con cobertura.</p>
-    <p style="font-family:var(--mono);font-size:22px;font-weight:800;margin:8px 0 0">v9</p>
-  </div>
+    <p style="font-family:var(--mono);font-size:26px;font-weight:800;margin:0">v10</p>
+    <p class="hint" style="margin:4px 0 0">Publicada el 17/08/2026. Si una PDA muestra otro número, tiene una copia antigua:
+      usa el botón <b>Buscar actualización</b> de más arriba.</p>
+    <details style="margin-top:10px">
+      <summary style="cursor:pointer;font-size:12px;letter-spacing:.1em;text-transform:uppercase;color:var(--mute);font-weight:800">Qué cambia respecto a la v8</summary>
+      <ul class="hint" style="margin:10px 0 0;padding-left:18px;line-height:1.7">
+        <li>Ubicar en Mapa escaneando palé y hueco, sin buscar la línea.</li>
+        <li>Arreglada la sincronización: las ubicaciones ya viajan a la nube.</li>
+        <li>Subir y traer un 69% y un 54% más ligeros.</li>
+        <li>Toda la pantalla en verde o rojo con cada lectura.</li>
+        <li>El aviso de bulto raro sólo salta con un código nuevo en el palé.</li>
+        <li>Anomalías u observaciones por palé, con botones rápidos y búsqueda.</li>
+        <li>Resultados de búsqueda en orden de extracción y copiado con cabeceras.</li>
+        <li>Protecciones contra perder datos: aviso de respaldo, copia de rescate y borrado con confirmación escrita.</li>
+      </ul>
+    </details></div>
 
   <div class="card">
     <h2>Comprobar la cámara</h2>
@@ -4378,12 +4391,37 @@ async function syFetchRemoto(){
   const r = await fetch(syUrl(), {headers:{'Authorization':`Bearer ${SY_CFG.token}`,'Accept':'application/vnd.github.raw'}});
   if(r.status===404){ SY_SHA=null; return {sha:null, datos:null}; }
   if(!r.ok) throw new Error('No se pudo leer la nube ('+r.status+')');
-  const texto = await r.text();
+  const texto = await textoDeRespuesta(r);
   let datos=null;
   try{ datos=JSON.parse(texto); }catch(e){ throw new Error('El archivo de la nube no es válido'); }
   return {sha:SY_SHA, datos};
 }
 const kb = n => (n/1024).toFixed(0)+' KB';
+
+/* Comprime antes de subir: el JSON de la operativa baja alrededor del 90%.
+   Si el navegador es antiguo y no sabe comprimir, se sube en plano. */
+async function gzipB64(texto){
+  if(typeof CompressionStream==='undefined')
+    return {b64: btoa(unescape(encodeURIComponent(texto))), comprimido:false};
+  const flujo = new Blob([texto]).stream().pipeThrough(new CompressionStream('gzip'));
+  const buf = new Uint8Array(await new Response(flujo).arrayBuffer());
+  let s='';
+  const paso=0x8000;
+  for(let i=0;i<buf.length;i+=paso) s += String.fromCharCode.apply(null, buf.subarray(i, i+paso));
+  return {b64: btoa(s), comprimido:true};
+}
+/* Lee la respuesta: si viene comprimida la descomprime, y si viene en texto
+   plano (subida por una versión anterior) la usa tal cual. */
+async function textoDeRespuesta(r){
+  const buf = new Uint8Array(await r.arrayBuffer());
+  if(buf.length>2 && buf[0]===0x1f && buf[1]===0x8b){
+    if(typeof DecompressionStream==='undefined')
+      throw new Error('Este navegador no puede descomprimir. Actualiza Chrome.');
+    const st = new Blob([buf]).stream().pipeThrough(new DecompressionStream('gzip'));
+    return await new Response(st).text();
+  }
+  return new TextDecoder('utf-8').decode(buf);
+}
 function syClaveScan(x){ return x.c+'|'+x.u+'|'+(x.t||''); }
 function syMergePalet(loc, rem){
   if(!loc) return rem;
@@ -4434,7 +4472,7 @@ $('#sy_push').addEventListener('click', async ()=>{
   try{
     // JSON compacto: sin sangría ocupa cerca de un 40% menos
     const cuerpo = JSON.stringify({cfg:S.cfg, ubic:S.ubic, conts:S.conts});
-    const b64 = btoa(unescape(encodeURIComponent(cuerpo)));
+    const {b64, comprimido} = await gzipB64(cuerpo);
     $('#sy_info').textContent = `Subiendo ${kb(b64.length)}…`;
     pintaNube(`Subiendo ${kb(b64.length)}…`,'pend');
 
@@ -4458,6 +4496,7 @@ $('#sy_push').addEventListener('click', async ()=>{
     const seg=((Date.now()-t0)/1000).toFixed(1);
     $('#sy_info').innerHTML = `Subido en ${seg} s · ${new Date().toLocaleString('es-ES')}<br>`+
       `<b>${S.conts.length} camiones · ${nb} bultos · ${nub} palés ubicados</b> · ${kb(b64.length)}`+
+      (comprimido?' comprimido':' sin comprimir')+
       (nub===0?' <span style="color:var(--ko)">— ojo: no has subido ninguna ubicación</span>':'');
     S.cfg.ultimaNube=new Date().toISOString();
     save();
