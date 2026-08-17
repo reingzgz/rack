@@ -37,6 +37,17 @@ header{position:sticky;top:0;z-index:40;background:var(--ink);color:#fff}
 nav{display:flex;overflow-x:auto;background:#1b2126;scrollbar-width:none}
 nav::-webkit-scrollbar{display:none}
 nav button{flex:1 0 auto;background:none;border:0;border-bottom:3px solid transparent;color:#96a2ab;padding:11px 14px;font-size:12px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;cursor:pointer}
+.nube{display:flex;gap:8px;align-items:center;padding:8px 12px;background:#222a30;border-top:1px solid #2f393f}
+.nube .nb{flex:0 0 auto;border:1.5px solid #3c464e;background:#2b343b;color:#fff;font-weight:700;
+  font-size:12.5px;padding:8px 12px;border-radius:8px;cursor:pointer;font-family:inherit;white-space:nowrap}
+.nube .nb:hover{border-color:var(--amber)}
+.nube .nb.sub{background:var(--amber);border-color:var(--amber);color:#171008}
+.nube .nb:disabled{opacity:.5;cursor:wait}
+.nube .nb_est{flex:1;min-width:0;font-size:11.5px;color:#95a1aa;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.nube .nb_est b{color:#fff}
+.nube .nb_est.pend{color:#ffcf8f}
+.nube .nb_est.malo{color:#ff9d92}
+@media (max-width:520px){ .nube .nb{font-size:11.5px;padding:7px 9px} }
 nav button.on{color:#fff;border-bottom-color:var(--amber)}
 
 main{max-width:1180px;margin:0 auto;padding:14px 12px 90px}
@@ -212,6 +223,21 @@ table input{padding:7px 8px;border-radius:7px;font-size:14px}
 #camLee label{color:#95a1aa}
 #camLee input{font-size:34px;text-align:center;padding:12px;letter-spacing:.12em}
 
+/* ---------- destello a pantalla completa ---------- */
+#flash{position:fixed;inset:0;z-index:200;pointer-events:none;opacity:0;transition:opacity .12s;
+  display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:20px}
+#flash.on{opacity:1}
+#flash.ok{background:rgba(10,150,95,.95)}
+#flash.ko{background:rgba(200,35,20,.96)}
+#flash b{font-family:var(--mono);font-size:clamp(46px,16vw,150px);line-height:.95;color:#fff;font-weight:800;
+  letter-spacing:-.02em;word-break:break-word}
+#flash span{font-size:clamp(16px,4.5vw,30px);color:#fff;font-weight:700;margin-top:14px;max-width:900px;white-space:pre-line}
+#flash.ko b{animation:sacude .35s ease}
+@keyframes sacude{0%,100%{transform:translateX(0)}25%{transform:translateX(-12px)}75%{transform:translateX(12px)}}
+.nubebar{display:flex;gap:8px;align-items:center;flex-wrap:wrap;background:#fff;border:1px solid var(--line);
+  border-radius:12px;padding:9px 12px;margin-bottom:12px}
+.nubebar .nubeinfo{font-size:11.5px;color:var(--mute);flex:1;min-width:140px;line-height:1.4}
+.nubebar .nubeinfo b{color:var(--ink)}
 #toast{position:fixed;left:50%;bottom:22px;transform:translateX(-50%) translateY(140%);background:var(--ink);color:#fff;padding:12px 18px;border-radius:10px;font-weight:700;z-index:90;transition:transform .22s;max-width:92vw;text-align:center;font-size:14px}
 #toast.show{transform:translateX(-50%) translateY(0)}
 #toast.ok{background:var(--ok)}#toast.ko{background:var(--ko)}
@@ -262,6 +288,11 @@ details summary{cursor:pointer;font-size:12px;letter-spacing:.1em;text-transform
     <button data-v="mapa">Mapa</button>
     <button data-v="datos">Datos</button>
   </nav>
+  <div class="nube" id="nubeBar">
+    <button class="nb sub" id="nb_push">&#8593; Subir a la nube</button>
+    <button class="nb tra" id="nb_pull">&#8595; Traer de la nube</button>
+    <span class="nb_est" id="nb_est"></span>
+  </div>
 </header>
 
 <main>
@@ -613,6 +644,7 @@ details summary{cursor:pointer;font-size:12px;letter-spacing:.1em;text-transform
     <button class="btn gh sm" id="camSwap">Girar</button>
     <button class="btn gh sm" id="camClose">Cerrar</button></div>
 </div>
+<div id="flash"><b id="flashTit"></b><span id="flashSub"></span></div>
 <div id="toast"></div>
 
 <script>
@@ -2943,8 +2975,20 @@ let VIEW='cont', PAL=null, tSave=null;
 const $  = s=>document.querySelector(s);
 const $$ = s=>Array.from(document.querySelectorAll(s));
 const esc = s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+/* El operario no debería tener que mirar de cerca: toda la pantalla canta
+   el resultado. Verde corto para seguir, rojo más largo para que se pare. */
+function flash(tipo, titulo, sub){
+  const f=$('#flash');
+  if(!f) return;
+  $('#flashTit').textContent=titulo||'';
+  $('#flashSub').textContent=sub||'';
+  f.className='on '+(tipo==='ok'?'ok':'ko');
+  clearTimeout(f._h);
+  f._h=setTimeout(()=>{ f.className=''; }, tipo==='ok'?650:1600);
+}
 function toast(m,k){ const t=$('#toast'); t.textContent=m; t.className='show '+(k||''); clearTimeout(t._h); t._h=setTimeout(()=>t.className='',2200); }
-function save(){ clearTimeout(tSave); tSave=setTimeout(async()=>{
+let SIN_SUBIR=false;
+function save(){ SIN_SUBIR=true; pintaNube(); clearTimeout(tSave); tSave=setTimeout(async()=>{
   await Store.set('palets_cfg',{cfg:S.cfg,ubic:S.ubic,sel:S.sel});
   await Store.set('palets_conts',S.conts);
 },180); }
@@ -3014,6 +3058,36 @@ async function load(){
   if(S.sel && !S.conts.some(x=>x.id===S.sel)) S.sel=null;
   if(!S.sel && S.conts.length) S.sel=S.conts[0].id;
 }
+
+/* ================= barra de nube =================
+   Los mismos botones de Datos, pero visibles desde cualquier pestaña. */
+function contadoresNube(){
+  const cam=S.conts.length;
+  const bul=S.conts.reduce((a,c)=>a+c.palets.reduce((z,p)=>z+((p.scans||[]).length),0),0);
+  const ub=S.conts.reduce((a,c)=>a+c.palets.filter(p=>(p.escaneado||'').trim()).length,0);
+  return {cam,bul,ub};
+}
+function pintaNube(estado, clase){
+  const e=$('#nb_est'); if(!e) return;
+  if(estado!==undefined){ e.innerHTML=estado; e.className='nb_est '+(clase||''); return; }
+  const c=contadoresNube();
+  const ultima=S.cfg.ultimaNube ? new Date(S.cfg.ultimaNube) : null;
+  const base=`<b>${c.cam}</b> camiones · <b>${c.bul}</b> bultos · <b>${c.ub}</b> ubicados`;
+  if(SIN_SUBIR){ e.innerHTML=base+' · sin subir'; e.className='nb_est pend'; }
+  else if(ultima){ e.innerHTML=base+' · al día ('+ultima.toLocaleTimeString('es-ES',{hour:'2-digit',minute:'2-digit'})+')'; e.className='nb_est'; }
+  else { e.innerHTML=base+' · nunca subido'; e.className='nb_est pend'; }
+}
+function nubeOcupada(v){
+  $('#nb_push').disabled=v; $('#nb_pull').disabled=v;
+}
+$('#nb_push').addEventListener('click',async()=>{
+  nubeOcupada(true); pintaNube('Subiendo…','');
+  try{ await syPush(); }finally{ nubeOcupada(false); }
+});
+$('#nb_pull').addEventListener('click',async()=>{
+  nubeOcupada(true); pintaNube('Trayendo…','');
+  try{ await syPull(); }finally{ nubeOcupada(false); }
+});
 
 /* ================= navegación ================= */
 $('#nav').addEventListener('click', e=>{
@@ -3169,6 +3243,7 @@ function beep(ok){
   }catch(e){}
 }
 function eco(clase, grande, chico){
+  flash(clase==='good'?'ok':'ko', grande, chico);
   const e=$('#g_eco');
   e.className='eco on '+clase;
   e.innerHTML=`<span class="big">${esc(grande)}</span><span class="sm">${esc(chico)}</span>`;
@@ -3198,10 +3273,12 @@ function anomaliaDe(cod){
   if(comparaArt && r.moca && mocacota(cod)!==r.moca)
     return {tit:'MAL ESTIRADO', txt:`Este bulto es de otro artículo: el palé es ${r.moca} y este es ${mocacota(cod)}.`};
 
-  // Un bulto que no es igual al anterior: palé mal estirado, o es el pico.
-  const previo = PAL && PAL.scans.length ? PAL.scans[PAL.scans.length-1].c : '';
-  if(previo && cod!==previo)
-    return {tit:'MAL ESTIRADO', txt:`Este bulto no es igual al anterior. Antes: ${previo}. Ahora: ${cod}. Si es el pico del palé, acéptalo.`};
+  // Sólo avisa si el código es NUEVO en este palé. Si ya se ha leído antes
+  // aquí, es un bulto más de los que ya se dieron por buenos y no molesta.
+  const yaLeidos = new Set(((PAL&&PAL.scans)||[]).map(x=>x.c));
+  if(yaLeidos.size && !yaLeidos.has(cod))
+    return {tit:'MAL ESTIRADO',
+            txt:`Este código no se había leído en este palé.\nEn el palé hay: ${[...yaLeidos].join(', ')}\nAhora llega: ${cod}\nSi es el pico o una variante, acéptalo.`};
   return null;
 }
 
@@ -3210,6 +3287,7 @@ let pendCambio={n:null, t:0};
 let pendAnom=null;              // {cod, uds, motivo}
 
 function pideConfirmar(cod, uds, motivo){
+  flash('ko', motivo.tit, motivo.txt);
   // si la cámara está abierta, se cierra: el panel de decisión quedaría tapado
   if($('#camWrap').classList.contains('on') && typeof Cam!=='undefined') Cam.cerrar();
   pendAnom={cod, uds, motivo};
@@ -3820,6 +3898,7 @@ $('#m_coordChg').addEventListener('click',()=>{
 let MP={p:null, txt:''}, MP_N=0;
 
 function mpEco(clase, grande, chico){
+  flash(clase==='good'?'ok':'ko', grande, chico);
   const e=$('#mp_eco');
   e.className='eco on '+clase;
   e.innerHTML=`<span class="big">${esc(grande)}</span><span class="sm">${esc(chico)}</span>`;
@@ -4242,6 +4321,7 @@ $('#sy_push').addEventListener('click', async ()=>{
     $('#sy_info').innerHTML = `Subido · ${new Date().toLocaleString('es-ES')}<br>`+
       `<b>${S.conts.length} camiones · ${nb} bultos · ${nub} palés ubicados</b>`+
       (nub===0?' <span style="color:var(--ko)">— ojo: no has subido ninguna ubicación</span>':'');
+    S.cfg.ultimaNube=new Date().toISOString(); save(); pintaNubeInfo();
     toast('Datos subidos a la nube','ok');
   }catch(err){ $('#sy_info').textContent='Error al subir: '+err.message; toast('No se pudo subir','ko'); }
 });
@@ -4265,6 +4345,7 @@ $('#sy_pull').addEventListener('click', async ()=>{
       `Ubicados: ${antesUb} → <b>${ahoraUb}</b> · bultos: ${antesB} → <b>${ahoraB}</b><br>`+
       (remUb===0 ? '<span style="color:var(--ko)">En la nube no hay ninguna ubicación: quien ubica no ha subido después de ubicar.</span>'
                  : `En la nube había ${remUb} palés ubicados.`);
+    S.cfg.ultimaNube=new Date().toISOString(); save(); pintaNubeInfo();
     toast('Datos combinados','ok');
   }catch(err){ $('#sy_info').textContent='Error al traer: '+err.message; toast('No se pudo traer','ko'); }
 });
@@ -4508,10 +4589,39 @@ function copia(txt,msg){
   if(navigator.clipboard&&window.isSecureContext) navigator.clipboard.writeText(txt).then(ok).catch(fb); else fb();
 }
 
+/* ================= barra de nube en cada pestaña ================= */
+function ponBarrasNube(){
+  ['cont','grab','hist','mapa','datos'].forEach(v=>{
+    const sec=document.getElementById('v-'+v);
+    if(!sec || sec.querySelector('.nubebar')) return;
+    const d=document.createElement('div');
+    d.className='nubebar';
+    d.innerHTML=`<button class="btn gh sm" data-nube="push">Subir a la nube</button>
+      <button class="btn gh sm" data-nube="pull">Traer de la nube</button>
+      <span class="nubeinfo"></span>`;
+    sec.insertBefore(d, sec.firstChild);
+  });
+  pintaNubeInfo();
+}
+function pintaNubeInfo(){
+  const ub=S.conts.reduce((a,c)=>a+c.palets.filter(p=>(p.escaneado||'').trim()).length,0);
+  const nb=S.conts.reduce((a,c)=>a+c.palets.reduce((z,p)=>z+(p.scans||[]).length,0),0);
+  const t=S.cfg.ultimaNube ? new Date(S.cfg.ultimaNube) : null;
+  const txt = t ? `Última vez con la nube: ${t.toLocaleString('es-ES')}` : 'Todavía no has usado la nube en este dispositivo';
+  document.querySelectorAll('.nubeinfo').forEach(e=>{
+    e.innerHTML = `${txt} · <b>${S.conts.length}</b> camiones · <b>${nb}</b> bultos · <b>${ub}</b> ubicados`;
+  });
+}
+document.addEventListener('click',e=>{
+  const b=e.target.closest('[data-nube]');
+  if(!b) return;
+  $(b.dataset.nube==='push' ? '#sy_push' : '#sy_pull').click();
+});
+
 /* ================= arranque ================= */
 (async function(){
   $('#nc_fec').value=new Date().toISOString().slice(0,10);
-  await load(); aplicaFormato(); render();
+  await load(); aplicaFormato(); render(); ponBarrasNube();
   $('#g_sonido').textContent='Sonido: '+(S.cfg.sonido?'activado':'apagado');
   $('#mp_sonido').textContent='Sonido: '+(S.cfg.sonido?'activado':'apagado');
   $('#g_oper').value=S.cfg.operario||''; $('#m_coord').value=S.cfg.coordinador||'';
