@@ -479,6 +479,28 @@ details summary{cursor:pointer;font-size:12px;letter-spacing:.1em;text-transform
     </div>
     <div id="m_aviso" style="margin-top:10px"></div>
   </div>
+
+  <div class="card hide" id="m_scanCard">
+    <div id="mp_paso" class="paso">
+      <div class="pasoN">1</div>
+      <div><b>Escanea el QR del palé</b><i>No hace falta buscarlo en la tabla</i></div>
+    </div>
+    <div class="scanbox">
+      <div class="scanrow">
+        <input id="mp_scan" class="mono" placeholder="Dispara el lector aquí" autocomplete="off" autocapitalize="characters">
+        <button class="camBtn hide" data-cam="mp_scan">&#9723;</button>
+      </div>
+      <div id="mp_foco" class="foco">Listo para escanear</div>
+    </div>
+    <div id="mp_eco" class="eco"></div>
+    <div id="mp_ultimo" class="ultimo">Todavía no has ubicado ningún palé</div>
+    <div class="actions">
+      <button class="btn gh" id="mp_cancel">Empezar de nuevo</button>
+      <button class="btn pri" id="mp_subir">Subir a la nube</button>
+      <button class="btn gh sm" id="mp_sonido">Sonido: activado</button>
+    </div>
+  </div>
+
   <div class="card hide" id="m_tablaCard"><div id="mapaTabla" class="tw"></div></div>
 </section>
 
@@ -548,7 +570,7 @@ details summary{cursor:pointer;font-size:12px;letter-spacing:.1em;text-transform
   <div class="card">
     <h2>Versión</h2>
     <p class="hint">Si una PDA se comporta distinto a otra, compara este número. Si no coincide, esa PDA tiene una copia antigua guardada: ciérrala del todo y vuelve a abrirla con cobertura.</p>
-    <p style="font-family:var(--mono);font-size:22px;font-weight:800;margin:8px 0 0">v8</p>
+    <p style="font-family:var(--mono);font-size:22px;font-weight:800;margin:8px 0 0">v9</p>
   </div>
 
   <div class="card">
@@ -3003,6 +3025,7 @@ $('#nav').addEventListener('click', e=>{
   render();
   if(VIEW==='grab') setTimeout(foco,60);
   if(VIEW==='hist') setTimeout(()=>$('#h_art').focus(),60);
+  if(VIEW==='mapa') setTimeout(()=>{ mpPaso(); mpFoco(); },60);
 });
 function render(){
   renderSelector();
@@ -3359,6 +3382,7 @@ $('#g_operChg').addEventListener('click',()=>{
 $('#g_sonido').addEventListener('click',()=>{
   S.cfg.sonido=!S.cfg.sonido; save();
   $('#g_sonido').textContent='Sonido: '+(S.cfg.sonido?'activado':'apagado');
+  $('#mp_sonido').textContent='Sonido: '+(S.cfg.sonido?'activado':'apagado');
   $('#g_oper').value=S.cfg.operario||''; $('#m_coord').value=S.cfg.coordinador||'';
   if(S.cfg.sonido) beep(true);
 });
@@ -3771,6 +3795,7 @@ function puertaCoordinador(){
   const hay=!!(S.cfg.coordinador||'').trim();
   $('#m_gate').classList.toggle('hide',hay);
   $('#m_card').classList.toggle('hide',!hay);
+  $('#m_scanCard').classList.toggle('hide',!hay);
   $('#m_tablaCard').classList.toggle('hide',!hay);
   $('#m_coordShow').textContent=S.cfg.coordinador||'';
   if(!hay) setTimeout(()=>$('#m_coord').focus(),60);
@@ -3787,6 +3812,131 @@ $('#m_coord').addEventListener('keydown',e=>{ if(e.key==='Enter'){ e.preventDefa
 $('#m_coordChg').addEventListener('click',()=>{
   $('#m_coord').value=S.cfg.coordinador||'';
   S.cfg.coordinador=''; save(); puertaCoordinador();
+});
+
+/* ================= ubicar escaneando =================
+   Dos disparos y listo: el QR del palé y la etiqueta del hueco.
+   Se guarda en el momento, sin buscar la línea en la tabla. */
+let MP={p:null, txt:''}, MP_N=0;
+
+function mpEco(clase, grande, chico){
+  const e=$('#mp_eco');
+  e.className='eco on '+clase;
+  e.innerHTML=`<span class="big">${esc(grande)}</span><span class="sm">${esc(chico)}</span>`;
+  clearTimeout(e._h); e._h=setTimeout(()=>{ e.className='eco'; }, 4000);
+}
+function mpPaso(){
+  const cab=$('#mp_paso');
+  if(!cab) return;
+  if(MP.p){
+    const r=res(MP.p);
+    cab.className='paso ok';
+    cab.innerHTML=`<div class="pasoN">2</div><div><b>P${MP.p.n} cogido · escanea el hueco</b>`+
+      `<i>${esc(r.moca||'sin artículo')} · ${r.total||0} uds${MP.p.tono?' · tono '+esc(MP.p.tono):''}</i></div>`;
+    $('#mp_scan').placeholder='Escanea la etiqueta del rack';
+  }else{
+    cab.className='paso';
+    cab.innerHTML='<div class="pasoN">1</div><div><b>Escanea el QR del palé</b><i>No hace falta buscarlo en la tabla</i></div>';
+    $('#mp_scan').placeholder='Dispara el lector aquí';
+  }
+  mpMarcaFoco();
+}
+function mpMarcaFoco(){
+  const f=$('#mp_foco'); if(!f) return;
+  const activo=document.activeElement===$('#mp_scan');
+  f.className='foco'+(activo?'':' off');
+  f.textContent = activo ? (MP.p?'Listo · escanea el hueco':'Listo · escanea el palé')
+                         : 'Toca el recuadro para seguir escaneando';
+}
+function mpFoco(){
+  if(VIEW!=='mapa') return;
+  if(!(S.cfg.coordinador||'').trim()) return;
+  const cw=$('#camWrap'); if(cw && cw.classList.contains('on')) return;
+  const a=document.activeElement;
+  if(a && a!==document.body && /^(INPUT|TEXTAREA|SELECT)$/.test(a.tagName) && a.id!=='mp_scan') return;
+  const el=$('#mp_scan'); if(!el) return;
+  if(document.activeElement!==el) el.focus();
+  mpMarcaFoco();
+}
+/* Saca pasillo, altura y número de la etiqueta del hueco si tiene un formato
+   reconocible. Si no, la ubicación se guarda igual tal cual se ha leído. */
+function descomponeHueco(scan){
+  const NIV={A:1,B:2,C:3,D:4};
+  const raw=String(scan||'').trim().toUpperCase();
+  let m=raw.match(/^PM\d+[-\s]*(\d{1,3})[-\s]*([A-Z])[-\s]*(\d{1,3})/);
+  if(m && NIV[m[2]]) return {pasillo:String(Number(m[1])), altura:String(NIV[m[2]]), numero:String(Number(m[3]))};
+  m=raw.replace(/[^A-Z0-9]/g,'').match(/(\d{1,3})([A-Z])(\d{1,3})$/);
+  if(m && NIV[m[2]]) return {pasillo:String(Number(m[1])), altura:String(NIV[m[2]]), numero:String(Number(m[3]))};
+  m=raw.match(/^(\d{1,3})[-\s](\d)[-\s](\d{1,3})$/);
+  if(m) return {pasillo:String(Number(m[1])), altura:String(Number(m[2])), numero:String(Number(m[3]))};
+  return null;
+}
+function mpProcesa(){
+  const el=$('#mp_scan'), txt=el.value.trim().toUpperCase();
+  el.value='';
+  if(!txt) return;
+  const c=cont();
+  if(!c){ beep(false); mpEco('bad','Sin camión','Selecciona antes un camión arriba'); return; }
+
+  /* ---- toca el palé ---- */
+  if(!MP.p){
+    if(!esQrPalet(txt)){
+      beep(false); mpEco('bad','Eso no es un palé','Escanea primero el QR del palé'); mpFoco(); return;
+    }
+    const p=buscaPalet(txt);
+    if(!p){ beep(false); mpEco('bad','Palé no encontrado','Ese QR no es de este camión'); mpFoco(); return; }
+    MP.p=p; MP.txt=txt;
+    const r=res(p);
+    beep(true);
+    if((p.escaneado||'').trim())
+      mpEco('bad','P'+p.n+' ya ubicado',`Estaba en ${p.escaneado}. Si escaneas otro hueco, se cambia`);
+    else if(!r.n)
+      mpEco('bad','P'+p.n+' sin grabar','No tiene bultos todavía, pero se puede ubicar');
+    else
+      mpEco('good','P'+p.n, `${r.moca||''} · ${r.total} uds · ahora el hueco`);
+    mpPaso(); mpFoco(); return;
+  }
+
+  /* ---- toca el hueco ---- */
+  if(esQrPalet(txt)){
+    const otro=buscaPalet(txt);
+    if(otro && otro!==MP.p){
+      MP.p=otro; MP.txt=txt; beep(false);
+      mpEco('bad','Cambiado a P'+otro.n,'No habías escaneado el hueco del anterior');
+      mpPaso(); mpFoco(); return;
+    }
+    beep(false); mpEco('bad','Falta el hueco',`Sigues en P${MP.p.n}. Escanea la etiqueta del rack`);
+    mpFoco(); return;
+  }
+
+  const p=MP.p;
+  p.paletScan = MP.txt;
+  p.escaneado = txt;
+  p.coordinador = S.cfg.coordinador || p.coordinador || '';
+  p.ubTs = new Date().toISOString();          // marca propia: así viaja en la sincronización
+  const d = descomponeHueco(txt);
+  if(d){ p.pasillo=d.pasillo; p.altura=d.altura; p.numero=d.numero; }
+  save();
+  MP_N++;
+  beep(true); if(navigator.vibrate) navigator.vibrate(45);
+  mpEco('good','P'+p.n+' ubicado', txt + (d?` · pasillo ${d.pasillo} · altura ${d.altura} · nº ${d.numero}`:''));
+  $('#mp_ultimo').innerHTML=`Llevas <b>${MP_N}</b> ubicados en esta sesión · último: <b>P${p.n}</b> en <b>${esc(txt)}</b>`
+    + ` · <span style="color:var(--ko)">acuérdate de subir a la nube</span>`;
+  MP={p:null, txt:''};
+  renderMapa(); mpPaso(); mpFoco();
+}
+$('#mp_scan').addEventListener('keydown',e=>{ if(e.key==='Enter'){ e.preventDefault(); mpProcesa(); } });
+$('#mp_scan').addEventListener('change', mpProcesa);
+$('#mp_scan').addEventListener('focus', mpMarcaFoco);
+$('#mp_scan').addEventListener('blur', ()=>setTimeout(()=>{ mpFoco(); mpMarcaFoco(); },120));
+setInterval(()=>{ if(VIEW==='mapa') mpFoco(); }, 700);
+$('#m_scanCard').addEventListener('click',e=>{ if(!e.target.closest('button')) mpFoco(); });
+$('#mp_cancel').addEventListener('click',()=>{ MP={p:null,txt:''}; mpEco('good','Listo','Escanea el QR de un palé'); mpPaso(); mpFoco(); });
+$('#mp_subir').addEventListener('click',()=>{ $('#sy_push').click(); toast('Subiendo a la nube…','ok'); });
+$('#mp_sonido').addEventListener('click',()=>{
+  S.cfg.sonido=!S.cfg.sonido; save();
+  $('#mp_sonido').textContent='Sonido: '+(S.cfg.sonido?'activado':'apagado');
+  if(S.cfg.sonido) beep(true);
 });
 
 function renderMapa(){
@@ -3835,6 +3985,7 @@ $('#mapaTabla').addEventListener('input',e=>{
   const p=cont().palets.find(x=>x.n===Number(el.dataset.p)); if(!p) return;
   p[el.dataset.f]=el.value.trim().toUpperCase();
   p.coordinador=S.cfg.coordinador||p.coordinador||'';
+  p.ubTs=new Date().toISOString();
   save();
   const tr=el.closest('tr');
   if(tr) tr.children[7].innerHTML=chipMapa(p);
@@ -4034,12 +4185,33 @@ function syClaveScan(x){ return x.c+'|'+x.u+'|'+(x.t||''); }
 function syMergePalet(loc, rem){
   if(!loc) return rem;
   if(!rem) return loc;
+  // Los bultos se suman: nunca se pierde una lectura de ninguna PDA.
   const vistos = new Set((loc.scans||[]).map(syClaveScan));
   const scans = [...(loc.scans||[])];
   (rem.scans||[]).forEach(x=>{ const k=syClaveScan(x); if(!vistos.has(k)){ vistos.add(k); scans.push(x); } });
   scans.sort((a,b)=> (a.t||'').localeCompare(b.t||''));
-  const masReciente = (loc.ts||'') >= (rem.ts||'') ? loc : rem;
-  return {...masReciente, scans};
+
+  // El resto se fusiona campo a campo. Antes ganaba el palé entero más
+  // reciente, y como ubicar no cambiaba la fecha, la ubicación hecha en otra
+  // PDA se perdía al traerla. Ahora la ubicación viaja por su cuenta.
+  const base = (loc.ts||'') >= (rem.ts||'') ? loc : rem;
+  const out = {...base, scans};
+
+  const ubL = (loc.escaneado||'').trim(), ubR = (rem.escaneado||'').trim();
+  const tsL = loc.ubTs||'', tsR = rem.ubTs||'';
+  let ub = null;
+  if(ubL && ubR) ub = (tsL >= tsR) ? loc : rem;      // ubicados los dos: el más reciente
+  else if(ubL) ub = loc;
+  else if(ubR) ub = rem;
+  if(ub){
+    ['paletScan','escaneado','pasillo','altura','numero','coordManual','coordinador','ubTs','huecoId']
+      .forEach(k=>{ out[k] = ub[k] !== undefined ? ub[k] : out[k]; });
+  }
+  // tono y operario: se queda el que tenga valor
+  ['tono','operario'].forEach(k=>{
+    if(!(out[k]||'').trim()) out[k] = (loc[k]||'').trim() || (rem[k]||'').trim() || out[k];
+  });
+  return out;
 }
 function syMergeConts(locConts, remConts){
   const porId = new Map(locConts.map(c=>[c.id,c]));
@@ -4065,7 +4237,11 @@ $('#sy_push').addEventListener('click', async ()=>{
       body: JSON.stringify({message:'Sincronización palés '+new Date().toISOString(), content:b64, branch:SY_CFG.branch, sha:sha||undefined})
     });
     if(!r.ok) throw new Error('GitHub rechazó la subida ('+r.status+')');
-    $('#sy_info').textContent = 'Subido correctamente · '+new Date().toLocaleString('es-ES');
+    const nub=S.conts.reduce((a,c)=>a+c.palets.filter(p=>(p.escaneado||'').trim()).length,0);
+    const nb=S.conts.reduce((a,c)=>a+c.palets.reduce((z,p)=>z+(p.scans||[]).length,0),0);
+    $('#sy_info').innerHTML = `Subido · ${new Date().toLocaleString('es-ES')}<br>`+
+      `<b>${S.conts.length} camiones · ${nb} bultos · ${nub} palés ubicados</b>`+
+      (nub===0?' <span style="color:var(--ko)">— ojo: no has subido ninguna ubicación</span>':'');
     toast('Datos subidos a la nube','ok');
   }catch(err){ $('#sy_info').textContent='Error al subir: '+err.message; toast('No se pudo subir','ko'); }
 });
@@ -4076,11 +4252,19 @@ $('#sy_pull').addEventListener('click', async ()=>{
     const {datos} = await syFetchRemoto();
     if(!datos){ $('#sy_info').textContent='Todavía no hay nada subido a la nube.'; return; }
     if(!confirm('Se van a combinar los datos de la nube con los de este dispositivo (no se borra nada local). ¿Seguir?')) { $('#sy_info').textContent=''; return; }
+    const antesUb=S.conts.reduce((a,c)=>a+c.palets.filter(p=>(p.escaneado||'').trim()).length,0);
+    const antesB=S.conts.reduce((a,c)=>a+c.palets.reduce((z,p)=>z+(p.scans||[]).length,0),0);
+    const remUb=(datos.conts||[]).reduce((a,c)=>a+c.palets.filter(p=>(p.escaneado||'').trim()).length,0);
     S.ubic = {...(datos.ubic||{}), ...S.ubic};
     S.conts = syMergeConts(S.conts, datos.conts||[]);
     if(!S.sel && S.conts.length) S.sel = S.conts[0].id;
     save(); render();
-    $('#sy_info').textContent = 'Traído y combinado · '+new Date().toLocaleString('es-ES');
+    const ahoraUb=S.conts.reduce((a,c)=>a+c.palets.filter(p=>(p.escaneado||'').trim()).length,0);
+    const ahoraB=S.conts.reduce((a,c)=>a+c.palets.reduce((z,p)=>z+(p.scans||[]).length,0),0);
+    $('#sy_info').innerHTML = `Traído y combinado · ${new Date().toLocaleString('es-ES')}<br>`+
+      `Ubicados: ${antesUb} → <b>${ahoraUb}</b> · bultos: ${antesB} → <b>${ahoraB}</b><br>`+
+      (remUb===0 ? '<span style="color:var(--ko)">En la nube no hay ninguna ubicación: quien ubica no ha subido después de ubicar.</span>'
+                 : `En la nube había ${remUb} palés ubicados.`);
     toast('Datos combinados','ok');
   }catch(err){ $('#sy_info').textContent='Error al traer: '+err.message; toast('No se pudo traer','ko'); }
 });
@@ -4329,6 +4513,7 @@ function copia(txt,msg){
   $('#nc_fec').value=new Date().toISOString().slice(0,10);
   await load(); aplicaFormato(); render();
   $('#g_sonido').textContent='Sonido: '+(S.cfg.sonido?'activado':'apagado');
+  $('#mp_sonido').textContent='Sonido: '+(S.cfg.sonido?'activado':'apagado');
   $('#g_oper').value=S.cfg.operario||''; $('#m_coord').value=S.cfg.coordinador||'';
   if(Cam.hay()&&window.isSecureContext) $$('.camBtn').forEach(b=>b.classList.remove('hide'));
   if('serviceWorker' in navigator && location.protocol.startsWith('http'))
