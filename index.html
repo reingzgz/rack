@@ -244,6 +244,23 @@ table input{padding:7px 8px;border-radius:7px;font-size:14px}
 .etiquetas button:hover{border-color:var(--amber);color:var(--ink)}
 .etiquetas button.on{background:var(--warn-bg);border-color:var(--warn);color:var(--warn);font-weight:700}
 .etiquetas button.limpia{border-color:var(--ko);color:var(--ko)}
+.progresos{display:flex;gap:16px;flex-wrap:wrap;margin-top:6px}
+.progresos .pr{font-size:11.5px;color:var(--mute);display:flex;align-items:center;gap:6px}
+.progresos .pr b{color:var(--ink);font-weight:700}
+.progresos .bar{display:inline-block;width:90px;height:6px;background:#e6eae8;border-radius:99px;overflow:hidden}
+.progresos .bar i{display:block;height:100%;background:var(--ok)}
+.progresos .bar i.ub{background:var(--amber)}
+.editbulto{margin-top:12px;border:2px solid var(--amber);background:#fff8f1;border-radius:12px;padding:14px}
+.editbulto .eb_cab{display:flex;gap:10px;align-items:baseline;flex-wrap:wrap;margin-bottom:10px}
+.editbulto .eb_cab b{font-size:18px}
+.editbulto .eb_cab span{font-size:12px;color:var(--mute);word-break:break-all}
+.eb_fila{display:flex;gap:8px;align-items:stretch}
+.eb_fila input{flex:1;font-size:34px;text-align:center;padding:10px;font-weight:800}
+.eb_pm{flex:0 0 62px;border:1.5px solid var(--ink);background:#fff;border-radius:9px;font-size:28px;
+  font-weight:800;cursor:pointer;font-family:inherit;color:var(--ink)}
+.eb_pm:active{background:var(--ink);color:#fff}
+.tally .t.man{outline:3px solid var(--amber);outline-offset:-3px}
+.tally .t.man::after{content:'✎';position:absolute;top:1px;right:4px;font-size:10px;opacity:.9}
 #toast{position:fixed;left:50%;bottom:22px;transform:translateX(-50%) translateY(140%);background:var(--ink);color:#fff;padding:12px 18px;border-radius:10px;font-weight:700;z-index:90;transition:transform .22s;max-width:92vw;text-align:center;font-size:14px}
 #toast.show{transform:translateX(-50%) translateY(0)}
 #toast.ok{background:var(--ok)}#toast.ko{background:var(--ko)}
@@ -411,6 +428,25 @@ details summary{cursor:pointer;font-size:12px;letter-spacing:.1em;text-transform
     </div>
     <div class="desg" id="r_desg">Todavía sin bultos</div>
     <div id="g_bultos" class="tally"></div>
+
+    <div id="g_edit" class="editbulto hide">
+      <div class="eb_cab">
+        <b id="eb_tit">Bulto</b>
+        <span id="eb_cod" class="mono"></span>
+      </div>
+      <label>Unidades de este bulto</label>
+      <div class="eb_fila">
+        <button class="eb_pm" id="eb_menos">−</button>
+        <input id="eb_uds" type="number" inputmode="numeric" min="0" class="mono">
+        <button class="eb_pm" id="eb_mas">+</button>
+      </div>
+      <div class="etiquetas" id="eb_rapidos"></div>
+      <div class="actions">
+        <button class="btn pri grande" id="eb_guardar">Guardar unidades</button>
+        <button class="btn gh grande dgr" id="eb_quitar">Quitar el bulto</button>
+        <button class="btn gh" id="eb_cerrar">Cancelar</button>
+      </div>
+    </div>
     <div id="g_avisos"></div>
 
     <div class="row" style="margin-top:14px">
@@ -583,6 +619,22 @@ details summary{cursor:pointer;font-size:12px;letter-spacing:.1em;text-transform
   </div>
 
   <div class="card hide" id="ex_scanCard">
+    <div class="row" style="margin-bottom:12px">
+      <div style="flex:1 1 100%">
+        <label>Qué vas a sacar</label>
+        <div class="niveles" id="ex_modo">
+          <button data-m="palet" class="on">El palé entero</button>
+          <button data-m="bulto">Sólo unos bultos</button>
+        </div>
+      </div>
+    </div>
+    <div class="row hide" id="ex_cantWrap" style="margin-bottom:12px">
+      <div style="flex:0 1 180px"><label>Cuántos bultos sacas</label>
+        <input id="ex_cant" type="number" inputmode="numeric" min="1" value="1"></div>
+      <div style="flex:1 1 220px"><label>De qué tamaño (uds por bulto)</label>
+        <select id="ex_tam"><option value="">El más pequeño primero</option></select></div>
+    </div>
+
     <div id="ex_paso" class="paso">
       <div class="pasoN">1</div>
       <div><b>Escanea el QR del palé</b><i>El que vas a sacar del rack</i></div>
@@ -607,6 +659,15 @@ details summary{cursor:pointer;font-size:12px;letter-spacing:.1em;text-transform
     <h2>Ubicados en este camión</h2>
     <p class="hint" style="margin-bottom:10px">Pendientes de extraer. Al confirmarse la extracción, la fila desaparece de aquí.</p>
     <div id="extraerTabla" class="tw"></div>
+  </div>
+
+  <div class="card hide" id="ex_movCard">
+    <h2>Movimientos de entrada y salida</h2>
+    <div class="actions" style="margin:0 0 10px">
+      <button class="btn pri sm" id="ex_movXlsx">Descargar movimientos (Excel)</button>
+      <button class="btn gh sm" id="ex_movTodos">Ver todos los camiones</button>
+    </div>
+    <div id="movTabla" class="tw"></div>
   </div>
 </section>
 
@@ -685,7 +746,7 @@ details summary{cursor:pointer;font-size:12px;letter-spacing:.1em;text-transform
 
   <div class="card">
     <h2>Versión</h2>
-    <p style="font-family:var(--mono);font-size:26px;font-weight:800;margin:0">v12</p>
+    <p style="font-family:var(--mono);font-size:26px;font-weight:800;margin:0">v14</p>
     <p class="hint" style="margin:4px 0 0">Publicada el 17/08/2026. Si una PDA muestra otro número, tiene una copia antigua:
       usa el botón <b>Buscar actualización</b> de más arriba.</p>
     <details style="margin-top:10px" open>
@@ -3188,14 +3249,10 @@ function pintaNube(estado, clase){
 function nubeOcupada(v){
   $('#nb_push').disabled=v; $('#nb_pull').disabled=v;
 }
-$('#nb_push').addEventListener('click',async()=>{
-  nubeOcupada(true); pintaNube('Subiendo…','');
-  try{ await syPush(); }finally{ nubeOcupada(false); }
-});
-$('#nb_pull').addEventListener('click',async()=>{
-  nubeOcupada(true); pintaNube('Trayendo…','');
-  try{ await syPull(); }finally{ nubeOcupada(false); }
-});
+/* La barra de arriba no repite el código: dispara exactamente el mismo botón
+   de la pestaña Datos, que es el que está optimizado y probado. */
+$('#nb_push').addEventListener('click',()=>{ $('#sy_push').click(); });
+$('#nb_pull').addEventListener('click',()=>{ $('#sy_pull').click(); });
 
 /* ================= navegación ================= */
 $('#nav').addEventListener('click', e=>{
@@ -3233,16 +3290,26 @@ function renderConts(){
     const g=c.palets.filter(p=>estadoPalet(p).grabado).length;
     const u=c.palets.filter(p=>estadoPalet(p).okUb).length;
     const uds=c.palets.reduce((a,p)=>a+totalDe(p),0);
+    const conHueco=c.palets.filter(p=>(p.escaneado||'').trim()).length;
     const pct=c.palets.length?Math.round(g/c.palets.length*100):0;
+    const pctU=c.palets.length?Math.round(conHueco/c.palets.length*100):0;
     return `<div class="citem ${c.id===S.sel?'sel':''}">
       <div style="flex:1 1 200px">
         <div class="cid">${esc(c.codigo)} ${c.cerrado?'<span class="chip pend">cerrado</span>':''}</div>
-        <div class="meta">${fmtFecha(c.fecha)} · ${c.palets.length} palés · ${g} grabados · ${u} ubicados · ${uds} uds</div>
+        <div class="meta">${fmtFecha(c.fecha)} · ${c.palets.length} palés · ${uds} uds</div>
+        <div class="progresos">
+          <span class="pr"><b>Grabados</b> ${g}/${c.palets.length}<i class="bar"><i style="width:${pct}%"></i></i></span>
+          <span class="pr"><b>Ubicados</b> ${conHueco}/${c.palets.length}
+            <i class="bar"><i class="ub" style="width:${pctU}%"></i></i></span>
+        </div>
       </div>
-      <div class="bar"><i style="width:${pct}%"></i></div>
+      ${conHueco===c.palets.length&&c.palets.length?'<span class="chip ok">todo ubicado</span>':
+        conHueco?`<span class="chip warn">faltan ${c.palets.length-conHueco} por ubicar</span>`:
+        '<span class="chip pend">sin ubicar</span>'}
       <div style="display:flex;gap:6px;flex-wrap:wrap">
         ${c.id===S.sel?'<span class="chip warn">activo</span>':`<button class="btn gh sm" data-act="sel" data-id="${c.id}">Activar</button>`}
         <button class="btn gh sm" data-act="xlsx" data-id="${c.id}">Excel</button>
+        <button class="btn gh sm" data-act="npal" data-id="${c.id}">Nº de palés</button>
         <button class="btn gh sm" data-act="cerrar" data-id="${c.id}">${c.cerrado?'Reabrir':'Cerrar'}</button>
         <button class="btn gh sm dgr" data-act="del" data-id="${c.id}">Borrar</button>
       </div></div>`;
@@ -3254,11 +3321,48 @@ $('#contList').addEventListener('click', e=>{
   const a=b.dataset.act;
   if(a==='sel'){ S.sel=c.id; PAL=null; }
   if(a==='cerrar') c.cerrado=!c.cerrado;
+  if(a==='npal'){
+    // Caso típico: se imprimieron 30 pegatinas y al final vinieron 22 palés.
+    const conDatos=c.palets.filter(p=>res(p).n || (p.escaneado||'').trim());
+    const ultimo=conDatos.length?Math.max(...conDatos.map(p=>p.n)):0;
+    const v=prompt(`${c.codigo} tiene ahora ${c.palets.length} palés.\n`+
+      (ultimo?`El último con datos es el P${ultimo}.\n`:'')+
+      `\n¿Cuántos palés han venido de verdad?`, String(ultimo||c.palets.length));
+    if(v===null) return;
+    const n=parseInt(v,10);
+    if(!n || n<1 || n>300) return toast('Pon un número entre 1 y 300','ko');
+    if(n<c.palets.length){
+      const sobran=c.palets.filter(p=>p.n>n);
+      const conDatosSobran=sobran.filter(p=>res(p).n || (p.escaneado||'').trim());
+      if(conDatosSobran.length){
+        return toast(`No se puede: P${conDatosSobran.map(p=>p.n).join(', P')} ya tienen datos`,'ko');
+      }
+      c.palets=c.palets.filter(p=>p.n<=n);
+      toast(`${c.codigo} queda con ${n} palés`,'ok');
+    } else if(n>c.palets.length){
+      for(let i=c.palets.length+1;i<=n;i++) c.palets.push(nuevoPalet(i));
+      toast(`${c.codigo} queda con ${n} palés`,'ok');
+    } else toast('Se queda igual','ok');
+  }
   if(a==='xlsx'){ descargaXLSX(hojas([c]), `palets_${c.codigo}_${c.fecha}.xlsx`); return; }
   if(a==='del'){
-    if(!confirm(`¿Borrar ${c.codigo} y sus ${c.palets.length} palés?`)) return;
+    const rr=c.palets.reduce((z,p)=>{ const x=res(p); return {n:z.n+(x.n?1:0), b:z.b+x.n, u:z.u+x.total}; },{n:0,b:0,u:0});
+    const escrito=prompt(`BORRAR ${c.codigo}\n\n`+
+      `Se pierden ${c.palets.length} palés, ${rr.n} grabados, ${rr.b} bultos y ${rr.u} uds.\n\n`+
+      `Escribe el código del camión para confirmarlo:`);
+    if(escrito===null) return;
+    if(escrito.trim().toUpperCase()!==c.codigo.trim().toUpperCase()){
+      toast('El código no coincide: no se ha borrado nada','ko'); return;
+    }
+    Store.set('palets_rescate',{cuando:new Date().toISOString(),
+      estado:{cfg:S.cfg, ubic:S.ubic, conts:S.conts, sel:S.sel, extraidos:S.extraidos}});
     S.conts=S.conts.filter(x=>x.id!==c.id);
+    // si el camión estaba abierto en alguna pantalla, se suelta para no dejar referencias muertas
+    if(typeof PAL!=='undefined' && PAL && !S.conts.some(x=>x.palets.includes(PAL))) PAL=null;
+    if(typeof MP!=='undefined' && MP && MP.p) MP={p:null, txt:''};
+    if(typeof EX!=='undefined' && EX && EX.p) EX={p:null, txt:''};
     if(S.sel===c.id) S.sel=S.conts.length?S.conts[0].id:null;
+    toast(`${c.codigo} borrado · se puede recuperar en Datos`,'ok');
   }
   save(); render();
 });
@@ -3617,6 +3721,7 @@ $('#g_modoChg').addEventListener('click',()=>{
   toast('Lectura por '+(c.modo==='imagen'?'foto del número':'lector de códigos'),'ok');
 });
 function pintaForm(){
+  if($('#g_edit')) { EB_I=null; $('#g_edit').classList.add('hide'); }
   const c=cont(), f=$('#g_form');
   pintaModo();
   if(!PAL||!c){
@@ -3645,21 +3750,70 @@ function pintaBultos(){
   const av=[];
   if(PAL.scans.some(x=>x.dup)) av.push('<span class="chip ko">posible doble lectura en rojo</span>');
   if((PAL.obs||'').trim()) av.push(`<span class="chip warn">observación: ${esc(PAL.obs)}</span>`);
+  const nm=PAL.scans.filter(x=>x.man).length;
+  if(nm) av.push(`<span class="chip warn">${nm} bulto${nm>1?'s':''} con uds corregidas a mano</span>`);
   const na=PAL.scans.filter(x=>x.anom).length;
   if(na) av.push(`<span class="chip warn">${na} bulto${na>1?'s':''} aceptado${na>1?'s':''} con anomalía</span>`);
   $('#g_avisos').innerHTML = av.length?'<div style="margin-top:10px;display:flex;gap:6px;flex-wrap:wrap">'+av.join('')+'</div>':'';
   // contador visual: un cuadro por bulto, ámbar si es un pico
   const ult=PAL.scans.length-1;
   $('#g_bultos').innerHTML = PAL.scans.map((x,i)=>
-    `<div class="t ${x.anom?'anomal':(x.u!==r.udsC?'pico':'')} ${i===ult?'nuevo':''}" data-del="${i}" title="${esc(x.anom||'Tocar para quitar')}">${i+1}<small>${x.u} uds</small></div>`
+    `<div class="t ${x.anom?'anomal':(x.u!==r.udsC?'pico':'')} ${x.man?'man':''} ${i===ult?'nuevo':''}" data-del="${i}"
+       title="${esc(x.c)}${x.man?` · corregido de ${x.uOrig} a ${x.u}`:''}${x.anom?' · '+esc(x.anom):''} · tocar para editar">${i+1}<small>${x.u} uds</small></div>`
   ).join('') || '<div class="hueco"></div><div class="hueco"></div><div class="hueco"></div>';
 }
+/* Al tocar un bulto se puede corregir sus unidades, no sólo quitarlo:
+   hay códigos mal impresos que se leen con la cantidad equivocada. */
+let EB_I=null;
 $('#g_bultos').addEventListener('click',e=>{
   const b=e.target.closest('[data-del]'); if(!b||!PAL) return;
-  const i=Number(b.dataset.del);
-  if(!confirm(`¿Quitar el bulto ${i+1} de ${PAL.scans.length}?`)) { foco(); return; }
-  PAL.scans.splice(i,1); save(); pintaBultos(); foco();
+  abreEdicion(Number(b.dataset.del));
 });
+function abreEdicion(i){
+  if(!PAL || !PAL.scans[i]) return;
+  EB_I=i;
+  const x=PAL.scans[i], r=res(PAL);
+  $('#eb_tit').textContent=`Bulto ${i+1} de ${PAL.scans.length}`;
+  $('#eb_cod').textContent=x.c + (x.uOrig!==undefined?` · leído ${x.uOrig} uds`:'');
+  $('#eb_uds').value=x.u;
+  // atajos con los tamaños que ya hay en el palé
+  const tam=[...new Set(PAL.scans.map(z=>z.u))].sort((a,b)=>b-a);
+  $('#eb_rapidos').innerHTML = tam.map(u=>`<button data-u="${u}">${u} uds</button>`).join('');
+  $('#g_edit').classList.remove('hide');
+  setTimeout(()=>{ $('#eb_uds').focus(); $('#eb_uds').select(); }, 60);
+}
+function cierraEdicion(){ EB_I=null; $('#g_edit').classList.add('hide'); foco(); }
+$('#eb_rapidos').addEventListener('click',e=>{
+  const b=e.target.closest('button[data-u]'); if(!b) return;
+  $('#eb_uds').value=b.dataset.u; $('#eb_uds').focus();
+});
+$('#eb_menos').addEventListener('click',()=>{ const el=$('#eb_uds'); el.value=Math.max(0,(+el.value||0)-1); });
+$('#eb_mas').addEventListener('click',()=>{ const el=$('#eb_uds'); el.value=(+el.value||0)+1; });
+$('#eb_uds').addEventListener('keydown',e=>{ if(e.key==='Enter'){ e.preventDefault(); $('#eb_guardar').click(); } });
+$('#eb_guardar').addEventListener('click',()=>{
+  if(EB_I===null||!PAL) return;
+  const n=parseInt($('#eb_uds').value,10);
+  if(isNaN(n)||n<0) return toast('Pon un número de unidades válido','ko');
+  const x=PAL.scans[EB_I];
+  if(n===x.u){ cierraEdicion(); return; }
+  if(x.uOrig===undefined) x.uOrig=x.u;      // se guarda lo que leyó el lector
+  const antes=x.u;
+  x.u=n; x.man=true; x.manQuien=S.cfg.operario||''; x.manTs=new Date().toISOString();
+  PAL.ts=new Date().toISOString();
+  save(); pintaBultos();
+  const r=res(PAL);
+  eco('good', (n>antes?'+':'')+(n-antes)+' uds', `Bulto ${EB_I+1} corregido de ${antes} a ${n} · total ${r.total} uds`);
+  cierraEdicion();
+});
+$('#eb_quitar').addEventListener('click',()=>{
+  if(EB_I===null||!PAL) return;
+  const x=PAL.scans[EB_I];
+  if(!confirm(`¿Quitar el bulto ${EB_I+1} de ${PAL.scans.length}? Son ${x.u} uds.`)) return;
+  PAL.scans.splice(EB_I,1); save(); pintaBultos();
+  eco('bad','−'+x.u+' uds','Bulto quitado');
+  cierraEdicion();
+});
+$('#eb_cerrar').addEventListener('click', cierraEdicion);
 function renderGrab(){
   puertaOperario(); pintaModo();
   const c=cont(), L=$('#g_list');
@@ -3687,16 +3841,36 @@ $('#g_list').addEventListener('click',e=>{
   pintaForm(); window.scrollTo({top:0,behavior:'smooth'});
   setTimeout(foco,250);
 });
+/* Resumen por artículo y tamaño de bulto: cuántos bultos hay de cada
+   cantidad de unidades y cuántas unidades suman entre todos. */
+function resumenMocacota(cs){
+  const g={};
+  cs.forEach(c=>c.palets.forEach(p=>(p.scans||[]).forEach(x=>{
+    const m=mocacota(x.c), k=m+'|'+x.u;
+    g[k]=g[k]||{moca:m, uds:x.u, bultos:0, palets:new Set()};
+    g[k].bultos++; g[k].palets.add(c.id+'-'+p.n);
+  })));
+  const filas=Object.values(g)
+    .sort((a,b)=> a.moca.localeCompare(b.moca) || b.uds-a.uds)
+    .map(v=>[v.moca, v.uds, v.bultos, v.uds*v.bultos, v.palets.size]);
+  const totB=filas.reduce((a,f)=>a+f[2],0), totU=filas.reduce((a,f)=>a+f[3],0);
+  if(filas.length) filas.push(['TOTAL','',totB,totU,'']);
+  return filas;
+}
+const CAB_RESUMEN=['Mocacota','Uds por bulto','Nº de bultos','Uds totales','Palés'];
+
 $('#g_pack').addEventListener('click',()=>{
   const c=cont(); if(!c) return toast('Selecciona un contenedor','ko');
   const filas=[];
   c.palets.forEach(p=> (p.scans||[]).forEach((x,i)=>{
-    filas.push([c.codigo, fmtFecha(c.fecha), 'P'+p.n, i+1, x.c, mocacota(x.c), x.u, p.tono, coordDe(p),
+    filas.push([c.codigo, fmtFecha(c.fecha), 'P'+p.n, i+1, x.c, mocacota(x.c), x.u,
+                x.uOrig!==undefined?x.uOrig:'', x.man?(x.manQuien||'sí'):'', p.tono, coordDe(p),
                 p.operario||'', x.anom||'', p.obs||'', x.t?new Date(x.t).toLocaleString('es-ES'):'']);
   }));
   if(!filas.length) return toast('Aún no hay bultos escaneados','ko');
   descargaXLSX([
-    {name:'Packing list', header:['Contenedor','Fecha','Palé','Nº bulto','Código bulto','Mocacota','Uds','Tono','Coord','Operario','Anomalía','Observaciones','Hora'], rows:filas},
+    {name:'Packing list', header:['Contenedor','Fecha','Palé','Nº bulto','Código bulto','Mocacota','Uds','Uds leídas','Corregido por','Tono','Coord','Operario','Anomalía','Observaciones','Hora'], rows:filas},
+    {name:'Resumen por artículo', header:CAB_RESUMEN, rows:resumenMocacota([c])},
     {name:'Check list', header:CAB, rows:filasDe([c])}
   ], `packinglist_${c.codigo}_${c.fecha}.xlsx`);
 });
@@ -4273,6 +4447,7 @@ $('#m_copyTabla').addEventListener('click',()=>{
 });
 $('#m_xlsx').addEventListener('click',()=>{ const c=cont(); if(c) descargaXLSX(hojas([c]),`palets_${c.codigo}_${c.fecha}.xlsx`); });
 
+let EX_MODO='palet';   // 'palet' saca el palé entero, 'bulto' sólo unos bultos
 /* ================= extraer ubicación =================
    Proceso contrario a Añadir ubicación: se escanea el palé y el hueco
    donde está guardado; si coinciden, el palé se borra del sistema y el
@@ -4368,7 +4543,7 @@ function exProcesa(){
     if(!(p.escaneado||'').trim()){
       beep(false); exEco('bad','P'+p.n+' sin ubicación','No tiene hueco asignado, nada que extraer'); exFoco(); return;
     }
-    EX.p=p; EX.txt=txt;
+    EX.p=p; EX.txt=txt; exTamanos(p);
     beep(true);
     exEco('good','P'+p.n, `Está en ${p.escaneado} · ahora escanea el hueco`);
     exPaso(); exFoco(); return;
@@ -4396,28 +4571,88 @@ function exProcesa(){
     exFoco(); return;
   }
 
-  if(!confirm(`¿Extraer P${p.n} de ${p.escaneado}?\nSe borra del sistema y el hueco queda libre.`)){
+  const r=res(p);
+
+  /* ---- salida parcial: sólo unos bultos, el palé se queda en su hueco ---- */
+  if(EX_MODO==='bulto'){
+    const cant=Math.max(1, parseInt($('#ex_cant').value,10)||1);
+    const tam=$('#ex_tam').value;
+    let candidatos = tam ? p.scans.filter(x=>String(x.u)===String(tam)) : p.scans.slice();
+    if(!tam) candidatos.sort((a,b)=>a.u-b.u);          // se gastan antes los picos
+    if(!candidatos.length){
+      beep(false); exEco('bad','No hay bultos así', tam?`P${p.n} no tiene bultos de ${tam} uds`:`P${p.n} está vacío`);
+      exFoco(); return;
+    }
+    if(candidatos.length < cant){
+      beep(false); exEco('bad','No hay suficientes',`P${p.n} sólo tiene ${candidatos.length} bulto(s) de ese tipo`);
+      exFoco(); return;
+    }
+    const sacados = candidatos.slice(0, cant);
+    const uds = sacados.reduce((a,x)=>a+x.u,0);
+    if(!confirm(`¿Sacar ${cant} bulto(s) de P${p.n} (${uds} uds)?\n`+
+                `El palé SIGUE en ${p.escaneado} con lo que quede.`)){
+      exEco('bad','Cancelado','Sigue en el paso 2'); exFoco(); return;
+    }
+    EX_LAST = {contId:c.id, n:p.n, parcial:true, snapshot:JSON.parse(JSON.stringify(p.scans))};
+    sacados.forEach(s=>{ const i=p.scans.indexOf(s); if(i>=0) p.scans.splice(i,1); });
+    p.ts=new Date().toISOString();
+    const quedan=res(p);
+    S.extraidos.push({
+      tipo:'bulto', contId:c.id, contCodigo:c.codigo, n:p.n, hueco:p.escaneado,
+      articulo:r.moca||'', bultos:cant, total:uds,
+      restanBultos:quedan.n, restanUds:quedan.total,
+      operario:S.cfg.coordinador||'', ts:new Date().toISOString()
+    });
+    save();
+    EX_N++;
+    beep(true); if(navigator.vibrate) navigator.vibrate([45,60,45]);
+    exEco('good','−'+uds+' uds', `${cant} bulto(s) de P${p.n} · quedan ${quedan.n} bultos y ${quedan.total} uds en ${txt}`);
+    $('#ex_ultimo').innerHTML=`Llevas <b>${EX_N}</b> salidas en esta sesión · última: <b>${cant} bulto(s)</b> de <b>P${p.n}</b>`
+      + ` · el palé sigue en <b>${esc(txt)}</b> · <span style="color:var(--ko)">acuérdate de subir a la nube</span>`;
+    $('#ex_deshacer').disabled=false;
+    EX={p:null, txt:''};
+    renderExtraer(); exPaso(); exFoco();
+    return;
+  }
+
+  /* ---- salida completa: el palé desaparece y el hueco queda libre ---- */
+  if(!confirm(`¿Extraer P${p.n} entero de ${p.escaneado}?\n${r.n} bultos y ${r.total} uds.\nSe borra del sistema y el hueco queda libre.`)){
     exEco('bad','Cancelado','Sigue en el paso 2 si quieres volver a intentarlo');
     exFoco(); return;
   }
 
-  const r=res(p);
   EX_LAST = {contId:c.id, snapshot:JSON.parse(JSON.stringify(p))};
   c.palets = c.palets.filter(x=>x.n!==p.n);
   S.extraidos.push({
-    contId:c.id, contCodigo:c.codigo, n:p.n, hueco:p.escaneado,
-    articulo:r.moca||'', total:r.total||0,
+    tipo:'palet', contId:c.id, contCodigo:c.codigo, n:p.n, hueco:p.escaneado,
+    articulo:r.moca||'', bultos:r.n, total:r.total||0,
+    restanBultos:0, restanUds:0,
     operario:S.cfg.coordinador||'', ts:new Date().toISOString()
   });
   save();
   EX_N++;
   beep(true); if(navigator.vibrate) navigator.vibrate([45,60,45]);
   exEco('good','P'+p.n+' extraído', `Borrado del sistema · hueco ${txt} libre`);
-  $('#ex_ultimo').innerHTML=`Llevas <b>${EX_N}</b> extraídos en esta sesión · último: <b>P${p.n}</b> de <b>${esc(txt)}</b>`
+  $('#ex_ultimo').innerHTML=`Llevas <b>${EX_N}</b> salidas en esta sesión · última: <b>P${p.n}</b> de <b>${esc(txt)}</b>`
     + ` · <span style="color:var(--ko)">acuérdate de subir a la nube</span>`;
   $('#ex_deshacer').disabled=false;
   EX={p:null, txt:''};
   renderExtraer(); exPaso(); exFoco();
+}
+$('#ex_modo').addEventListener('click',e=>{
+  const b=e.target.closest('button[data-m]'); if(!b) return;
+  EX_MODO=b.dataset.m;
+  document.querySelectorAll('#ex_modo button').forEach(x=>x.classList.toggle('on',x===b));
+  $('#ex_cantWrap').classList.toggle('hide', EX_MODO!=='bulto');
+  exPaso(); exFoco();
+});
+/* Los tamaños de bulto se sacan del propio palé al abrirlo. */
+function exTamanos(p){
+  const s=$('#ex_tam'); if(!s) return;
+  const cnt={}; ((p&&p.scans)||[]).forEach(x=>cnt[x.u]=(cnt[x.u]||0)+1);
+  const ks=Object.keys(cnt).map(Number).sort((a,b)=>a-b);
+  s.innerHTML='<option value="">El más pequeño primero</option>'+
+    ks.map(u=>`<option value="${u}">${u} uds · hay ${cnt[u]}</option>`).join('');
 }
 $('#ex_scan').addEventListener('keydown',e=>{ if(e.key==='Enter'){ e.preventDefault(); exProcesa(); } });
 $('#ex_scan').addEventListener('change', exProcesa);
@@ -4431,9 +4666,16 @@ $('#ex_deshacer').addEventListener('click',()=>{
   const c=S.conts.find(x=>x.id===EX_LAST.contId);
   if(!c){ toast('Ese camión ya no existe','ko'); return; }
   const ultimo=S.extraidos[S.extraidos.length-1];
-  if(ultimo && ultimo.contId===EX_LAST.contId && ultimo.n===EX_LAST.snapshot.n) S.extraidos.pop();
-  c.palets.push(EX_LAST.snapshot);
-  c.palets.sort((a,b)=>a.n-b.n);
+  if(ultimo && ultimo.contId===EX_LAST.contId && ultimo.n===EX_LAST.n) S.extraidos.pop();
+  else if(ultimo && ultimo.contId===EX_LAST.contId && EX_LAST.snapshot && ultimo.n===EX_LAST.snapshot.n) S.extraidos.pop();
+  if(EX_LAST.parcial){
+    // salida de bultos: el palé nunca se fue, se le devuelven sus bultos
+    const p=c.palets.find(x=>x.n===EX_LAST.n);
+    if(p) p.scans=EX_LAST.snapshot;
+  } else {
+    c.palets.push(EX_LAST.snapshot);
+    c.palets.sort((a,b)=>a.n-b.n);
+  }
   save(); EX_LAST=null; $('#ex_deshacer').disabled=true;
   toast('Extracción deshecha','ok'); renderExtraer(); renderDatos();
 });
@@ -4446,6 +4688,7 @@ $('#ex_sonido').addEventListener('click',()=>{
 function renderExtraer(){
   puertaExtraer();
   if(!(S.cfg.coordinador||'').trim()) return;
+  renderMovimientos();
   const c=cont(), T=$('#extraerTabla');
   if(!c){ T.innerHTML='<div class="empty">Selecciona un contenedor.</div>'; return; }
   const ub = c.palets.filter(p=>(p.escaneado||'').trim());
@@ -4459,6 +4702,60 @@ function renderExtraer(){
       <td>${esc(s.num||'—')}</td><td class="m">${esc(p.escaneado||'—')}</td></tr>`;
   }).join('')}</tbody></table>`;
 }
+
+/* Historial de movimientos: las entradas salen de cuándo se ubicó cada palé
+   y las salidas del registro de extracciones. */
+let MOV_TODOS=false;
+function movimientos(){
+  const out=[];
+  S.conts.forEach(c=>{
+    if(!MOV_TODOS && cont() && c.id!==cont().id) return;
+    c.palets.forEach(p=>{
+      if((p.escaneado||'').trim()){
+        const r=res(p);
+        out.push({tipo:'ENTRADA', ts:p.ubTs||p.ts||'', cam:c.codigo, n:p.n, hueco:p.escaneado,
+                  articulo:r.moca||'', bultos:r.n, uds:r.total, quien:p.coordinador||'', restan:r.total});
+      }
+    });
+  });
+  (S.extraidos||[]).forEach(x=>{
+    if(!MOV_TODOS && cont() && x.contId!==cont().id) return;
+    out.push({tipo: x.tipo==='bulto'?'SALIDA BULTOS':'SALIDA PALÉ', ts:x.ts||'', cam:x.contCodigo, n:x.n,
+              hueco:x.hueco||'', articulo:x.articulo||'', bultos:x.bultos ?? '', uds:x.total||0,
+              quien:x.operario||'', restan:x.restanUds ?? ''});
+  });
+  return out.sort((a,b)=>String(b.ts).localeCompare(String(a.ts)));
+}
+const CAB_MOV=['Movimiento','Fecha y hora','Camión','Palé','Hueco','Artículo','Bultos','Uds','Quedan uds','Quién'];
+function filaMov(m){
+  return [m.tipo, m.ts?new Date(m.ts).toLocaleString('es-ES'):'', m.cam, 'P'+m.n, m.hueco,
+          m.articulo, m.bultos, m.uds, m.restan, m.quien];
+}
+function renderMovimientos(){
+  const T=$('#movTabla'), C=$('#ex_movCard');
+  if(!C) return;
+  const ms=movimientos();
+  C.classList.toggle('hide', !(S.cfg.coordinador||'').trim());
+  $('#ex_movTodos').textContent = MOV_TODOS ? 'Ver sólo este camión' : 'Ver todos los camiones';
+  if(!ms.length){ T.innerHTML='<div class="empty">Todavía no hay movimientos.</div>'; return; }
+  T.innerHTML=`<table><thead><tr>${CAB_MOV.map(x=>`<th>${x}</th>`).join('')}</tr></thead><tbody>${
+    ms.slice(0,300).map(m=>{
+      const cls = m.tipo==='ENTRADA'?'ok':(m.tipo==='SALIDA PALÉ'?'ko':'warn');
+      return `<tr><td><span class="chip ${cls}">${m.tipo}</span></td>
+        <td>${m.ts?new Date(m.ts).toLocaleString('es-ES'):'—'}</td>
+        <td class="m">${esc(m.cam)}</td><td class="m"><b>P${m.n}</b></td>
+        <td class="m">${esc(m.hueco||'—')}</td><td class="m">${esc(m.articulo||'—')}</td>
+        <td class="m">${m.bultos===''?'—':m.bultos}</td><td class="m"><b>${m.uds}</b></td>
+        <td class="m">${m.restan===''?'—':m.restan}</td><td>${esc(m.quien||'—')}</td></tr>`;
+    }).join('')}</tbody></table>${ms.length>300?`<p class="hint" style="margin-top:8px">Se muestran 300 de ${ms.length}. Descarga el Excel para verlos todos.</p>`:''}`;
+}
+$('#ex_movTodos').addEventListener('click',()=>{ MOV_TODOS=!MOV_TODOS; renderMovimientos(); });
+$('#ex_movXlsx').addEventListener('click',()=>{
+  const ms=movimientos();
+  if(!ms.length) return toast('No hay movimientos','ko');
+  descargaXLSX([{name:'Movimientos', header:CAB_MOV, rows:ms.map(filaMov)}],
+    `movimientos_${new Date().toISOString().slice(0,10)}.xlsx`);
+});
 
 /* ================= datos ================= */
 function renderDatos(){
@@ -4569,9 +4866,12 @@ function hojas(cs){
   const h=[{name:'Palés', header:CAB, rows:filasDe(cs)}];
   const pack=[];
   cs.forEach(c=>c.palets.forEach(p=>(p.scans||[]).forEach((x,i)=>
-    pack.push([c.codigo, fmtFecha(c.fecha), 'P'+p.n, i+1, x.c, mocacota(x.c), x.u, p.tono, coordDe(p),
+    pack.push([c.codigo, fmtFecha(c.fecha), 'P'+p.n, i+1, x.c, mocacota(x.c), x.u,
+               x.uOrig!==undefined?x.uOrig:'', x.man?(x.manQuien||'sí'):'', p.tono, coordDe(p),
                p.operario||'', x.anom||'', p.obs||'', x.t?new Date(x.t).toLocaleString('es-ES'):'']))));
-  if(pack.length) h.push({name:'Packing list', header:['Contenedor','Fecha','Palé','Nº bulto','Código bulto','Mocacota','Uds','Tono','Coord','Operario','Anomalía','Observaciones','Hora'], rows:pack});
+  if(pack.length) h.push({name:'Packing list', header:['Contenedor','Fecha','Palé','Nº bulto','Código bulto','Mocacota','Uds','Uds leídas','Corregido por','Tono','Coord','Operario','Anomalía','Observaciones','Hora'], rows:pack});
+  const rm=resumenMocacota(cs);
+  if(rm.length) h.push({name:'Resumen por artículo', header:CAB_RESUMEN, rows:rm});
   h.push({name:'Resumen', header:['Contenedor','Fecha','Palés','Grabados','Ubicados OK','Bultos','Total uds','Estado'],
     rows:cs.map(c=>[c.codigo, fmtFecha(c.fecha), c.palets.length,
       c.palets.filter(p=>estadoPalet(p).grabado).length,
