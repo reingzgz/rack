@@ -799,7 +799,7 @@ details summary{cursor:pointer;font-size:12px;letter-spacing:.1em;text-transform
 
   <div class="card">
     <h2>Sincronización online</h2>
-    <p class="hint">Los datos operativos no están dentro de esta web pública ni se cargan del navegador. Se guardan en un repositorio <b>privado</b> de GitHub, en <code>sync/datos.json</code>. Al abrir la web todo aparece vacío; introduce la conexión y un token válido y pulsa <b>Traer datos de la nube</b>. Para conservar los cambios de esta sesión, pulsa <b>Subir mis datos a la nube</b> antes de cerrar o recargar.</p>
+    <p class="hint">Los datos operativos no están dentro de esta web pública ni se cargan del navegador. Se guardan en un repositorio <b>privado</b> de GitHub, en <code>sync/datos.json</code>. Al abrir la web todo aparece vacío; introduce la conexión y un token válido y pulsa <b>Traer datos de la nube</b>. Al traer o subir, la aplicación <b>fusiona</b> los datos: no reemplaza el contenido. Los bultos nuevos se añaden y las ubicaciones/extracciones se conservan.</p>
     <div class="row">
       <div><label>Usuario/organización</label><input id="sy_owner" class="mono" placeholder="TU-USUARIO"></div>
       <div><label>Repositorio</label><input id="sy_repo" class="mono" placeholder="TU-REPO"></div>
@@ -3636,7 +3636,7 @@ function apunta(cod, uds, anom){
   const dup = cod===ultimoScan.c && (ahora-ultimoScan.t)<600 && !anom;
   const c=cont();
   if(c && !c.patron) fijaPatron(c,cod);
-  PAL.scans.push({c:cod, u:uds, t:new Date().toISOString(), dup, anom:anom||''});
+  PAL.scans.push({id:syNuevoId(), c:cod, u:uds, t:new Date().toISOString(), dup, anom:anom||''});
   PAL.ts=new Date().toISOString();
   ultimoScan={c:cod, t:ahora};
   pendCambio={n:null,t:0};
@@ -5004,7 +5004,33 @@ async function fetchConLimite(url, opts, ms=20000){
     throw new Error('Sin conexión con GitHub. Comprueba la cobertura.');
   }finally{ clearTimeout(aviso); }
 }
+
 const SY_PATH = 'sync/datos.json';
+
+/* Seguridad/privacidad: cualquier dato que llegue desde el repositorio privado
+   se limpia antes de entrar en memoria. Así un respaldo antiguo con nombres
+   nunca vuelve a introducir identidad personal en la aplicación. */
+function syLimpiaObjetoIdentidad(v){
+  if(Array.isArray(v)){ v.forEach(syLimpiaObjetoIdentidad); return v; }
+  if(v && typeof v==='object'){
+    delete v.operario; delete v.coordinador; delete v.manQuien; delete v.quien;
+    Object.values(v).forEach(syLimpiaObjetoIdentidad);
+  }
+  return v;
+}
+function syLimpiaDatos(datos){
+  if(!datos || typeof datos!=='object') return datos;
+  syLimpiaObjetoIdentidad(datos);
+  return datos;
+}
+/* Los scans nuevos llevan un id único. Esto evita que dos PDAs que lean
+   el mismo código en el mismo segundo puedan confundirse como un duplicado
+   durante la fusión. Los respaldos antiguos siguen usando la clave histórica. */
+function syNuevoId(){
+  try{ if(crypto && crypto.randomUUID) return crypto.randomUUID(); }catch(e){}
+  return 's-'+Date.now().toString(36)+'-'+Math.random().toString(36).slice(2,12);
+}
+
 function syUrl(){ return `https://api.github.com/repos/${SY_CFG.owner}/${SY_CFG.repo}/contents/${SY_PATH}?ref=${encodeURIComponent(SY_CFG.branch)}`; }
 let SY_SHA = null;   // se recuerda entre operaciones: evita descargas inútiles
 
@@ -5030,6 +5056,7 @@ async function syFetchRemoto(){
   const texto = await textoDeRespuesta(r);
   let datos=null;
   try{ datos=JSON.parse(texto); }catch(e){ throw new Error('El archivo de la nube no es válido'); }
+  syLimpiaDatos(datos);
   return {sha:SY_SHA, datos};
 }
 const kb = n => (n/1024).toFixed(0)+' KB';
@@ -5058,10 +5085,12 @@ async function textoDeRespuesta(r){
   }
   return new TextDecoder('utf-8').decode(buf);
 }
-function syClaveScan(x){ return x.c+'|'+x.u+'|'+(x.t||''); }
+function syClaveScan(x){ return x.id ? 'ID|'+x.id : 'LEG|'+x.c+'|'+x.u+'|'+(x.t||''); }
 function syMergePalet(loc, rem){
-  if(!loc) return rem;
-  if(!rem) return loc;
+  if(loc) syLimpiaObjetoIdentidad(loc);
+  if(rem) syLimpiaObjetoIdentidad(rem);
+  if(!loc) return rem ? {...rem, scans:[...(rem.scans||[])]} : rem;
+  if(!rem) return loc ? {...loc, scans:[...(loc.scans||[])]} : loc;
   // Los bultos se suman: nunca se pierde una lectura de ninguna PDA.
   const vistos = new Set((loc.scans||[]).map(syClaveScan));
   const scans = [...(loc.scans||[])];
@@ -5129,45 +5158,100 @@ function syMergeConts(locConts, remConts){
   });
   return [...porId.values()];
 }
+
+/* Integra la nube SIN reemplazar la sesión. Todo se fusiona:
+   - maestro: unión de claves
+   - suelo: gana la anotación más reciente
+   - extracciones: unión sin duplicados
+   - camiones/palés: unión; los scans se añaden y la ubicación más reciente gana
+   Las tumbas de extracción impiden que un palé extraído vuelva a aparecer. */
+function syIntegraRemoto(datos){
+  if(!datos) return;
+  syLimpiaDatos(datos);
+  S.ubic = {...(datos.ubic||{}), ...S.ubic};
+
+  if(datos.suelo){
+    const mio = S.suelo || (S.suelo = {});
+    Object.entries(datos.suelo).forEach(([k,v])=>{
+      if(!v || !v.t) return;
+      if(!mio[k] || String(mio[k].t||'') < String(v.t)){ mio[k] = v; }
+    });
+    if(typeof LAY==='object') LAY.suelo = mio;
+  }
+
+  if((datos.extraidos||[]).length){
+    const vistos = new Set((S.extraidos||[]).map(x=>x.contId+'|'+x.n+'|'+x.tipo+'|'+(x.ts||'')));
+    (datos.extraidos||[]).forEach(x=>{
+      const k=x.contId+'|'+x.n+'|'+x.tipo+'|'+(x.ts||'');
+      if(!vistos.has(k)){ vistos.add(k); S.extraidos.push(x); }
+    });
+  }
+
+  S.conts = syMergeConts(S.conts||[], datos.conts||[]);
+  repasaTumbas();
+  limpiaIdentidad();
+  if(!S.sel && S.conts.length) S.sel = S.conts[0].id;
+}
+function syCuerpoActual(){
+  limpiaIdentidad();
+  return JSON.stringify({cfg:S.cfg, ubic:S.ubic, conts:S.conts, extraidos:S.extraidos, suelo:(S.suelo||{})});
+}
+
 $('#sy_push').addEventListener('click', async ()=>{
   if(!SY_CFG.owner || !SY_CFG.repo || !SY_CFG.token) return toast('Rellena y guarda antes la conexión','ko');
   const t0=Date.now();
-  nubeOcupada(true); pintaNube('Subiendo…','pend');
+  nubeOcupada(true); pintaNube('Fusionando y subiendo…','pend');
   try{
-    // JSON compacto y sin datos de identidad personal.
     limpiaIdentidad();
-    const cuerpo = JSON.stringify({cfg:S.cfg, ubic:S.ubic, conts:S.conts, extraidos:S.extraidos, suelo:(S.suelo||{})});
-    const {b64, comprimido} = await gzipB64(cuerpo);
-    $('#sy_info').textContent = `Subiendo ${kb(b64.length)}…`;
+
+    /* Antes de subir SIEMPRE se lee la versión actual de GitHub y se fusiona
+       con lo que hay en esta PDA. Por tanto subir nunca pisa datos ajenos. */
+    const prepara = async ()=>{
+      SY_SHA = await syShaRemoto();
+      if(SY_SHA){
+        const {datos} = await syFetchRemoto();
+        if(datos) syIntegraRemoto(datos);
+      }
+      const cuerpo = syCuerpoActual();
+      return await gzipB64(cuerpo);
+    };
+
+    let paquete = await prepara();
+    let b64 = paquete.b64, comprimido = paquete.comprimido;
+    $('#sy_info').textContent = `Fusionando y subiendo ${kb(b64.length)}…`;
     pintaNube(`Subiendo ${kb(b64.length)}…`,'pend');
 
-    if(SY_SHA===null) SY_SHA = await syShaRemoto();   // sólo la primera vez
     const enviar = async sha => fetchConLimite(`https://api.github.com/repos/${SY_CFG.owner}/${SY_CFG.repo}/contents/${SY_PATH}`, {
       method:'PUT',
       headers:{'Authorization':`Bearer ${SY_CFG.token}`,'Accept':'application/vnd.github+json','Content-Type':'application/json'},
       body: JSON.stringify({message:'Sincronización palés '+new Date().toISOString(), content:b64, branch:SY_CFG.branch, sha:sha||undefined})
     });
+
     let r = await enviar(SY_SHA);
-    if(r.status===409 || r.status===422){          // otro equipo subió entretanto
-      SY_SHA = await syShaRemoto();
+
+    /* Si otra PDA subió justo entre nuestra lectura y nuestro PUT, volvemos
+       a traer ESA versión, la fusionamos y sólo entonces reintentamos. */
+    if(r.status===409 || r.status===422){
+      paquete = await prepara();
+      b64 = paquete.b64; comprimido = paquete.comprimido;
       r = await enviar(SY_SHA);
     }
+
     if(!r.ok) throw new Error('GitHub rechazó la subida ('+r.status+')');
     const j = await r.json().catch(()=>null);
-    SY_SHA = (j && j.content && j.content.sha) || null;   // así la próxima no consulta nada
+    SY_SHA = (j && j.content && j.content.sha) || null;
 
     const nub=S.conts.reduce((a,c)=>a+c.palets.filter(p=>(p.escaneado||'').trim()).length,0);
     const nb=S.conts.reduce((a,c)=>a+c.palets.reduce((z,p)=>z+(p.scans||[]).length,0),0);
     const seg=((Date.now()-t0)/1000).toFixed(1);
-    $('#sy_info').innerHTML = `Subido en ${seg} s · ${new Date().toLocaleString('es-ES')}<br>`+
+    $('#sy_info').innerHTML = `Fusionado y subido en ${seg} s · ${new Date().toLocaleString('es-ES')}<br>`+
       `<b>${S.conts.length} camiones · ${nb} bultos · ${nub} palés ubicados</b> · ${kb(b64.length)}`+
-      (comprimido?' comprimido':' sin comprimir')+
-      (nub===0?' <span style="color:var(--ko)">— ojo: no has subido ninguna ubicación</span>':'');
+      (comprimido?' comprimido':' sin comprimir');
     S.cfg.ultimaNube=new Date().toISOString();
-    save();
     SIN_SUBIR=false;
     pintaNube();
-    toast(`Subido en ${seg} s`,'ok');
+    render();
+    toast(`Fusionado y subido en ${seg} s`,'ok');
   }catch(err){
     $('#sy_info').textContent='Error al subir: '+err.message;
     pintaNube(); toast('No se pudo subir','ko');
@@ -5176,47 +5260,38 @@ $('#sy_push').addEventListener('click', async ()=>{
 $('#sy_pull').addEventListener('click', async ()=>{
   if(!SY_CFG.owner || !SY_CFG.repo || !SY_CFG.token) return toast('Rellena y guarda antes la conexión','ko');
   const t0=Date.now();
-  nubeOcupada(true); pintaNube('Trayendo…','pend');
-  $('#sy_info').textContent = 'Trayendo…';
+  const habiaSinSubir = SIN_SUBIR;
+  nubeOcupada(true); pintaNube('Trayendo y fusionando…','pend');
+  $('#sy_info').textContent = 'Trayendo y fusionando…';
   try{
+    SY_SHA = await syShaRemoto();
     const {datos} = await syFetchRemoto();
     if(!datos){ $('#sy_info').textContent='Todavía no hay nada subido a la nube.'; pintaNube(); return; }
+
     const antesUb=S.conts.reduce((a,c)=>a+c.palets.filter(p=>(p.escaneado||'').trim()).length,0);
     const antesB=S.conts.reduce((a,c)=>a+c.palets.reduce((z,p)=>z+(p.scans||[]).length,0),0);
     const remUb=(datos.conts||[]).reduce((a,c)=>a+c.palets.filter(p=>(p.escaneado||'').trim()).length,0);
-    S.ubic = {...(datos.ubic||{}), ...S.ubic};
-    /* Suelo del layout: gana la anotación más reciente, venga de donde venga. */
-    if(datos.suelo){
-      const mio = S.suelo || (S.suelo = {});
-      let cambia = false;
-      Object.entries(datos.suelo).forEach(([k,v])=>{
-        if(!v || !v.t) return;
-        if(!mio[k] || String(mio[k].t||'') < String(v.t)){ mio[k] = v; cambia = true; }
-      });
-      if(cambia && typeof LAY==='object') LAY.suelo = mio;
-    }
-    // Las extracciones se fusionan ANTES que los palés: así, si un palé se
-    // extrajo en otra PDA, su "tumba" ya está disponible al decidir si un
-    // palé que llega de la nube debe resucitarse o no.
-    if((datos.extraidos||[]).length){
-      const vistos = new Set(S.extraidos.map(x=>x.contId+'|'+x.n+'|'+x.ts));
-      (datos.extraidos||[]).forEach(x=>{ const k=x.contId+'|'+x.n+'|'+x.ts; if(!vistos.has(k)){ vistos.add(k); S.extraidos.push(x); } });
-    }
-    S.conts = syMergeConts(S.conts, datos.conts||[]);
-    repasaTumbas();
-    if(!S.sel && S.conts.length) S.sel = S.conts[0].id;
-    save(); render();
+
+    syIntegraRemoto(datos);
+    render();
+
     const ahoraUb=S.conts.reduce((a,c)=>a+c.palets.filter(p=>(p.escaneado||'').trim()).length,0);
     const ahoraB=S.conts.reduce((a,c)=>a+c.palets.reduce((z,p)=>z+(p.scans||[]).length,0),0);
     const seg=((Date.now()-t0)/1000).toFixed(1);
-    $('#sy_info').innerHTML = `Traído en ${seg} s · ${new Date().toLocaleString('es-ES')}<br>`+
+
+    $('#sy_info').innerHTML = `Traído y fusionado en ${seg} s · ${new Date().toLocaleString('es-ES')}<br>`+
       `Ubicados: ${antesUb} → <b>${ahoraUb}</b> · bultos: ${antesB} → <b>${ahoraB}</b><br>`+
-      (remUb===0 ? '<span style="color:var(--ko)">En la nube no hay ninguna ubicación: quien ubica no ha subido después de ubicar.</span>'
-                 : `En la nube había ${remUb} palés ubicados.`);
-    S.cfg.ultimaNube=new Date().toISOString(); save(); pintaNube();
-    toast(`Traído en ${seg} s · ${ahoraB-antesB} bultos nuevos`,'ok');
-  }catch(err){ $('#sy_info').textContent='Error al traer: '+err.message; pintaNube(); toast('No se pudo traer','ko'); }
-  finally{ nubeOcupada(false); }
+      `En la nube había ${remUb} palés ubicados. No se ha reemplazado la sesión: se ha fusionado.`;
+
+    S.cfg.ultimaNube=new Date().toISOString();
+    SIN_SUBIR = habiaSinSubir;   // traer no convierte datos remotos en cambios pendientes
+    pintaNube();
+    toast(`Fusionado · ${Math.max(0,ahoraB-antesB)} bultos añadidos`,'ok');
+  }catch(err){
+    $('#sy_info').textContent='Error al traer: '+err.message;
+    SIN_SUBIR = habiaSinSubir;
+    pintaNube(); toast('No se pudo traer','ko');
+  }finally{ nubeOcupada(false); }
 });
 syCargaCfg();
 
