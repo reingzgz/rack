@@ -421,7 +421,7 @@ details summary{cursor:pointer;font-size:12px;letter-spacing:.1em;text-transform
 <!-- ============ GRABAR PALÉ ============ -->
 <section id="v-grab" class="hide">
 
-  <div class="card" id="g_gate">
+  <div class="card hide" id="g_gate">
     <h2>¿Quién está descargando?</h2>
     <label for="g_oper">Nombre del operario</label>
     <input id="g_oper" placeholder="Escribe tu nombre" autocomplete="off" autocapitalize="words" style="font-size:19px;padding:15px">
@@ -430,7 +430,7 @@ details summary{cursor:pointer;font-size:12px;letter-spacing:.1em;text-transform
   </div>
 
   <div class="card hide" id="g_card">
-    <div class="quien">
+    <div class="quien hide">
       <label>Operario</label>
       <b id="g_operShow" class="mono"></b>
       <button class="btn gh sm" id="g_operChg">Cambiar</button>
@@ -668,7 +668,7 @@ details summary{cursor:pointer;font-size:12px;letter-spacing:.1em;text-transform
 
 <!-- ============ MAPA ============ -->
 <section id="v-mapa" class="hide">
-  <div class="card" id="m_gate">
+  <div class="card hide" id="m_gate">
     <h2>¿Quién está ubicando?</h2>
     <label for="m_coord">Nombre del coordinador</label>
     <input id="m_coord" placeholder="Escribe tu nombre" autocomplete="off" autocapitalize="words" style="font-size:19px;padding:15px">
@@ -677,7 +677,7 @@ details summary{cursor:pointer;font-size:12px;letter-spacing:.1em;text-transform
   </div>
 
   <div class="card hide" id="m_card">
-    <div class="quien">
+    <div class="quien hide">
       <label>Coordinador</label>
       <b id="m_coordShow" class="mono"></b>
       <button class="btn gh sm" id="m_coordChg">Cambiar</button>
@@ -717,7 +717,7 @@ details summary{cursor:pointer;font-size:12px;letter-spacing:.1em;text-transform
 
 <!-- ============ EXTRAER UBICACIÓN ============ -->
 <section id="v-extraer" class="hide">
-  <div class="card" id="ex_gate">
+  <div class="card hide" id="ex_gate">
     <h2>¿Quién está extrayendo?</h2>
     <label for="ex_coord">Nombre del operario</label>
     <input id="ex_coord" placeholder="Escribe tu nombre" autocomplete="off" autocapitalize="words" style="font-size:19px;padding:15px">
@@ -726,7 +726,7 @@ details summary{cursor:pointer;font-size:12px;letter-spacing:.1em;text-transform
   </div>
 
   <div class="card hide" id="ex_card">
-    <div class="quien">
+    <div class="quien hide">
       <label>Operario</label>
       <b id="ex_coordShow" class="mono"></b>
       <button class="btn gh sm" id="ex_coordChg">Cambiar</button>
@@ -865,7 +865,7 @@ details summary{cursor:pointer;font-size:12px;letter-spacing:.1em;text-transform
 
   <div class="card">
     <h2>Versión</h2>
-    <p style="font-family:var(--mono);font-size:26px;font-weight:800;margin:0">v15</p>
+    <p style="font-family:var(--mono);font-size:26px;font-weight:800;margin:0">v16 · sin nombres</p>
     <p class="hint" style="margin:4px 0 0">Publicada el 26/08/2026. Si una PDA muestra otro número, tiene una copia antigua:
       usa el botón <b>Buscar actualización</b> de más arriba.</p>
     <details style="margin-top:10px" open>
@@ -3260,7 +3260,7 @@ const Store = (()=>{
   };
 })();
 
-const DEF = {pos:3, len:2, moca:12, sonido:true, largo:0, operario:'', coordinador:''};
+const DEF = {pos:3, len:2, moca:12, sonido:true, largo:0};
 let S = {cfg:{...DEF}, ubic:{}, conts:[], sel:null, extraidos:[]};
 let VIEW='cont', PAL=null, tSave=null;
 
@@ -3280,7 +3280,7 @@ function flash(tipo, titulo, sub){
 }
 function toast(m,k){ const t=$('#toast'); t.textContent=m; t.className='show '+(k||''); clearTimeout(t._h); t._h=setTimeout(()=>t.className='',2200); }
 let SIN_SUBIR=false;
-function save(){ SIN_SUBIR=true; if(typeof layInvalida==='function') layInvalida(); pintaNube(); clearTimeout(tSave); tSave=setTimeout(async()=>{
+function save(){ delete S.cfg.operario; delete S.cfg.coordinador; S.conts.forEach(c=>c.palets.forEach(p=>{delete p.operario;delete p.coordinador;(p.scans||[]).forEach(x=>delete x.manQuien);})); S.extraidos.forEach(x=>delete x.operario); SIN_SUBIR=true; if(typeof layInvalida==='function') layInvalida(); pintaNube(); clearTimeout(tSave); tSave=setTimeout(async()=>{
   await Store.set('palets_cfg',{cfg:S.cfg,ubic:S.ubic,sel:S.sel});
   await Store.set('palets_conts',S.conts);
   await Store.set('palets_extraidos',S.extraidos);
@@ -3327,7 +3327,7 @@ function estadoPalet(p){
   return {grabado, ubicado:!!co, okUb};
 }
 const cont = ()=> S.conts.find(c=>c.id===S.sel) || null;
-const nuevoPalet = n => ({n, scans:[], tono:'', obs:'', pasillo:'', altura:'', numero:'', paletScan:'', escaneado:'', coordManual:'', ts:null, operario:'', coordinador:''});
+const nuevoPalet = n => ({n, scans:[], tono:'', obs:'', pasillo:'', altura:'', numero:'', paletScan:'', escaneado:'', coordManual:'', ts:null});
 const qrTexto = (c,p)=> `P${p.n} ${c.codigo} ${fmtFecha(c.fecha)}`;
 
 /* migración desde el formato antiguo (bultos completos + pico) */
@@ -3366,6 +3366,10 @@ async function load(){
   if(c){ S.cfg=Object.assign({...DEF},c.cfg||{}); S.ubic=c.ubic||{}; S.sel=c.sel||null; }
   S.conts = (await Store.get('palets_conts')) || [];
   S.extraidos = (await Store.get('palets_extraidos')) || [];
+  // Privacidad: esta versión no guarda ni conserva nombres de personas.
+  delete S.cfg.operario; delete S.cfg.coordinador;
+  S.conts.forEach(c=>c.palets.forEach(p=>{ delete p.operario; delete p.coordinador; (p.scans||[]).forEach(x=>delete x.manQuien); }));
+  S.extraidos.forEach(x=>delete x.operario);
   migra();
   if(repasaTumbas()) save();
   if(S.sel && !S.conts.some(x=>x.id===S.sel)) S.sel=null;
@@ -3676,7 +3680,7 @@ function apunta(cod, uds, anom){
   if(c && !c.patron) fijaPatron(c,cod);
   PAL.scans.push({c:cod, u:uds, t:new Date().toISOString(), dup, anom:anom||''});
   PAL.ts=new Date().toISOString();
-  PAL.operario=S.cfg.operario||PAL.operario||'';
+
   ultimoScan={c:cod, t:ahora};
   pendCambio={n:null,t:0};
   save(); pintaBultos();
@@ -3732,7 +3736,7 @@ function entra(txt, deFoto){
 function procesaScan(){ const el=$('#g_scan'), t=el.value; el.value=''; entra(t,false); }
 function abre(p, txt){
   PAL=p; ultimoScan={c:'',t:0}; pendCambio={n:null,t:0};
-  if(!PAL.operario) PAL.operario=S.cfg.operario||'';
+
   const r=res(PAL);
   beep(true);
   eco('good','P'+PAL.n, r.n ? `Ya tenía ${r.n} bultos · seguirá sumando` : 'Empieza a escanear los bultos');
@@ -3750,7 +3754,7 @@ $('#g_scan').addEventListener('change', procesaScan);
 /* El foco no se pierde: el operario no debe tocar la pantalla entre lecturas. */
 function foco(){
   if(VIEW!=='grab') return;
-  if(!(S.cfg.operario||'').trim()) return;
+
   const a=document.activeElement;
   if($('#camWrap').classList.contains('on')) return;
   if(a && a!==document.body && /^(INPUT|TEXTAREA|SELECT)$/.test(a.tagName) && a.id!=='g_scan') return;
@@ -3818,29 +3822,25 @@ function pintaObsTags(){
 }
 $('#g_tono').addEventListener('keydown',e=>{ if(e.key==='Enter'){ e.preventDefault(); foco(); } });
 function puertaOperario(){
-  const hay=!!(S.cfg.operario||'').trim();
+  const hay=true;
   $('#g_gate').classList.toggle('hide',hay);
   $('#g_card').classList.toggle('hide',!hay);
   if(!hay) $('#g_form').classList.add('hide');
-  $('#g_operShow').textContent=S.cfg.operario||'';
+  $('#g_operShow').textContent='';
   if(hay) foco(); else setTimeout(()=>$('#g_oper').focus(),60);
 }
-function entraOperario(){
-  const v=$('#g_oper').value.trim();
-  if(v.length<2){ beep(false); toast('Escribe tu nombre para empezar','ko'); $('#g_oper').focus(); return; }
-  S.cfg.operario=v; save(); puertaOperario(); toast('Hola, '+v,'ok');
-}
+function entraOperario(){ puertaOperario(); foco(); }
 $('#g_start').addEventListener('click',entraOperario);
 $('#g_oper').addEventListener('keydown',e=>{ if(e.key==='Enter'){ e.preventDefault(); entraOperario(); } });
 $('#g_operChg').addEventListener('click',()=>{
   if(PAL) cierraPalet(true);
-  $('#g_oper').value=S.cfg.operario||''; $('#m_coord').value=S.cfg.coordinador||''; S.cfg.operario=''; save(); puertaOperario();
+  puertaOperario();
 });
 $('#g_sonido').addEventListener('click',()=>{
   S.cfg.sonido=!S.cfg.sonido; save();
   $('#g_sonido').textContent='Sonido: '+(S.cfg.sonido?'activado':'apagado');
   $('#mp_sonido').textContent='Sonido: '+(S.cfg.sonido?'activado':'apagado');
-  $('#g_oper').value=S.cfg.operario||''; $('#m_coord').value=S.cfg.coordinador||'';
+  $('#g_oper').value=''; $('#m_coord').value=''; $('#ex_coord').value='';
   if(S.cfg.sonido) beep(true);
 });
 
@@ -3942,7 +3942,7 @@ $('#eb_guardar').addEventListener('click',()=>{
   if(n===x.u){ cierraEdicion(); return; }
   if(x.uOrig===undefined) x.uOrig=x.u;      // se guarda lo que leyó el lector
   const antes=x.u;
-  x.u=n; x.man=true; x.manQuien=S.cfg.operario||''; x.manTs=new Date().toISOString();
+  x.u=n; x.man=true; x.manTs=new Date().toISOString();
   PAL.ts=new Date().toISOString();
   save(); pintaBultos();
   const r=res(PAL);
@@ -4276,7 +4276,7 @@ function filtroPalets(){
       if(!r.n && !co) return;
       if(SOLO_OBS && !(p.obs||'').trim()) return;
       if(q){
-        const t=[r.cod,r.moca,p.tono,co,p.escaneado,c.codigo,'P'+p.n,p.operario,p.coordinador,p.obs,
+        const t=[r.cod,r.moca,p.tono,co,p.escaneado,c.codigo,'P'+p.n,p.obs,
                  layoutDe(p),String(r.total)].join(' ').toUpperCase();
         const enBultos=(p.scans||[]).some(x=>x.c.toUpperCase().includes(q));
         if(!t.includes(q) && !enBultos) return;
@@ -4377,7 +4377,7 @@ $('#h_xlsx').addEventListener('click',()=>{
     if(!rows.length) return toast('No hay resultados','ko');
     descargaXLSX([{name:'Bultos', header:['Camión','Fecha','Palé','Nº bulto','Código bulto','Uds','Artículo','Tono','Ubicación','Operario','Coordinador','Anomalía','Observaciones','Hora'],
       rows:rows.map(({c,p,x,i,co})=>[c.codigo,fmtFecha(c.fecha),'P'+p.n,i+1,x.c,x.u,mocacota(x.c),p.tono,co,
-        p.operario||'',p.coordinador||'',x.anom||'',p.obs||'',x.t?new Date(x.t).toLocaleString('es-ES'):''])}], nom);
+        x.anom||'',p.obs||'',x.t?new Date(x.t).toLocaleString('es-ES'):''])}], nom);
     return;
   }
   if(NIVEL==='cont'){
@@ -4395,26 +4395,19 @@ $('#h_xlsx').addEventListener('click',()=>{
 /* ================= mapa ================= */
 /* Puerta del coordinador: sin nombre no se ve la tabla. */
 function puertaCoordinador(){
-  const hay=!!(S.cfg.coordinador||'').trim();
+  const hay=true;
   $('#m_gate').classList.toggle('hide',hay);
   $('#m_card').classList.toggle('hide',!hay);
   $('#m_scanCard').classList.toggle('hide',!hay);
   $('#m_tablaCard').classList.toggle('hide',!hay);
-  $('#m_coordShow').textContent=S.cfg.coordinador||'';
+  $('#m_coordShow').textContent='';
   if(!hay) setTimeout(()=>$('#m_coord').focus(),60);
 }
-function entraCoordinador(){
-  const v=$('#m_coord').value.trim();
-  if(v.length<2){ toast('Escribe tu nombre para empezar','ko'); $('#m_coord').focus(); return; }
-  S.cfg.coordinador=v; save();
-  puertaCoordinador(); renderMapa();
-  toast('Hola, '+v,'ok');
-}
+function entraCoordinador(){ puertaCoordinador(); renderMapa(); }
 $('#m_start').addEventListener('click',entraCoordinador);
 $('#m_coord').addEventListener('keydown',e=>{ if(e.key==='Enter'){ e.preventDefault(); entraCoordinador(); } });
 $('#m_coordChg').addEventListener('click',()=>{
-  $('#m_coord').value=S.cfg.coordinador||'';
-  S.cfg.coordinador=''; save(); puertaCoordinador();
+  puertaCoordinador();
 });
 
 /* ================= ubicar escaneando =================
@@ -4454,7 +4447,7 @@ function mpMarcaFoco(){
 }
 function mpFoco(){
   if(VIEW!=='mapa') return;
-  if(!(S.cfg.coordinador||'').trim()) return;
+
   const cw=$('#camWrap'); if(cw && cw.classList.contains('on')) return;
   const a=document.activeElement;
   if(a && a!==document.body && /^(INPUT|TEXTAREA|SELECT)$/.test(a.tagName) && a.id!=='mp_scan') return;
@@ -4516,7 +4509,7 @@ function mpProcesa(){
   const p=MP.p;
   p.paletScan = MP.txt;
   p.escaneado = txt;
-  p.coordinador = S.cfg.coordinador || p.coordinador || '';
+
   p.ubTs = new Date().toISOString();          // marca propia: así viaja en la sincronización
   const d = descomponeHueco(txt);
   if(d){ p.pasillo=d.pasillo; p.altura=d.altura; p.numero=d.numero; }
@@ -4544,7 +4537,7 @@ $('#mp_sonido').addEventListener('click',()=>{
 
 function renderMapa(){
   puertaCoordinador();
-  if(!(S.cfg.coordinador||'').trim()) return;
+
   const c=cont(), T=$('#mapaTabla');
   if(!c){ T.innerHTML='<div class="empty">Selecciona un contenedor.</div>'; $('#m_aviso').innerHTML=''; return; }
   const n=Object.keys(S.ubic).length;
@@ -4587,7 +4580,7 @@ $('#mapaTabla').addEventListener('input',e=>{
   const el=e.target; if(!el.dataset.f) return;
   const p=cont().palets.find(x=>x.n===Number(el.dataset.p)); if(!p) return;
   p[el.dataset.f]=el.value.trim().toUpperCase();
-  p.coordinador=S.cfg.coordinador||p.coordinador||'';
+
   p.ubTs=new Date().toISOString();
   save();
   const tr=el.closest('tr');
@@ -4616,26 +4609,19 @@ let EX_MODO='palet';   // 'palet' saca el palé entero, 'bulto' sólo unos bulto
 let EX={p:null, txt:''}, EX_N=0, EX_LAST=null;
 
 function puertaExtraer(){
-  const hay=!!(S.cfg.coordinador||'').trim();
+  const hay=true;
   $('#ex_gate').classList.toggle('hide',hay);
   $('#ex_card').classList.toggle('hide',!hay);
   $('#ex_scanCard').classList.toggle('hide',!hay);
   $('#ex_tablaCard').classList.toggle('hide',!hay);
-  $('#ex_coordShow').textContent=S.cfg.coordinador||'';
+  $('#ex_coordShow').textContent='';
   if(!hay) setTimeout(()=>$('#ex_coord').focus(),60);
 }
-function entraExtraer(){
-  const v=$('#ex_coord').value.trim();
-  if(v.length<2){ toast('Escribe tu nombre para empezar','ko'); $('#ex_coord').focus(); return; }
-  S.cfg.coordinador=v; save();
-  puertaExtraer(); renderExtraer();
-  toast('Hola, '+v,'ok');
-}
+function entraExtraer(){ puertaExtraer(); renderExtraer(); }
 $('#ex_start').addEventListener('click',entraExtraer);
 $('#ex_coord').addEventListener('keydown',e=>{ if(e.key==='Enter'){ e.preventDefault(); entraExtraer(); } });
 $('#ex_coordChg').addEventListener('click',()=>{
-  $('#ex_coord').value=S.cfg.coordinador||'';
-  S.cfg.coordinador=''; save(); puertaExtraer();
+  puertaExtraer();
 });
 
 function exEco(clase, grande, chico){
@@ -4669,7 +4655,7 @@ function exMarcaFoco(){
 }
 function exFoco(){
   if(VIEW!=='extraer') return;
-  if(!(S.cfg.coordinador||'').trim()) return;
+
   const cw=$('#camWrap'); if(cw && cw.classList.contains('on')) return;
   const a=document.activeElement;
   if(a && a!==document.body && /^(INPUT|TEXTAREA|SELECT)$/.test(a.tagName) && a.id!=='ex_scan') return;
@@ -4761,7 +4747,7 @@ function exProcesa(){
       tipo:'bulto', contId:c.id, contCodigo:c.codigo, n:p.n, hueco:p.escaneado,
       articulo:r.moca||'', bultos:cant, total:uds,
       restanBultos:quedan.n, restanUds:quedan.total,
-      operario:S.cfg.coordinador||'', ts:new Date().toISOString()
+      ts:new Date().toISOString()
     });
     save();
     EX_N++;
@@ -4787,7 +4773,7 @@ function exProcesa(){
     tipo:'palet', contId:c.id, contCodigo:c.codigo, n:p.n, hueco:p.escaneado,
     articulo:r.moca||'', bultos:r.n, total:r.total||0,
     restanBultos:0, restanUds:0,
-    operario:S.cfg.coordinador||'', ts:new Date().toISOString()
+    ts:new Date().toISOString()
   });
   save();
   EX_N++;
@@ -4847,7 +4833,7 @@ $('#ex_sonido').addEventListener('click',()=>{
 
 function renderExtraer(){
   puertaExtraer();
-  if(!(S.cfg.coordinador||'').trim()) return;
+
   renderMovimientos();
   const c=cont(), T=$('#extraerTabla');
   if(!c){ T.innerHTML='<div class="empty">Selecciona un contenedor.</div>'; return; }
@@ -4895,7 +4881,7 @@ function renderMovimientos(){
   const T=$('#movTabla'), C=$('#ex_movCard');
   if(!C) return;
   const ms=movimientos();
-  C.classList.toggle('hide', !(S.cfg.coordinador||'').trim());
+  C.classList.remove('hide');
   $('#ex_movTodos').textContent = MOV_TODOS ? 'Ver sólo este camión' : 'Ver todos los camiones';
   if(!ms.length){ T.innerHTML='<div class="empty">Todavía no hay movimientos.</div>'; return; }
   T.innerHTML=`<table><thead><tr>${CAB_MOV.map(x=>`<th>${x}</th>`).join('')}</tr></thead><tbody>${
@@ -5018,7 +5004,7 @@ function fila(c,p){
           r.total||'', p.tono, layoutDe(p),
           num(p.pasillo), num(p.altura), num(p.numero), p.paletScan||'', p.escaneado||'', ubicMaestro(p),
           textoCheck(p),
-          p.operario||'', p.coordinador||'', p.obs||'',
+           p.obs||'',
           p.ts?new Date(p.ts).toLocaleString('es-ES'):''];
 }
 const filasDe = cs => cs.flatMap(c=>c.palets.map(p=>fila(c,p)));
@@ -5816,8 +5802,7 @@ function layDetalle(){
         <dt>Artículo</dt><dd class="mono">${esc(r.moca||'—')}${r.mixto?' <span class="chip warn">mezcla</span>':''}</dd>
         <dt>Bultos</dt><dd>${r.n} · <b>${r.total}</b> uds${r.picos.length?` · ${r.picos.length} picos`:''}</dd>
         <dt>Tono</dt><dd>${esc(p.tono||'—')}</dd>
-        <dt>Ubicó</dt><dd>${esc(p.coordinador||'—')}${p.ts?' · '+new Date(p.ts).toLocaleDateString('es-ES'):''}</dd>
-        <dt>Grabó</dt><dd>${esc(p.operario||'—')}</dd>
+        
         ${p.obs?`<dt>Observaciones</dt><dd>${esc(p.obs)}</dd>`:''}
         <dt>Estado</dt><dd>${st.okUb?'<span class="chip ok">comprobado</span>':'<span class="chip pend">sin comprobar</span>'}</dd>
       </dl>`;
@@ -6045,7 +6030,7 @@ function layVeAlPrimero(){
   await load(); aplicaFormato(); render();
   $('#g_sonido').textContent='Sonido: '+(S.cfg.sonido?'activado':'apagado');
   $('#mp_sonido').textContent='Sonido: '+(S.cfg.sonido?'activado':'apagado');
-  $('#g_oper').value=S.cfg.operario||''; $('#m_coord').value=S.cfg.coordinador||'';
+  $('#g_oper').value=''; $('#m_coord').value=''; $('#ex_coord').value='';
   if(Cam.hay()&&window.isSecureContext) $$('.camBtn').forEach(b=>b.classList.remove('hide'));
   if('serviceWorker' in navigator && location.protocol.startsWith('http'))
     navigator.serviceWorker.register('sw.js').catch(()=>{});
