@@ -191,12 +191,7 @@ table input{padding:7px 8px;border-radius:7px;font-size:14px}
 .desg{text-align:center;font-family:var(--mono);font-size:15px;color:var(--steel);margin-top:10px}
 .btn.grande{flex:1 1 160px;padding:18px 14px;font-size:16px}
 
-/* ---------- operario, último código, contador visual ---------- */
-.quien{display:flex;align-items:center;gap:10px;margin-bottom:14px;padding-bottom:12px;border-bottom:1px solid var(--line)}
-.quien label{margin:0;flex:0 0 auto}
-.quien input{flex:1;padding:8px 10px;font-size:15px}
-.quien b{flex:1;font-size:15px;color:var(--ink)}
-#g_gate h2,#m_gate h2{font-size:17px;text-transform:none;letter-spacing:0;color:var(--ink)}
+/* ---------- último código, contador visual ---------- */
 .ultimo{margin-top:10px;background:#f4f6f5;border:1.5px solid var(--line);border-radius:9px;padding:9px 11px;
   font-family:var(--mono);font-size:13px;color:var(--steel);word-break:break-all;text-align:center}
 .ultimo b{color:var(--ink);font-size:15px}
@@ -421,20 +416,7 @@ details summary{cursor:pointer;font-size:12px;letter-spacing:.1em;text-transform
 <!-- ============ GRABAR PALÉ ============ -->
 <section id="v-grab" class="hide">
 
-  <div class="card hide" id="g_gate">
-    <h2>¿Quién está descargando?</h2>
-    <label for="g_oper">Nombre del operario</label>
-    <input id="g_oper" placeholder="Escribe tu nombre" autocomplete="off" autocapitalize="words" style="font-size:19px;padding:15px">
-    <div class="actions"><button class="btn pri grande" id="g_start">Empezar a escanear</button></div>
-    <p class="hint" style="margin-top:10px">Hace falta para saber quién ha grabado cada palé.</p>
-  </div>
-
-  <div class="card hide" id="g_card">
-    <div class="quien hide">
-      <label>Operario</label>
-      <b id="g_operShow" class="mono"></b>
-      <button class="btn gh sm" id="g_operChg">Cambiar</button>
-    </div>
+  <div class="card" id="g_card">
 
     <div class="modobar">
       <span id="g_modoTxt"></span>
@@ -668,22 +650,9 @@ details summary{cursor:pointer;font-size:12px;letter-spacing:.1em;text-transform
 
 <!-- ============ MAPA ============ -->
 <section id="v-mapa" class="hide">
-  <div class="card hide" id="m_gate">
-    <h2>¿Quién está ubicando?</h2>
-    <label for="m_coord">Nombre del coordinador</label>
-    <input id="m_coord" placeholder="Escribe tu nombre" autocomplete="off" autocapitalize="words" style="font-size:19px;padding:15px">
-    <div class="actions"><button class="btn pri grande" id="m_start">Empezar</button></div>
-    <p class="hint" style="margin-top:10px">Hace falta para saber quién ha ubicado cada palé.</p>
-  </div>
-
-  <div class="card hide" id="m_card">
-    <div class="quien hide">
-      <label>Coordinador</label>
-      <b id="m_coordShow" class="mono"></b>
-      <button class="btn gh sm" id="m_coordChg">Cambiar</button>
-    </div>
+  <div class="card" id="m_card">
     <h2>Mapa de ubicación</h2>
-    <p class="hint">Pasillo, altura y número los rellena el coordinador. La coordenada sale del maestro y se contrasta con lo que escanea la carretilla.</p>
+    <p class="hint">Pasillo, altura y número se rellenan durante la ubicación. La coordenada sale del maestro y se contrasta con lo que escanea la carretilla.</p>
     <div class="actions">
       <button class="btn gh sm" id="m_copyLayout">Copiar columna layout</button>
       <button class="btn gh sm" id="m_copyTabla">Copiar tabla</button>
@@ -717,24 +686,10 @@ details summary{cursor:pointer;font-size:12px;letter-spacing:.1em;text-transform
 
 <!-- ============ EXTRAER UBICACIÓN ============ -->
 <section id="v-extraer" class="hide">
-  <div class="card hide" id="ex_gate">
-    <h2>¿Quién está extrayendo?</h2>
-    <label for="ex_coord">Nombre del operario</label>
-    <input id="ex_coord" placeholder="Escribe tu nombre" autocomplete="off" autocapitalize="words" style="font-size:19px;padding:15px">
-    <div class="actions"><button class="btn pri grande" id="ex_start">Empezar</button></div>
-    <p class="hint" style="margin-top:10px">Hace falta para saber quién ha extraído cada palé.</p>
-  </div>
-
-  <div class="card hide" id="ex_card">
-    <div class="quien hide">
-      <label>Operario</label>
-      <b id="ex_coordShow" class="mono"></b>
-      <button class="btn gh sm" id="ex_coordChg">Cambiar</button>
-    </div>
+  <div class="card" id="ex_card">
     <h2>Extraer ubicación</h2>
     <p class="hint">Proceso contrario a Añadir ubicación: escanea el palé y luego el hueco donde está guardado.
-      Si coinciden, el palé <b>se borra del sistema</b> y el hueco queda libre para otro. Queda un registro
-      en Datos por si hace falta consultarlo o deshacerlo.</p>
+      Si coinciden, el palé <b>se borra del sistema</b> y el hueco queda libre para otro. Queda un registro en Datos por si hace falta consultarlo o deshacerlo.</p>
   </div>
 
   <div class="card hide" id="ex_scanCard">
@@ -835,8 +790,7 @@ details summary{cursor:pointer;font-size:12px;letter-spacing:.1em;text-transform
 
   <div class="card">
     <h2>Palés extraídos</h2>
-    <p class="hint">Registro de lo borrado desde Extraer ubicación: por si hace falta comprobar quién sacó qué
-      palé y cuándo. Los últimos 50, más recientes primero.</p>
+    <p class="hint">Registro de lo borrado desde Extraer ubicación: por si hace falta comprobar qué palé salió y cuándo. Los últimos 50, más recientes primero.</p>
     <div id="ex_log" class="tw" style="margin-top:10px"></div>
     <div class="actions" style="margin-top:10px">
       <button class="btn gh dgr" id="ex_logClear">Vaciar registro</button>
@@ -845,7 +799,7 @@ details summary{cursor:pointer;font-size:12px;letter-spacing:.1em;text-transform
 
   <div class="card">
     <h2>Sincronización online</h2>
-    <p class="hint">Guarda una copia de los datos de este dispositivo en el propio repositorio de GitHub donde está publicada la app (en un archivo <code>sync/datos.json</code>), para poder traerla a otra PDA. No hace falta contratar ningún servidor: se usa tu cuenta de GitHub. Cada PDA decide cuándo subir y cuándo traer; no es automático ni en tiempo real.</p>
+    <p class="hint">Los datos operativos no están dentro de esta web pública ni se cargan del navegador. Se guardan en un repositorio <b>privado</b> de GitHub, en <code>sync/datos.json</code>. Al abrir la web todo aparece vacío; introduce la conexión y un token válido y pulsa <b>Traer datos de la nube</b>. Para conservar los cambios de esta sesión, pulsa <b>Subir mis datos a la nube</b> antes de cerrar o recargar.</p>
     <div class="row">
       <div><label>Usuario/organización</label><input id="sy_owner" class="mono" placeholder="TU-USUARIO"></div>
       <div><label>Repositorio</label><input id="sy_repo" class="mono" placeholder="TU-REPO"></div>
@@ -854,9 +808,9 @@ details summary{cursor:pointer;font-size:12px;letter-spacing:.1em;text-transform
     <div class="row" style="margin-top:8px">
       <div style="flex:1 1 100%"><label>Token de GitHub (con permiso de lectura/escritura de contenidos de este repositorio)</label><input id="sy_token" class="mono" type="password" placeholder="ghp_…" autocomplete="off"></div>
     </div>
-    <p class="hint" style="margin-top:6px">El token se crea en GitHub → Settings → Developer settings → Fine-grained tokens, dándole permiso de <b>Contents: Read and write</b> sólo en este repositorio. Se guarda únicamente en este dispositivo, nunca se sube a ningún sitio.</p>
+    <p class="hint" style="margin-top:6px">El token se crea en GitHub → Settings → Developer settings → Fine-grained tokens, dándole permiso de <b>Contents: Read and write</b> sólo en este repositorio. Se usa sólo durante esta sesión y no se guarda en esta web ni en el almacenamiento local del navegador.</p>
     <div class="actions">
-      <button class="btn gh" id="sy_savecfg">Guardar estos datos de conexión</button>
+      <button class="btn gh" id="sy_savecfg">Usar esta conexión</button>
       <button class="btn pri" id="sy_push">Subir mis datos a la nube</button>
       <button class="btn gh" id="sy_pull">Traer datos de la nube</button>
     </div>
@@ -865,7 +819,7 @@ details summary{cursor:pointer;font-size:12px;letter-spacing:.1em;text-transform
 
   <div class="card">
     <h2>Versión</h2>
-    <p style="font-family:var(--mono);font-size:26px;font-weight:800;margin:0">v16 · sin nombres</p>
+    <p style="font-family:var(--mono);font-size:26px;font-weight:800;margin:0">v15</p>
     <p class="hint" style="margin:4px 0 0">Publicada el 26/08/2026. Si una PDA muestra otro número, tiene una copia antigua:
       usa el botón <b>Buscar actualización</b> de más arriba.</p>
     <details style="margin-top:10px" open>
@@ -3280,11 +3234,15 @@ function flash(tipo, titulo, sub){
 }
 function toast(m,k){ const t=$('#toast'); t.textContent=m; t.className='show '+(k||''); clearTimeout(t._h); t._h=setTimeout(()=>t.className='',2200); }
 let SIN_SUBIR=false;
-function save(){ delete S.cfg.operario; delete S.cfg.coordinador; S.conts.forEach(c=>c.palets.forEach(p=>{delete p.operario;delete p.coordinador;(p.scans||[]).forEach(x=>delete x.manQuien);})); S.extraidos.forEach(x=>delete x.operario); SIN_SUBIR=true; if(typeof layInvalida==='function') layInvalida(); pintaNube(); clearTimeout(tSave); tSave=setTimeout(async()=>{
-  await Store.set('palets_cfg',{cfg:S.cfg,ubic:S.ubic,sel:S.sel});
-  await Store.set('palets_conts',S.conts);
-  await Store.set('palets_extraidos',S.extraidos);
-},180); }
+function save(){
+  /* MODO PRIVADO: los datos operativos viven sólo en memoria durante esta sesión.
+     No se guardan camiones, bultos, ubicaciones ni extracciones en localStorage.
+     Para conservarlos hay que subirlos expresamente al repositorio privado. */
+  limpiaIdentidad();
+  SIN_SUBIR=true;
+  if(typeof layInvalida==='function') layInvalida();
+  pintaNube();
+}
 
 /* ================= cálculo ================= */
 function udsDeCodigo(cod){
@@ -3328,6 +3286,14 @@ function estadoPalet(p){
 }
 const cont = ()=> S.conts.find(c=>c.id===S.sel) || null;
 const nuevoPalet = n => ({n, scans:[], tono:'', obs:'', pasillo:'', altura:'', numero:'', paletScan:'', escaneado:'', coordManual:'', ts:null});
+function limpiaIdentidad(){
+  delete S.cfg.operario; delete S.cfg.coordinador;
+  S.conts.forEach(c=>(c.palets||[]).forEach(p=>{
+    delete p.operario; delete p.coordinador;
+    (p.scans||[]).forEach(x=>{ delete x.manQuien; });
+  }));
+  (S.extraidos||[]).forEach(x=>{ delete x.operario; delete x.quien; });
+}
 const qrTexto = (c,p)=> `P${p.n} ${c.codigo} ${fmtFecha(c.fecha)}`;
 
 /* migración desde el formato antiguo (bultos completos + pico) */
@@ -3362,18 +3328,12 @@ function repasaTumbas(){
   return tocado;
 }
 async function load(){
-  const c = await Store.get('palets_cfg');
-  if(c){ S.cfg=Object.assign({...DEF},c.cfg||{}); S.ubic=c.ubic||{}; S.sel=c.sel||null; }
-  S.conts = (await Store.get('palets_conts')) || [];
-  S.extraidos = (await Store.get('palets_extraidos')) || [];
-  // Privacidad: esta versión no guarda ni conserva nombres de personas.
-  delete S.cfg.operario; delete S.cfg.coordinador;
-  S.conts.forEach(c=>c.palets.forEach(p=>{ delete p.operario; delete p.coordinador; (p.scans||[]).forEach(x=>delete x.manQuien); }));
-  S.extraidos.forEach(x=>delete x.operario);
-  migra();
-  if(repasaTumbas()) save();
-  if(S.sel && !S.conts.some(x=>x.id===S.sel)) S.sel=null;
-  if(!S.sel && S.conts.length) S.sel=S.conts[0].id;
+  /* Arranque siempre vacío. Ningún dato operativo se recupera del navegador.
+     Los datos sólo aparecerán después de introducir un token válido y pulsar
+     "Traer datos de la nube" contra el repositorio privado. */
+  S = {cfg:{...DEF}, ubic:{}, conts:[], sel:null, extraidos:[], suelo:{}};
+  PAL=null;
+  limpiaIdentidad();
 }
 
 /* ================= barra de nube =================
@@ -3502,8 +3462,6 @@ $('#contList').addEventListener('click', e=>{
     if(escrito.trim().toUpperCase()!==c.codigo.trim().toUpperCase()){
       toast('El código no coincide: no se ha borrado nada','ko'); return;
     }
-    Store.set('palets_rescate',{cuando:new Date().toISOString(),
-      estado:{cfg:S.cfg, ubic:S.ubic, conts:S.conts, sel:S.sel, extraidos:S.extraidos}});
     S.conts=S.conts.filter(x=>x.id!==c.id);
     // si el camión estaba abierto en alguna pantalla, se suelta para no dejar referencias muertas
     if(typeof PAL!=='undefined' && PAL && !S.conts.some(x=>x.palets.includes(PAL))) PAL=null;
@@ -3680,7 +3638,6 @@ function apunta(cod, uds, anom){
   if(c && !c.patron) fijaPatron(c,cod);
   PAL.scans.push({c:cod, u:uds, t:new Date().toISOString(), dup, anom:anom||''});
   PAL.ts=new Date().toISOString();
-
   ultimoScan={c:cod, t:ahora};
   pendCambio={n:null,t:0};
   save(); pintaBultos();
@@ -3736,7 +3693,6 @@ function entra(txt, deFoto){
 function procesaScan(){ const el=$('#g_scan'), t=el.value; el.value=''; entra(t,false); }
 function abre(p, txt){
   PAL=p; ultimoScan={c:'',t:0}; pendCambio={n:null,t:0};
-
   const r=res(PAL);
   beep(true);
   eco('good','P'+PAL.n, r.n ? `Ya tenía ${r.n} bultos · seguirá sumando` : 'Empieza a escanear los bultos');
@@ -3754,7 +3710,6 @@ $('#g_scan').addEventListener('change', procesaScan);
 /* El foco no se pierde: el operario no debe tocar la pantalla entre lecturas. */
 function foco(){
   if(VIEW!=='grab') return;
-
   const a=document.activeElement;
   if($('#camWrap').classList.contains('on')) return;
   if(a && a!==document.body && /^(INPUT|TEXTAREA|SELECT)$/.test(a.tagName) && a.id!=='g_scan') return;
@@ -3822,25 +3777,12 @@ function pintaObsTags(){
 }
 $('#g_tono').addEventListener('keydown',e=>{ if(e.key==='Enter'){ e.preventDefault(); foco(); } });
 function puertaOperario(){
-  const hay=true;
-  $('#g_gate').classList.toggle('hide',hay);
-  $('#g_card').classList.toggle('hide',!hay);
-  if(!hay) $('#g_form').classList.add('hide');
-  $('#g_operShow').textContent='';
-  if(hay) foco(); else setTimeout(()=>$('#g_oper').focus(),60);
+  $('#g_card').classList.remove('hide');
 }
-function entraOperario(){ puertaOperario(); foco(); }
-$('#g_start').addEventListener('click',entraOperario);
-$('#g_oper').addEventListener('keydown',e=>{ if(e.key==='Enter'){ e.preventDefault(); entraOperario(); } });
-$('#g_operChg').addEventListener('click',()=>{
-  if(PAL) cierraPalet(true);
-  puertaOperario();
-});
 $('#g_sonido').addEventListener('click',()=>{
   S.cfg.sonido=!S.cfg.sonido; save();
   $('#g_sonido').textContent='Sonido: '+(S.cfg.sonido?'activado':'apagado');
   $('#mp_sonido').textContent='Sonido: '+(S.cfg.sonido?'activado':'apagado');
-  $('#g_oper').value=''; $('#m_coord').value=''; $('#ex_coord').value='';
   if(S.cfg.sonido) beep(true);
 });
 
@@ -4008,12 +3950,12 @@ $('#g_pack').addEventListener('click',()=>{
   const filas=[];
   c.palets.forEach(p=> (p.scans||[]).forEach((x,i)=>{
     filas.push([c.codigo, fmtFecha(c.fecha), 'P'+p.n, i+1, x.c, mocacota(x.c), x.u,
-                x.uOrig!==undefined?x.uOrig:'', x.man?(x.manQuien||'sí'):'', p.tono, coordDe(p),
-                p.operario||'', x.anom||'', p.obs||'', x.t?new Date(x.t).toLocaleString('es-ES'):'']);
+                x.uOrig!==undefined?x.uOrig:'', x.man?'sí':'', p.tono, coordDe(p),
+                x.anom||'', p.obs||'', x.t?new Date(x.t).toLocaleString('es-ES'):'']);
   }));
   if(!filas.length) return toast('Aún no hay bultos escaneados','ko');
   descargaXLSX([
-    {name:'Packing list', header:['Contenedor','Fecha','Palé','Nº bulto','Código bulto','Mocacota','Uds','Uds leídas','Corregido por','Tono','Coord','Operario','Anomalía','Observaciones','Hora'], rows:filas},
+    {name:'Packing list', header:['Contenedor','Fecha','Palé','Nº bulto','Código bulto','Mocacota','Uds','Uds leídas','Corregido','Tono','Coord','Anomalía','Observaciones','Hora'], rows:filas},
     {name:'Resumen por artículo', header:CAB_RESUMEN, rows:resumenMocacota([c])},
     {name:'Check list', header:CAB, rows:filasDe([c])}
   ], `packinglist_${c.codigo}_${c.fecha}.xlsx`);
@@ -4256,7 +4198,7 @@ function filtroBultos(){
       (p.scans||[]).forEach((x,i)=>{
         if(q){
           const t=[x.c, mocacota(x.c), p.tono, co, p.escaneado, c.codigo, 'P'+p.n,
-                   p.operario, p.coordinador, x.anom, p.obs, layoutDe(p), String(x.u)].join(' ').toUpperCase();
+                   x.anom, p.obs, layoutDe(p), String(x.u)].join(' ').toUpperCase();
           if(!t.includes(q)) return;
         }
         out.push({c,p,x,i,co,r});
@@ -4306,14 +4248,13 @@ function renderTablaHist(){
       ['Palés',new Set(rows.map(z=>z.c.id+'|'+z.p.n)).size],['Camiones',new Set(rows.map(z=>z.c.id)).size]]);
     if(!rows.length) return T.innerHTML='<div class="empty">Sin resultados.</div>';
     T.innerHTML=`<table><thead><tr><th>Camión</th><th>Fecha</th><th>Palé</th><th>Nº</th><th>Código bulto</th>
-      <th>Uds</th><th>Artículo</th><th>Tono</th><th>Ubicación</th><th>Pas/Alt/Nº</th><th>Operario</th><th>Anomalía</th><th>Hora</th></tr></thead><tbody>${
+      <th>Uds</th><th>Artículo</th><th>Tono</th><th>Ubicación</th><th>Pas/Alt/Nº</th><th>Anomalía</th><th>Observaciones</th><th>Hora</th></tr></thead><tbody>${
       rows.slice(0,600).map(({c,p,x,i,co})=>`<tr>
         <td class="m">${esc(c.codigo)}</td><td>${fmtFecha(c.fecha)}</td><td class="m"><b>P${p.n}</b></td>
         <td class="m">${i+1}</td><td class="m">${esc(x.c)}</td><td class="m"><b>${x.u}</b></td>
         <td class="m">${esc(mocacota(x.c))}</td><td class="m">${esc(p.tono||'—')}</td>
         <td class="m">${esc(co||'—')}</td>
         <td class="m">${(()=>{const s=sitioDe(p);return s.pas||s.num?`${s.pas||'—'} / ${s.alt||'—'} / ${s.num||'—'}`:'—';})()}</td>
-        <td>${esc(p.operario||'—')}</td>
         <td>${x.anom?`<span class="chip warn">${esc(x.anom)}</span>`:'—'}</td>
         <td>${(p.obs||'').trim()?esc(p.obs):'—'}</td>
         <td>${x.t?new Date(x.t).toLocaleString('es-ES'):'—'}</td></tr>`).join('')}</tbody></table>
@@ -4350,7 +4291,7 @@ function renderTablaHist(){
     ['Total uds',rows.reduce((a,z)=>a+z.r.total,0)],['Ubicados',rows.filter(z=>z.co).length]]);
   if(!rows.length) return T.innerHTML='<div class="empty">Sin resultados.</div>';
   T.innerHTML=`<table><thead><tr><th>Camión</th><th>Fecha</th><th>Palé</th><th>Artículo</th><th>Bultos</th>
-    <th>Total uds</th><th>Tono</th><th>Ubicación</th><th>Pas/Alt/Nº</th><th>Operario</th><th>Check</th></tr></thead><tbody>${
+    <th>Total uds</th><th>Tono</th><th>Ubicación</th><th>Pas/Alt/Nº</th><th>Observaciones</th><th>Check</th></tr></thead><tbody>${
     rows.map(({c,p,r,co})=>{
       const st=estadoPalet(p);
       const chip=chipMapa(p);
@@ -4358,7 +4299,6 @@ function renderTablaHist(){
         <td class="m">${esc(r.moca||'—')}</td><td class="m">${r.n||'—'}</td><td class="m"><b>${r.total||'—'}</b></td>
         <td class="m">${esc(p.tono||'—')}</td><td class="m"><b>${esc(co||'—')}</b></td>
         <td class="m">${(()=>{const s=sitioDe(p);return s.pas||s.num?`${s.pas||'—'} / ${s.alt||'—'}${s.letra?' ('+s.letra+')':''} / ${s.num||'—'}`:'—';})()}</td>
-        <td>${esc(p.operario||'—')}</td>
         <td>${(p.obs||'').trim()?`<span class="chip warn">${esc(p.obs)}</span>`:'—'}</td><td>${chip}</td></tr>`;
     }).join('')}</tbody></table>`;
 }
@@ -4375,7 +4315,7 @@ $('#h_xlsx').addEventListener('click',()=>{
   if(NIVEL==='bulto'){
     const rows=filtroBultos();
     if(!rows.length) return toast('No hay resultados','ko');
-    descargaXLSX([{name:'Bultos', header:['Camión','Fecha','Palé','Nº bulto','Código bulto','Uds','Artículo','Tono','Ubicación','Operario','Coordinador','Anomalía','Observaciones','Hora'],
+    descargaXLSX([{name:'Bultos', header:['Camión','Fecha','Palé','Nº bulto','Código bulto','Uds','Artículo','Tono','Ubicación','Anomalía','Observaciones','Hora'],
       rows:rows.map(({c,p,x,i,co})=>[c.codigo,fmtFecha(c.fecha),'P'+p.n,i+1,x.c,x.u,mocacota(x.c),p.tono,co,
         x.anom||'',p.obs||'',x.t?new Date(x.t).toLocaleString('es-ES'):''])}], nom);
     return;
@@ -4393,22 +4333,12 @@ $('#h_xlsx').addEventListener('click',()=>{
 });
 
 /* ================= mapa ================= */
-/* Puerta del coordinador: sin nombre no se ve la tabla. */
+/* Acceso directo: no se solicita ni se guarda identidad. */
 function puertaCoordinador(){
-  const hay=true;
-  $('#m_gate').classList.toggle('hide',hay);
-  $('#m_card').classList.toggle('hide',!hay);
-  $('#m_scanCard').classList.toggle('hide',!hay);
-  $('#m_tablaCard').classList.toggle('hide',!hay);
-  $('#m_coordShow').textContent='';
-  if(!hay) setTimeout(()=>$('#m_coord').focus(),60);
+  $('#m_card').classList.remove('hide');
+  $('#m_scanCard').classList.remove('hide');
+  $('#m_tablaCard').classList.remove('hide');
 }
-function entraCoordinador(){ puertaCoordinador(); renderMapa(); }
-$('#m_start').addEventListener('click',entraCoordinador);
-$('#m_coord').addEventListener('keydown',e=>{ if(e.key==='Enter'){ e.preventDefault(); entraCoordinador(); } });
-$('#m_coordChg').addEventListener('click',()=>{
-  puertaCoordinador();
-});
 
 /* ================= ubicar escaneando =================
    Dos disparos y listo: el QR del palé y la etiqueta del hueco.
@@ -4447,7 +4377,6 @@ function mpMarcaFoco(){
 }
 function mpFoco(){
   if(VIEW!=='mapa') return;
-
   const cw=$('#camWrap'); if(cw && cw.classList.contains('on')) return;
   const a=document.activeElement;
   if(a && a!==document.body && /^(INPUT|TEXTAREA|SELECT)$/.test(a.tagName) && a.id!=='mp_scan') return;
@@ -4509,7 +4438,6 @@ function mpProcesa(){
   const p=MP.p;
   p.paletScan = MP.txt;
   p.escaneado = txt;
-
   p.ubTs = new Date().toISOString();          // marca propia: así viaja en la sincronización
   const d = descomponeHueco(txt);
   if(d){ p.pasillo=d.pasillo; p.altura=d.altura; p.numero=d.numero; }
@@ -4537,7 +4465,6 @@ $('#mp_sonido').addEventListener('click',()=>{
 
 function renderMapa(){
   puertaCoordinador();
-
   const c=cont(), T=$('#mapaTabla');
   if(!c){ T.innerHTML='<div class="empty">Selecciona un contenedor.</div>'; $('#m_aviso').innerHTML=''; return; }
   const n=Object.keys(S.ubic).length;
@@ -4580,7 +4507,6 @@ $('#mapaTabla').addEventListener('input',e=>{
   const el=e.target; if(!el.dataset.f) return;
   const p=cont().palets.find(x=>x.n===Number(el.dataset.p)); if(!p) return;
   p[el.dataset.f]=el.value.trim().toUpperCase();
-
   p.ubTs=new Date().toISOString();
   save();
   const tr=el.closest('tr');
@@ -4609,20 +4535,10 @@ let EX_MODO='palet';   // 'palet' saca el palé entero, 'bulto' sólo unos bulto
 let EX={p:null, txt:''}, EX_N=0, EX_LAST=null;
 
 function puertaExtraer(){
-  const hay=true;
-  $('#ex_gate').classList.toggle('hide',hay);
-  $('#ex_card').classList.toggle('hide',!hay);
-  $('#ex_scanCard').classList.toggle('hide',!hay);
-  $('#ex_tablaCard').classList.toggle('hide',!hay);
-  $('#ex_coordShow').textContent='';
-  if(!hay) setTimeout(()=>$('#ex_coord').focus(),60);
+  $('#ex_card').classList.remove('hide');
+  $('#ex_scanCard').classList.remove('hide');
+  $('#ex_tablaCard').classList.remove('hide');
 }
-function entraExtraer(){ puertaExtraer(); renderExtraer(); }
-$('#ex_start').addEventListener('click',entraExtraer);
-$('#ex_coord').addEventListener('keydown',e=>{ if(e.key==='Enter'){ e.preventDefault(); entraExtraer(); } });
-$('#ex_coordChg').addEventListener('click',()=>{
-  puertaExtraer();
-});
 
 function exEco(clase, grande, chico){
   flash(clase==='good'?'ok':'ko', grande, chico);
@@ -4655,7 +4571,6 @@ function exMarcaFoco(){
 }
 function exFoco(){
   if(VIEW!=='extraer') return;
-
   const cw=$('#camWrap'); if(cw && cw.classList.contains('on')) return;
   const a=document.activeElement;
   if(a && a!==document.body && /^(INPUT|TEXTAREA|SELECT)$/.test(a.tagName) && a.id!=='ex_scan') return;
@@ -4747,7 +4662,7 @@ function exProcesa(){
       tipo:'bulto', contId:c.id, contCodigo:c.codigo, n:p.n, hueco:p.escaneado,
       articulo:r.moca||'', bultos:cant, total:uds,
       restanBultos:quedan.n, restanUds:quedan.total,
-      ts:new Date().toISOString()
+
     });
     save();
     EX_N++;
@@ -4773,7 +4688,7 @@ function exProcesa(){
     tipo:'palet', contId:c.id, contCodigo:c.codigo, n:p.n, hueco:p.escaneado,
     articulo:r.moca||'', bultos:r.n, total:r.total||0,
     restanBultos:0, restanUds:0,
-    ts:new Date().toISOString()
+
   });
   save();
   EX_N++;
@@ -4833,7 +4748,6 @@ $('#ex_sonido').addEventListener('click',()=>{
 
 function renderExtraer(){
   puertaExtraer();
-
   renderMovimientos();
   const c=cont(), T=$('#extraerTabla');
   if(!c){ T.innerHTML='<div class="empty">Selecciona un contenedor.</div>'; return; }
@@ -4860,7 +4774,7 @@ function movimientos(){
       if((p.escaneado||'').trim()){
         const r=res(p);
         out.push({tipo:'ENTRADA', ts:p.ubTs||p.ts||'', cam:c.codigo, n:p.n, hueco:p.escaneado,
-                  articulo:r.moca||'', bultos:r.n, uds:r.total, quien:p.coordinador||'', restan:r.total});
+                  articulo:r.moca||'', bultos:r.n, uds:r.total, restan:r.total});
       }
     });
   });
@@ -4868,14 +4782,14 @@ function movimientos(){
     if(!MOV_TODOS && cont() && x.contId!==cont().id) return;
     out.push({tipo: x.tipo==='bulto'?'SALIDA BULTOS':'SALIDA PALÉ', ts:x.ts||'', cam:x.contCodigo, n:x.n,
               hueco:x.hueco||'', articulo:x.articulo||'', bultos:x.bultos ?? '', uds:x.total||0,
-              quien:x.operario||'', restan:x.restanUds ?? ''});
+              restan:x.restanUds ?? ''});
   });
   return out.sort((a,b)=>String(b.ts).localeCompare(String(a.ts)));
 }
-const CAB_MOV=['Movimiento','Fecha y hora','Camión','Palé','Hueco','Artículo','Bultos','Uds','Quedan uds','Quién'];
+const CAB_MOV=['Movimiento','Fecha y hora','Camión','Palé','Hueco','Artículo','Bultos','Uds','Quedan uds'];
 function filaMov(m){
   return [m.tipo, m.ts?new Date(m.ts).toLocaleString('es-ES'):'', m.cam, 'P'+m.n, m.hueco,
-          m.articulo, m.bultos, m.uds, m.restan, m.quien];
+          m.articulo, m.bultos, m.uds, m.restan];
 }
 function renderMovimientos(){
   const T=$('#movTabla'), C=$('#ex_movCard');
@@ -4892,7 +4806,7 @@ function renderMovimientos(){
         <td class="m">${esc(m.cam)}</td><td class="m"><b>P${m.n}</b></td>
         <td class="m">${esc(m.hueco||'—')}</td><td class="m">${esc(m.articulo||'—')}</td>
         <td class="m">${m.bultos===''?'—':m.bultos}</td><td class="m"><b>${m.uds}</b></td>
-        <td class="m">${m.restan===''?'—':m.restan}</td><td>${esc(m.quien||'—')}</td></tr>`;
+        <td class="m">${m.restan===''?'—':m.restan}</td></tr>`;
     }).join('')}</tbody></table>${ms.length>300?`<p class="hint" style="margin-top:8px">Se muestran 300 de ${ms.length}. Descarga el Excel para verlos todos.</p>`:''}`;
 }
 $('#ex_movTodos').addEventListener('click',()=>{ MOV_TODOS=!MOV_TODOS; renderMovimientos(); });
@@ -4920,10 +4834,10 @@ function renderLogExtraidos(){
   if(!S.extraidos.length){ T.innerHTML='<div class="empty">Todavía no se ha extraído ningún palé.</div>'; return; }
   const lista=[...S.extraidos].sort((a,b)=>(b.ts||'').localeCompare(a.ts||'')).slice(0,50);
   T.innerHTML=`<table><thead><tr>
-    <th>Camión</th><th>Palé</th><th>Artículo</th><th>Total uds</th><th>Hueco</th><th>Operario</th><th>Cuándo</th>
+    <th>Camión</th><th>Palé</th><th>Artículo</th><th>Total uds</th><th>Hueco</th><th>Cuándo</th>
   </tr></thead><tbody>${lista.map(x=>`<tr>
     <td class="m">${esc(x.contCodigo)}</td><td class="m"><b>P${x.n}</b></td><td class="m">${esc(x.articulo||'—')}</td>
-    <td class="m">${x.total||'—'}</td><td class="m">${esc(x.hueco||'—')}</td><td>${esc(x.operario||'—')}</td>
+    <td class="m">${x.total||'—'}</td><td class="m">${esc(x.hueco||'—')}</td>
     <td>${x.ts?new Date(x.ts).toLocaleString('es-ES'):'—'}</td></tr>`).join('')}</tbody></table>`;
 }
 $('#ex_logClear').addEventListener('click',()=>{
@@ -4984,7 +4898,7 @@ $('#ub_clear').addEventListener('click',()=>{ if(confirm('¿Vaciar el maestro?')
 /* ================= exportación ================= */
 const CAB=['Contenedor','Fecha descarga','Palé','Codificación QR','Artículo (mocacota)','Código bulto',
            'Bultos','Uds x bulto','Picos','Uds en picos','Total uds','Tono','Copiar en layout',
-           'Pasillo','Altura','Número','Palé escaneado','Ubicación rack escaneada','Hueco del maestro','Check','Operario','Coordinador','Observaciones','Grabado'];
+           'Pasillo','Altura','Número','Palé escaneado','Ubicación rack escaneada','Hueco del maestro','Check','Observaciones','Grabado'];
 const num=v=>(v!==''&&v!==null&&v!==undefined&&!isNaN(v))?Number(v):v;
 /* Mismo criterio que el check del mapa, en texto para el Excel. */
 function textoCheck(p){
@@ -5004,7 +4918,7 @@ function fila(c,p){
           r.total||'', p.tono, layoutDe(p),
           num(p.pasillo), num(p.altura), num(p.numero), p.paletScan||'', p.escaneado||'', ubicMaestro(p),
           textoCheck(p),
-           p.obs||'',
+          p.obs||'',
           p.ts?new Date(p.ts).toLocaleString('es-ES'):''];
 }
 const filasDe = cs => cs.flatMap(c=>c.palets.map(p=>fila(c,p)));
@@ -5013,9 +4927,9 @@ function hojas(cs){
   const pack=[];
   cs.forEach(c=>c.palets.forEach(p=>(p.scans||[]).forEach((x,i)=>
     pack.push([c.codigo, fmtFecha(c.fecha), 'P'+p.n, i+1, x.c, mocacota(x.c), x.u,
-               x.uOrig!==undefined?x.uOrig:'', x.man?(x.manQuien||'sí'):'', p.tono, coordDe(p),
-               p.operario||'', x.anom||'', p.obs||'', x.t?new Date(x.t).toLocaleString('es-ES'):'']))));
-  if(pack.length) h.push({name:'Packing list', header:['Contenedor','Fecha','Palé','Nº bulto','Código bulto','Mocacota','Uds','Uds leídas','Corregido por','Tono','Coord','Operario','Anomalía','Observaciones','Hora'], rows:pack});
+               x.uOrig!==undefined?x.uOrig:'', x.man?'sí':'', p.tono, coordDe(p),
+               x.anom||'', p.obs||'', x.t?new Date(x.t).toLocaleString('es-ES'):'']))));
+  if(pack.length) h.push({name:'Packing list', header:['Contenedor','Fecha','Palé','Nº bulto','Código bulto','Mocacota','Uds','Uds leídas','Corregido','Tono','Coord','Anomalía','Observaciones','Hora'], rows:pack});
   const rm=resumenMocacota(cs);
   if(rm.length) h.push({name:'Resumen por artículo', header:CAB_RESUMEN, rows:rm});
   h.push({name:'Resumen', header:['Contenedor','Fecha','Palés','Grabados','Ubicados OK','Bultos','Total uds','Estado'],
@@ -5024,18 +4938,6 @@ function hojas(cs){
       c.palets.filter(p=>estadoPalet(p).okUb).length,
       c.palets.reduce((a,p)=>a+(p.scans||[]).length,0),
       c.palets.reduce((a,p)=>a+totalDe(p),0), c.cerrado?'Cerrado':'Abierto'])});
-  const act={};
-  cs.forEach(c=>c.palets.forEach(p=>{
-    const r=res(p);
-    if(r.n){ const k='O|'+(p.operario||'(sin nombre)')+'|'+c.codigo;
-      act[k]=act[k]||{quien:p.operario||'(sin nombre)', papel:'Operario', cont:c.codigo, palets:0, bultos:0, uds:0};
-      act[k].palets++; act[k].bultos+=r.n; act[k].uds+=r.total; }
-    if(coordDe(p)){ const k='C|'+(p.coordinador||'(sin nombre)')+'|'+c.codigo;
-      act[k]=act[k]||{quien:p.coordinador||'(sin nombre)', papel:'Coordinador', cont:c.codigo, palets:0, bultos:0, uds:0};
-      act[k].palets++; act[k].bultos+=r.n; act[k].uds+=r.total; }
-  }));
-  const filasAct=Object.values(act).map(a=>[a.quien,a.papel,a.cont,a.palets,a.bultos,a.uds]);
-  if(filasAct.length) h.push({name:'Seguimiento', header:['Nombre','Papel','Contenedor','Palés','Bultos','Uds'], rows:filasAct});
   const ub=Object.entries(S.ubic).map(([k,v])=>{ const q=k.split('-'); return [k,num(q[0]),num(q[1]),num(q[2]),v]; });
   if(ub.length) h.push({name:'Maestro ubicaciones', header:['Clave','Pasillo','Altura','Número','Coordenada'], rows:ub});
   return h;
@@ -5055,6 +4957,7 @@ $('#d_restore').addEventListener('change',e=>{
     const d=JSON.parse(r.result); if(!d.conts) throw 0;
     if(!confirm('Esto sustituye los datos del dispositivo. ¿Seguir?')) return;
     S={cfg:Object.assign({...DEF},d.cfg||{}), ubic:d.ubic||{}, conts:d.conts, sel:d.sel||null, extraidos:d.extraidos||[]};
+    limpiaIdentidad();
     migra(); if(!S.sel&&S.conts.length) S.sel=S.conts[0].id;
     save(); render(); toast('Respaldo restaurado','ok');
   }catch(err){ toast('Archivo no válido','ko'); } };
@@ -5068,15 +4971,14 @@ $('#d_restore').addEventListener('change',e=>{
    el token nunca se incluye en el JSON que se sube. */
 let SY_CFG = {owner:'', repo:'', branch:'main', token:''};
 async function syCargaCfg(){
-  const d = await Store.get('sync_cfg');
-  if(d) SY_CFG = {owner:d.owner||'', repo:d.repo||'', branch:d.branch||'main', token:d.token||''};
-  $('#sy_owner').value = SY_CFG.owner;
-  $('#sy_repo').value = SY_CFG.repo;
-  $('#sy_branch').value = SY_CFG.branch;
-  $('#sy_token').value = SY_CFG.token;
-  $('#sy_info').textContent = (SY_CFG.owner && SY_CFG.repo)
-    ? `Conectado a ${SY_CFG.owner}/${SY_CFG.repo} (${SY_CFG.branch}).`
-    : 'Sin configurar todavía.';
+  /* La conexión también empieza vacía en cada apertura. El token nunca se
+     recupera de localStorage ni se incrusta en el index público. */
+  SY_CFG = {owner:'', repo:'', branch:'main', token:''};
+  $('#sy_owner').value = '';
+  $('#sy_repo').value = '';
+  $('#sy_branch').value = 'main';
+  $('#sy_token').value = '';
+  $('#sy_info').textContent = 'Sin configurar. Introduce los datos del repositorio privado y el token.';
 }
 $('#sy_savecfg').addEventListener('click', async ()=>{
   SY_CFG = {
@@ -5085,10 +4987,9 @@ $('#sy_savecfg').addEventListener('click', async ()=>{
     branch: $('#sy_branch').value.trim() || 'main',
     token: $('#sy_token').value.trim()
   };
-  if(!SY_CFG.owner || !SY_CFG.repo) return toast('Indica usuario y repositorio','ko');
-  await Store.set('sync_cfg', SY_CFG);
-  $('#sy_info').textContent = `Conectado a ${SY_CFG.owner}/${SY_CFG.repo} (${SY_CFG.branch}).`;
-  toast('Datos de conexión guardados','ok');
+  if(!SY_CFG.owner || !SY_CFG.repo || !SY_CFG.token) return toast('Indica usuario, repositorio y token','ko');
+  $('#sy_info').textContent = `Conexión activa sólo durante esta sesión: ${SY_CFG.owner}/${SY_CFG.repo} (${SY_CFG.branch}).`;
+  toast('Conexión lista para esta sesión','ok');
 });
 /* Con mala cobertura, fetch() puede quedarse esperando para siempre y la
    barra de arriba se queda clavada en "Subiendo…"/"Trayendo…". Con esto,
@@ -5180,13 +5081,13 @@ function syMergePalet(loc, rem){
   else if(ubL) ub = loc;
   else if(ubR) ub = rem;
   if(ub){
-    ['paletScan','escaneado','pasillo','altura','numero','coordManual','coordinador','ubTs','huecoId']
+    ['paletScan','escaneado','pasillo','altura','numero','coordManual','ubTs','huecoId']
       .forEach(k=>{ out[k] = ub[k] !== undefined ? ub[k] : out[k]; });
   }
-  // tono y operario: se queda el que tenga valor
-  ['tono','operario'].forEach(k=>{
-    if(!(out[k]||'').trim()) out[k] = (loc[k]||'').trim() || (rem[k]||'').trim() || out[k];
-  });
+  // El tono se conserva si una de las copias lo tiene.
+  if(!(out.tono||'').trim()) out.tono = (loc.tono||'').trim() || (rem.tono||'').trim() || out.tono;
+  delete out.operario; delete out.coordinador;
+  (out.scans||[]).forEach(x=>delete x.manQuien);
   return out;
 }
 /* Fecha de la última modificación conocida de un palé (para comparar con
@@ -5233,7 +5134,8 @@ $('#sy_push').addEventListener('click', async ()=>{
   const t0=Date.now();
   nubeOcupada(true); pintaNube('Subiendo…','pend');
   try{
-    // JSON compacto: sin sangría ocupa cerca de un 40% menos
+    // JSON compacto y sin datos de identidad personal.
+    limpiaIdentidad();
     const cuerpo = JSON.stringify({cfg:S.cfg, ubic:S.ubic, conts:S.conts, extraidos:S.extraidos, suelo:(S.suelo||{})});
     const {b64, comprimido} = await gzipB64(cuerpo);
     $('#sy_info').textContent = `Subiendo ${kb(b64.length)}…`;
@@ -5285,13 +5187,13 @@ $('#sy_pull').addEventListener('click', async ()=>{
     S.ubic = {...(datos.ubic||{}), ...S.ubic};
     /* Suelo del layout: gana la anotación más reciente, venga de donde venga. */
     if(datos.suelo){
-      const mio = S.suelo || (S.suelo = (await Store.get('palets_suelo')) || {});
+      const mio = S.suelo || (S.suelo = {});
       let cambia = false;
       Object.entries(datos.suelo).forEach(([k,v])=>{
         if(!v || !v.t) return;
         if(!mio[k] || String(mio[k].t||'') < String(v.t)){ mio[k] = v; cambia = true; }
       });
-      if(cambia){ await Store.set('palets_suelo', mio); if(typeof LAY==='object') LAY.suelo = mio; }
+      if(cambia && typeof LAY==='object') LAY.suelo = mio;
     }
     // Las extracciones se fusionan ANTES que los palés: así, si un palé se
     // extrajo en otra PDA, su "tumba" ya está disponible al decidir si un
@@ -5640,13 +5542,12 @@ function layInvalida(){ LAY.idx = null; }
 /* ---------- suelo (nivel A), lo único que se rellena a mano ---------- */
 async function laySueloCarga(){
   if(LAY.suelo) return LAY.suelo;
-  LAY.suelo = (await Store.get('palets_suelo')) || {};
-  if(!S.suelo) S.suelo = LAY.suelo;
+  LAY.suelo = S.suelo || {};
+  S.suelo = LAY.suelo;
   return LAY.suelo;
 }
 function laySueloGuarda(){
-  S.suelo = LAY.suelo;
-  Store.set('palets_suelo', LAY.suelo);
+  S.suelo = LAY.suelo || {};
   SIN_SUBIR = true; pintaNube();
 }
 const laySueloVal = k => { const e = (LAY.suelo||{})[k]; return e ? e.v : ''; };
@@ -5693,7 +5594,7 @@ function layTextoDe(k, e){
   if(!e) return '';
   if(e.tipo === 'suelo') return e.txt + ' ' + k + ' ' + ((e.suelo && e.suelo.tipo) || '');
   const i = e.pl[0], r = i.r;
-  return [i.c.codigo, r.moca, r.cod, 'P'+i.p.n, i.p.tono, i.p.obs, i.p.operario, i.p.coordinador, k].join(' ');
+  return [i.c.codigo, r.moca, r.cod, 'P'+i.p.n, i.p.tono, i.p.obs, k].join(' ');
 }
 function layFiltra(q){
   const t = layNorm(q), ts = laySquash(q);
@@ -5778,7 +5679,7 @@ function layLeyenda(){
 /* ---------- detalle de un hueco ---------- */
 function layDetalle(){
   const box = $('#lay_det');
-  if(!LAY.sel){ box.innerHTML = '<p class="lay-hint" style="margin:10px 0 0">Toca un hueco para ver qué palé hay, de qué camión y quién lo ubicó.</p>'; return; }
+  if(!LAY.sel){ box.innerHTML = '<p class="lay-hint" style="margin:10px 0 0">Toca un hueco para ver qué palé hay y de qué camión es.</p>'; return; }
   const k = LAY.sel.k, e = layEn(k), h = layParse(k);
   let html = `<div class="lay-det"><h3>${k}</h3>
     <div class="lay-hint">${LAY_ZONAS[h.zona]||h.zona} · pasillo ${h.pas} · nivel ${h.niv==='A'?'A (suelo)':h.niv} ·
@@ -5802,7 +5703,7 @@ function layDetalle(){
         <dt>Artículo</dt><dd class="mono">${esc(r.moca||'—')}${r.mixto?' <span class="chip warn">mezcla</span>':''}</dd>
         <dt>Bultos</dt><dd>${r.n} · <b>${r.total}</b> uds${r.picos.length?` · ${r.picos.length} picos`:''}</dd>
         <dt>Tono</dt><dd>${esc(p.tono||'—')}</dd>
-        
+        <dt>Fecha</dt><dd>${p.ts?new Date(p.ts).toLocaleDateString('es-ES'):'—'}</dd>
         ${p.obs?`<dt>Observaciones</dt><dd>${esc(p.obs)}</dd>`:''}
         <dt>Estado</dt><dd>${st.okUb?'<span class="chip ok">comprobado</span>':'<span class="chip pend">sin comprobar</span>'}</dd>
       </dl>`;
@@ -6030,7 +5931,6 @@ function layVeAlPrimero(){
   await load(); aplicaFormato(); render();
   $('#g_sonido').textContent='Sonido: '+(S.cfg.sonido?'activado':'apagado');
   $('#mp_sonido').textContent='Sonido: '+(S.cfg.sonido?'activado':'apagado');
-  $('#g_oper').value=''; $('#m_coord').value=''; $('#ex_coord').value='';
   if(Cam.hay()&&window.isSecureContext) $$('.camBtn').forEach(b=>b.classList.remove('hide'));
   if('serviceWorker' in navigator && location.protocol.startsWith('http'))
     navigator.serviceWorker.register('sw.js').catch(()=>{});
