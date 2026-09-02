@@ -806,9 +806,9 @@ details summary{cursor:pointer;font-size:12px;letter-spacing:.1em;text-transform
       <div><label>Rama</label><input id="sy_branch" class="mono" placeholder="main"></div>
     </div>
     <div class="row" style="margin-top:8px">
-      <div style="flex:1 1 100%"><label>Token de GitHub (con permiso de lectura/escritura de contenidos de este repositorio)</label><input id="sy_token" class="mono" type="password" placeholder="ghp_…" autocomplete="off"></div>
+      <div style="flex:1 1 100%"><label>Token de GitHub (con permiso de lectura/escritura de contenidos de este repositorio)</label><input id="sy_token" class="mono" type="password" placeholder="ghp_…" autocomplete="off"><label style="display:flex;align-items:center;gap:8px;margin-top:9px;font-weight:700"><input id="sy_remember" type="checkbox" style="width:auto"> Guardar sesión en este dispositivo</label></div>
     </div>
-    <p class="hint" style="margin-top:6px">El token se crea en GitHub → Settings → Developer settings → Fine-grained tokens, dándole permiso de <b>Contents: Read and write</b> sólo en este repositorio. Se usa sólo durante esta sesión y no se guarda en esta web ni en el almacenamiento local del navegador.</p>
+    <p class="hint" style="margin-top:6px">El token se crea en GitHub → Settings → Developer settings → Fine-grained tokens, dándole permiso de <b>Contents: Read and write</b> sólo en este repositorio. Si marcas <b>Guardar sesión en este dispositivo</b>, la conexión y el token se conservarán únicamente en el almacenamiento local de este navegador/PDA para no tener que escribirlos de nuevo. No se suben al repositorio ni se incluyen en los datos.</p>
     <div class="actions">
       <button class="btn gh" id="sy_savecfg">Usar esta conexión</button>
       <button class="btn pri" id="sy_push">Subir mis datos a la nube</button>
@@ -4970,26 +4970,34 @@ $('#d_restore').addEventListener('change',e=>{
    configuración (usuario, repo, rama, token) sólo en su propio dispositivo;
    el token nunca se incluye en el JSON que se sube. */
 let SY_CFG = {owner:'', repo:'', branch:'main', token:''};
+const SY_SESSION_KEY = 'rack_github_session_v1';
 async function syCargaCfg(){
-  /* La conexión también empieza vacía en cada apertura. El token nunca se
-     recupera de localStorage ni se incrusta en el index público. */
   SY_CFG = {owner:'', repo:'', branch:'main', token:''};
-  $('#sy_owner').value = '';
-  $('#sy_repo').value = '';
-  $('#sy_branch').value = 'main';
-  $('#sy_token').value = '';
-  $('#sy_info').textContent = 'Sin configurar. Introduce los datos del repositorio privado y el token.';
+  let guardada=null;
+  try{ guardada=JSON.parse(localStorage.getItem(SY_SESSION_KEY)||'null'); }catch(e){}
+  if(guardada && guardada.owner && guardada.repo && guardada.token){
+    SY_CFG={owner:String(guardada.owner),repo:String(guardada.repo),branch:String(guardada.branch||'main'),token:String(guardada.token)};
+    $('#sy_owner').value=SY_CFG.owner; $('#sy_repo').value=SY_CFG.repo; $('#sy_branch').value=SY_CFG.branch; $('#sy_token').value=SY_CFG.token;
+    $('#sy_remember').checked=true;
+    $('#sy_info').textContent=`Sesión guardada en este dispositivo: ${SY_CFG.owner}/${SY_CFG.repo} (${SY_CFG.branch}). Ya puedes traer datos de la nube.`;
+  }else{
+    $('#sy_owner').value=''; $('#sy_repo').value=''; $('#sy_branch').value='main'; $('#sy_token').value=''; $('#sy_remember').checked=false;
+    $('#sy_info').textContent='Sin configurar. Introduce los datos del repositorio privado y el token.';
+  }
 }
 $('#sy_savecfg').addEventListener('click', async ()=>{
-  SY_CFG = {
-    owner: $('#sy_owner').value.trim(),
-    repo: $('#sy_repo').value.trim(),
-    branch: $('#sy_branch').value.trim() || 'main',
-    token: $('#sy_token').value.trim()
-  };
+  SY_CFG = {owner:$('#sy_owner').value.trim(),repo:$('#sy_repo').value.trim(),branch:$('#sy_branch').value.trim()||'main',token:$('#sy_token').value.trim()};
   if(!SY_CFG.owner || !SY_CFG.repo || !SY_CFG.token) return toast('Indica usuario, repositorio y token','ko');
-  $('#sy_info').textContent = `Conexión activa sólo durante esta sesión: ${SY_CFG.owner}/${SY_CFG.repo} (${SY_CFG.branch}).`;
-  toast('Conexión lista para esta sesión','ok');
+  if($('#sy_remember').checked){
+    try{ localStorage.setItem(SY_SESSION_KEY,JSON.stringify(SY_CFG)); }
+    catch(e){ return toast('No se pudo guardar la sesión en este dispositivo','ko'); }
+    $('#sy_info').textContent=`Sesión guardada en este dispositivo: ${SY_CFG.owner}/${SY_CFG.repo} (${SY_CFG.branch}).`;
+    toast('Sesión guardada en este dispositivo','ok');
+  }else{
+    try{ localStorage.removeItem(SY_SESSION_KEY); }catch(e){}
+    $('#sy_info').textContent=`Conexión activa sólo durante esta sesión: ${SY_CFG.owner}/${SY_CFG.repo} (${SY_CFG.branch}).`;
+    toast('Conexión lista para esta sesión','ok');
+  }
 });
 /* Con mala cobertura, fetch() puede quedarse esperando para siempre y la
    barra de arriba se queda clavada en "Subiendo…"/"Trayendo…". Con esto,
