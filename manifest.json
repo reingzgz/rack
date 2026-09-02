@@ -1,0 +1,12 @@
+{
+  "name": "Control de palés",
+  "short_name": "Palés",
+  "description": "Escaneo de bultos, ubicación en rack e histórico de descargas",
+  "start_url": "./index.html",
+  "scope": "./",
+  "display": "standalone",
+  "background_color": "#eef1ef",
+  "theme_color": "#14181c",
+  "lang": "es",
+  "icons": [{ "src": "icon.svg", "sizes": "any", "type": "image/svg+xml", "purpose": "any maskable" }]
+}
